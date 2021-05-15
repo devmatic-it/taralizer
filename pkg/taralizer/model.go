@@ -56,7 +56,7 @@ type CommunicationLink struct {
 	Description        string   `yaml:"description,omitempty"`
 	Protocol           string   `yaml:"protocol,omitempty"`
 	Authenication      string   `yaml:"authenication,omitempty"`
-	Authorization      string   `yaml:"authoritation,omitempty"`
+	Authorization      string   `yaml:"authorization,omitempty"`
 	DataAssetsSent     []string `yaml:"data_assets_sent,omitempty"`
 	DataAssetsReceived []string `yaml:"data_assets_received,omitempty"`
 }

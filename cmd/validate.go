@@ -31,7 +31,7 @@ var (
 
 			messages := t.Validate(args[0])
 			if len(messages) == 0 {
-				fmt.Println("Model validated sucessfully. No Validation errors found.")
+				fmt.Println("Model validated successfully. No Validation errors found.")
 			} else {
 				for _, msg := range messages {
 					fmt.Printf("WARNING %s\n", msg)
@@ -41,7 +41,7 @@ var (
 	}
 )
 
-// initializes arguments for version commmand
+// initializes arguments for version command
 func init() {
 	rootCmd.AddCommand(validateCmd)
 }
