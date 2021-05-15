@@ -50,7 +50,7 @@ var (
 	}
 )
 
-// initializes arguments for version commmand
+// initializes arguments for version command
 func init() {
 	reportCmd.Flags().StringVar(&reportFile, "out", "report", "output file name")
 	reportCmd.Flags().StringVar(&reportType, "type", "html", "type of report")

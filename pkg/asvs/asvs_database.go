@@ -1,4 +1,4 @@
-// Package asvs OWASP Application Security Verfication Standard libary parset
+// Package asvs OWASP Application Security Verification Standard database
 // Copyright 2021 taralizer authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");

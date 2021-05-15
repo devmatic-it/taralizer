@@ -22,7 +22,7 @@ import (
 	"os/exec"
 )
 
-// initializes arguments for version commmand
+// initializes arguments for version command
 func init() {
 	diagramCmd.Flags().StringVar(&engine, "engine", "dot", "default command to generate graph. Currently 'dot' and 'plantuml' are supported.")
 	diagramCmd.Flags().StringVar(&outFile, "out", "diagram", "output file name")

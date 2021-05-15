@@ -38,7 +38,7 @@ Taralizer is a Threat and Risk Analysis tool.
 	}
 )
 
-// initializes arguments for version commmand
+// initializes arguments for version command
 func init() {
 	cobra.OnInitialize(initConfig)
 	rootCmd.Flags().StringVar(&cfgFile, "config", "", "configuration file. If not specified, 'config.yaml' is searched in path.")
