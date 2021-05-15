@@ -4,7 +4,9 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/devmatic-it/taralizer/blob/master/LICENSE)
 [![codecov](https://codecov.io/gh/devmatic-it/taralizer/branch/master/graph/badge.svg)](https://codecov.io/gh/devmatic-it/taralizer)
 
-The following project performs a Threat and Risk Analysis based on an architecture model defined through  YAML file.
+The following project performs a Threat and Risk Analysis based on an architecture model defined through simple YAML file.
+We aim to implement the OWASP Application Security Verification Standard (ASVS)(<https://owasp.org/www-project-application-security-verification-standard/>) and also destribute their great database (<https://github.com/OWASP/ASVS/raw/v4.0.2/4.0/docs_en/OWASP%20Application%20Security%20Verification%20Standard%204.0.2-en.csv>).
+Furthermore, we use and distribute MITRE Common Weakness Enumeration (<https://cwe.mitre.org/data/downloads.html>) as a way to classify weaknesses.
 
 ## Motivation
 
@@ -42,13 +44,15 @@ Taralizer tries to overcome these limitations with the following approach:
 
 ## Credits
 
-This work has ben inspired by the following open source projects:
+This work has been inspired and would not be possible without the following awesome open source projects:
 
 - Threagile - Agile Threat Modelling (<https://threagile.io>)
 - Open Policy Agent (<https://www.openpolicyagent.org>)
 - PlantUML (<https://plantuml.com>)
 - GraphViz (<https://graphviz.org>)
 - WKhtmltoPDF (<https://wkhtmltopdf.org>)
+- OWASP Application Security Verification Standard <https://owasp.org/www-project-application-security-verification-standard/>
+- Common Weakness Enumeration (<https://cwe.mitre.org/index.html>)
 - GoRleaser Builder Image (<https://github.com/goreleaser/goreleaser>)
 - Building a basic CI/CD pipeline for a Golang application using GitHub Actions
 (<https://dev.to/brpaz/building-a-basic-ci-cd-pipeline-for-a-golang-application-using-github-actions-icj>)
