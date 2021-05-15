@@ -17,9 +17,9 @@ GOBIN=$(GOBASE)/dist
 PKG := "github.com/devmatic-it/taralizer"
 PKG_LIST := $(shell go list ${PKG}/... | grep -v /vendor/)
 VERSION := 1.2.3.4
-all:  compile
+all:  compile test-coverage
 
-compile: build 
+compile: build
 
 init: get compile
 

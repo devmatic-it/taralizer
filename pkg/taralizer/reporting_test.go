@@ -20,7 +20,7 @@ import (
 )
 
 func TestNewReporitng(t *testing.T) {
-	report := Load("../../data/model.yaml")
+	report := Load("../../examples/gcp/bank_of_anthos.yaml")
 	engine := NewReportEngine()
 	engine.GenerateReport(os.Stdout, "../../templates/html.tpl", report)
 }

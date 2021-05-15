@@ -205,7 +205,7 @@ func (svc *ReportEngine) GenerateReport(wr io.Writer, tplFile string, report Rep
 	/* #nosec G304 */
 	f, err := os.Open(tplFile)
 	if err != nil {
-		log.Fatalf("cannot load model file: %v", err)
+		log.Fatalf("GenerateReport: cannot load template file: %v", err)
 	}
 
 	/* #nosec G307 */
@@ -221,4 +221,17 @@ func (svc *ReportEngine) GenerateReport(wr io.Writer, tplFile string, report Rep
 	if err != nil {
 		log.Fatalf("Error, executing template engine: %s\n", err)
 	}
+}
+
+// GetTemplateDir returns the directory of the template files
+func (svc *ReportEngine) GetTemplateDir() string {
+	defaultTemplatesDir := []string{"./templates/", "/etc/taralizer/templates/", "../templates/", "../../templates/"}
+	templateDir := "NOT_FOUND"
+	for _, v := range defaultTemplatesDir {
+		if _, err := os.Stat(v); !os.IsNotExist(err) {
+			templateDir = v
+			break
+		}
+	}
+	return templateDir
 }

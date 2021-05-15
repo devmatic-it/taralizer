@@ -96,6 +96,13 @@ func (svc *Taralizer) Validate(fileName string) []string {
 
 // // Evaluate executes an Open Policy Agent (OPA) query against the rule sets calling the given query 'queryStr'
 func (svc *Taralizer) query(fileName string, queryStr string) rego.ResultSet {
+	dir, err := os.Getwd()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	log.Printf("Current directory: %s", dir)
+
 	/* #nosec G304 */
 	jsonFile, err := os.Open(fileName)
 
@@ -117,7 +124,14 @@ func (svc *Taralizer) query(fileName string, queryStr string) rego.ResultSet {
 		log.Fatalf("cannot unmarshal model file: %v", err)
 	}
 
-	rules := []string{"./rules/"}
+	defaultRulesDir := []string{"./rules/", "/etc/taralizer/rules/", "../../rules/"}
+	rules := []string{}
+	for _, v := range defaultRulesDir {
+		if _, err := os.Stat(v); !os.IsNotExist(err) {
+			rules = append(rules, v)
+		}
+	}
+
 	query, err := rego.New(rego.Query(queryStr), rego.Load(rules, nil)).PrepareForEval(svc.ctx)
 	if err != nil {
 		log.Fatalf("cannot load model file into rego engine: %v", err)

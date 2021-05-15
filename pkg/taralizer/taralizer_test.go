@@ -22,6 +22,6 @@ import (
 
 func TestNewTaralizer(t *testing.T) {
 	i := NewTaralizer("asvs")
-	report := i.Evaluate("../../data/model.yaml")
+	report := i.Evaluate("../../examples/gcp/bank_of_anthos.yaml")
 	assert.Greater(t, len(report.Risks), 0)
 }

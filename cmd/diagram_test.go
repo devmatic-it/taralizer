@@ -11,6 +11,6 @@ func init() {
 }
 
 func Test_Diagram_Cmd(t *testing.T) {
-	diagramCmd.Run(diagramCmd, []string{"../example/model.yaml"})
+	diagramCmd.Run(diagramCmd, []string{"../examples/gcp/bank_of_anthos.yaml"})
 	//assert.Empty(t, err)
 }

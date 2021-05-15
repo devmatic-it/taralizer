@@ -21,7 +21,7 @@ import (
 )
 
 func TestLoad(t *testing.T) {
-	report := Load("../../data/model.yaml")
+	report := Load("../../examples/gcp/bank_of_anthos.yaml")
 	assert.Greater(t, len(report.DataAssets), 0)
 	assert.Greater(t, len(report.TechnicalAssets), 0)
 	assert.Greater(t, len(report.TrustBoundaries), 0)
