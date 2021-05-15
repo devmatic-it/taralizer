@@ -212,14 +212,18 @@ func (svc *ReportEngine) GenerateReport(wr io.Writer, tplFile string, report Rep
 	defer f.Close()
 
 	templateText, err := ioutil.ReadAll(f)
+	if err != nil {
+		log.Fatalf("GenerateReport: ReadAll error: %s", err)
+	}
+
 	tpl, err := template.New("tpl").Funcs(funcMap).Parse(string(templateText))
 	if err != nil {
-		log.Fatalf("parsing: %s", err)
+		log.Fatalf("GenerateReport: template.New error: %s", err)
 	}
 
 	err = tpl.Execute(wr, report)
 	if err != nil {
-		log.Fatalf("Error, executing template engine: %s\n", err)
+		log.Fatalf("GenerateReport: Execute error: %s", err)
 	}
 }
 

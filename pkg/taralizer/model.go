@@ -122,11 +122,14 @@ func Load(fileName string) Report {
 	}
 
 	data, err := ioutil.ReadAll(jsonFile)
+	if err != nil {
+		log.Fatalf("Load: ReadAll error: %v", err)
+	}
 
 	// unmarshal for report
 	err = yaml.Unmarshal([]byte(data), &report)
 	if err != nil {
-		log.Fatalf("cannot unmarshal report file: %v", err)
+		log.Fatalf("Load: unmarksall error: %v", err)
 	}
 
 	// replace variables in Puml
