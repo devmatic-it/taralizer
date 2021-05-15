@@ -16,6 +16,9 @@ jobs:
     - name: Check out code into the Go module directory
       uses: actions/checkout@v1
 
+    - name: Install dependencies graphviz, plantuml and wkhtmltopdf
+      run: sudo apt-get install -y graphviz plantuml wkhtmltopdf
+
     - name: Build
       run: make
 
