@@ -1,0 +1,8 @@
+coverage.txt
+cover.out
+gosec_report.*
+report.*
+diagram.*
+dist
+build/debcvescan
+dist/

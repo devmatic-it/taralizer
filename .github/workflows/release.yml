@@ -1,0 +1,36 @@
+name: Release
+on:
+  create:
+    tags:
+      - v*
+
+jobs:
+  release:
+    name: Release on GitHub
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v1
+
+      - name: Validates GO releaser config
+        uses: docker://goreleaser/goreleaser:latest
+        with:
+          args: check
+
+      - name: Create release on GitHub
+        uses: docker://goreleaser/goreleaser:latest
+        with:
+          args: release
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+      - name: Create Debian repository
+        uses: devmatic-it/debrepo-action@v1
+        env: 
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          PUBLIC_KEY: ${{secrets.PUBLIC_KEY}}
+          PRIVATE_KEY: ${{secrets.PRIVATE_KEY}}
+          REPOSITORY: './docs/debian'
+          NAME: 'debcvescan'          
+          OS: 'linux'
+          CODENAME: 'buster'

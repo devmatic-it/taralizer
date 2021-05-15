@@ -1,0 +1,480 @@
+title: Bank of Anthos
+customer: Anthos Bank Investment Ltd.
+date: 2020-07-02
+version: 1.1
+
+author:
+  name: Ferenc Bator
+  homepage: www.devmatic-it.com
+
+threat_agents:
+  - id: unauthorized-external-agent
+    name: TA1
+    description: external threat agent 
+
+  - id: authorized-employee
+    name: TA2
+    description: authorized employee
+
+  - id: unauthorized-employee
+    name: TA3
+    description: Employee of the company that is not authorized to access the system
+
+
+data_assets:
+  - id: client-application-code
+    name: A1
+    description: Angular and other client-side code delivered by the application.
+    confidentiality: 1 # values: public, internal, restricted, confidential, strictly-confidential
+    integrity: 2 # values: archive, operational, important, critical, mission-critical
+    availability: 1 # values: archive, operational, important, critical, mission-critical
+
+  - id: id-token
+    name: A2
+    description: OIDC identity token
+    confidentiality: 2 # values: public, internal, restricted, confidential, strictly-confidential
+    integrity: 1 # values: archive, operational, important, critical, mission-critical
+    availability: 1 # values: archive, operational, important, critical, mission-critical
+
+  - id: access-token
+    name: A3
+    description: OAuth2 access token
+    confidentiality: 2 # values: public, internal, restricted, confidential, strictly-confidential
+    integrity: 1 # values: archive, operational, important, critical, mission-critical
+    availability: 1 # values: archive, operational, important, critical, mission-critical
+
+  - id: refresh-token
+    name: A4
+    description: OAuth2 refresh token
+    confidentiality: 2 # values: public, internal, restricted, confidential, strictly-confidential
+    integrity: 1 # values: archive, operational, important, critical, mission-critical
+    availability: 1 # values: archive, operational, important, critical, mission-critical
+
+  - id: product-catalog
+    name: A5
+    description: product catalog
+    quantity: very-few # values: very-few, few, many, very-many
+    confidentiality: 1 
+    integrity: 1
+    availability: 1 
+
+  - id: root-ca
+    name: A6
+    description: root certificates
+    quantity: very-few # values: very-few, few, many, very-many
+    confidentiality: 3
+    integrity: 3
+    availability: 2 
+
+
+technical_assets:
+- id: browser
+  name: User
+  technology: browser
+  description: The browser used by the end customer
+  puml: Client($id, "$name", "")
+  used_as_client_by_human: true
+  out_of_scope: true
+  communication_links:
+    - target: waf
+      description: Link to waf
+      protocol: https # values: see help
+      authentication: session-id # values: none, credentials, session-id, token, client-certificate, two-factor
+      authorization: enduser-identity-propagation # values: none, technical-user, enduser-identity-propagation
+      data_assets_sent: # sequence of IDs to reference
+      data_assets_received: # sequence of IDs to reference
+        - client-application-code
+        - product-catalog
+
+- id: developer_client  
+  name: DevOps
+  description: laptop used by developers and operators to manage the system
+  technology: devops-client
+  puml: Client($id, "$name", "")
+  used_as_client_by_human: true
+  out_of_scope: false
+  communication_links:
+    - target: waf
+      description: Link to waf
+      protocol: https # values: see help
+      authentication: none # values: none, credentials, session-id, token, client-certificate, two-factor
+      authorization: none # values: none, technical-user, enduser-identity-propagation
+      data_assets_sent: # sequence of IDs to reference
+      data_assets_received: # sequence of IDs to reference
+        - client-application-code
+        - product-catalog
+
+- id: waf
+  name: WAF
+  technology: waf
+  puml: CloudArmor($id, "$name", "$data", "")
+  description: Google Cloud Armor Web Application Firewall
+  internet: true
+  communication_links:
+    - target: ingress
+      description: Link to app
+      protocol: https # values: see help
+      authentication: session-id # values: none, credentials, session-id, token, client-certificate, two-factor
+      authorization: enduser-identity-propagation # values: none, technical-user, enduser-identity-propagation
+      data_assets_sent: # sequence of IDs to reference
+      data_assets_received: # sequence of IDs to reference
+        - client-application-code
+        - product-catalog
+
+- id: ingress
+  name: istio-ingress-gateway
+  technology: kubernetes-ingress
+  puml: KubernetesSvc($id,"$name", "$data")
+  description: ISTIO ingress gateway
+  communication_links:
+    - target: frontend
+      protocol: https # values: see help
+      authentication: session-id # values: none, credentials, session-id, token, client-certificate, two-factor
+      authorization: enduser-identity-propagation # values: none, technical-user, enduser-identity-propagation
+      data_assets_sent: # sequence of IDs to reference
+      data_assets_received: # sequence of IDs to reference
+        - product-catalog
+
+- id: frontend
+  name: frontend
+  technology: kubernetes-pod
+  puml: KubernetesPod($id, "$name", "$data") 
+  description: Exposes an HTTP server to serve the website. Contains a login page, a signup page, and a home page.
+  communication_links:
+    - target: user_service
+      protocol: https # values: see help
+      authentication: session-id # values: none, credentials, session-id, token, client-certificate, two-factor
+      authorization: enduser-identity-propagation # values: none, technical-user, enduser-identity-propagation
+      data_assets_sent: # sequence of IDs to reference
+      data_assets_received: # sequence of IDs to reference
+        - product-catalog
+
+    - target: contacts
+      protocol: https # values: see help
+      authentication: session-id # values: none, credentials, session-id, token, client-certificate, two-factor
+      authorization: enduser-identity-propagation # values: none, technical-user, enduser-identity-propagation
+      data_assets_sent: # sequence of IDs to reference
+      data_assets_received: # sequence of IDs to reference
+        - product-catalog
+
+
+    - target: trans_history
+      protocol: https # values: see help
+      authentication: session-id # values: none, credentials, session-id, token, client-certificate, two-factor
+      authorization: enduser-identity-propagation # values: none, technical-user, enduser-identity-propagation
+      data_assets_sent: # sequence of IDs to reference
+      data_assets_received: # sequence of IDs to reference
+        - product-catalog
+
+    - target: balance_reader
+      protocol: https # values: see help
+      authentication: session-id # values: none, credentials, session-id, token, client-certificate, two-factor
+      authorization: enduser-identity-propagation # values: none, technical-user, enduser-identity-propagation
+      data_assets_sent: # sequence of IDs to reference
+      data_assets_received: # sequence of IDs to reference
+        - product-catalog
+
+    - target: ledger_writer
+      protocol: https # values: see help
+      authentication: session-id # values: none, credentials, session-id, token, client-certificate, two-factor
+      authorization: enduser-identity-propagation # values: none, technical-user, enduser-identity-propagation
+      data_assets_sent: # sequence of IDs to reference
+      data_assets_received: # sequence of IDs to reference
+        - product-catalog
+
+
+- id: user_service
+  name: User Service
+  technology: kubernetes-pod
+  puml: KubernetesPod($id, "$name", "$data") 
+  communication_links:
+    - target: accounts_db
+      description: Link to database
+      protocol: sql_encrypted # values: see help
+      authentication: session-id # values: none, credentials, session-id, token, client-certificate, two-factor
+      authorization: enduser-identity-propagation # values: none, technical-user, enduser-identity-propagation
+      data_assets_sent: # sequence of IDs to reference
+      data_assets_received: # sequence of IDs to reference
+        - product-catalog
+
+- id: contacts
+  name: Contacts
+  technology: kubernetes-pod
+  puml: KubernetesPod($id, "$name", "$data") 
+  description: Stores a list of additional accounts that are associated with a user. These accounts are listed in the application's Send Payment and Deposit forms.
+  communication_links:
+    - target: accounts_db
+      description: Link to database
+      protocol: sql_encrypted # values: see help
+      authentication: session-id # values: none, credentials, session-id, token, client-certificate, two-factor
+      authorization: enduser-identity-propagation # values: none, technical-user, enduser-identity-propagation
+      data_assets_sent: # sequence of IDs to reference
+      data_assets_received: # sequence of IDs to reference
+        - product-catalog
+
+
+- id: user_service
+  name: User Service
+  technology: kubernetes-pod
+  puml: KubernetesPod($id, "$name", "$data") 
+  description: Manages user accounts and authentication. The service signs JWTs that are used for authentication by other services.
+  communication_links:
+    - target: accounts_db
+      description: Link to database
+      protocol: sql_encrypted # values: see help
+      authentication: session-id # values: none, credentials, session-id, token, client-certificate, two-factor
+      authorization: enduser-identity-propagation # values: none, technical-user, enduser-identity-propagation
+      data_assets_sent: # sequence of IDs to reference
+      data_assets_received: # sequence of IDs to reference
+        - product-catalog
+
+- id: ledger_writer
+  name: ledger writer
+  technology: kubernetes-pod
+  puml: KubernetesPod($id, "$name", "$data")
+  description: Accepts and validates incoming transactions before writing them to the ledger.
+  communication_links:
+    - target: ledger_db
+      description: Link to database
+      protocol: sql_encrypted # values: see help
+      authentication: session-id # values: none, credentials, session-id, token, client-certificate, two-factor
+      authorization: enduser-identity-propagation # values: none, technical-user, enduser-identity-propagation
+      data_assets_sent: # sequence of IDs to reference
+      data_assets_received: # sequence of IDs to reference
+        - product-catalog
+
+- id: balance_reader
+  name: balance reader
+  technology: kubernetes-pod
+  puml: KubernetesPod($id, "$name", "$data") 
+  description: Provides an efficient readable cache of user balances, as read from ledger-db.
+  communication_links:
+    - target: ledger_db
+      description: Link to database
+      protocol: sql_encrypted # values: see help
+      authentication: session-id # values: none, credentials, session-id, token, client-certificate, two-factor
+      authorization: enduser-identity-propagation # values: none, technical-user, enduser-identity-propagation
+      data_assets_sent: # sequence of IDs to reference
+      data_assets_received: # sequence of IDs to reference
+        - product-catalog
+
+- id: trans_history
+  name: trans history
+  technology: kubernetes-pod
+  puml: KubernetesPod($id, "$name", "$data") 
+  description: Provides an efficient readable cache of past transactions, as read from ledger-db.
+  communication_links:
+    - target: ledger_db
+      description: Link to database
+      protocol: sql_encrypted # values: see help
+      authentication: session-id # values: none, credentials, session-id, token, client-certificate, two-factor
+      authorization: enduser-identity-propagation # values: none, technical-user, enduser-identity-propagation
+      data_assets_sent: # sequence of IDs to reference
+      data_assets_received: # sequence of IDs to reference
+        - product-catalog
+
+
+- id: accounts_db
+  name: accounts-db
+  technology: database-sql
+  puml: CloudSQL($id, "$name", "$data", "")
+  description: SQL database
+  data_assets_stored:
+    - product-catalog
+
+- id: ledger_db
+  name: ledger-db
+  technology: database-nosql
+  puml: CloudSQL($id, "$name", "$data", "")
+  description: CloudSQL for hyperledger 
+  data_assets_stored:
+    - id-token
+    - access-token
+    - refresh-token
+
+- id: kms
+  name: KMS
+  technology: hsm
+  puml: KeyManagementService($id, "$name", "$data", "")
+  description: Google Key Management Service
+  data_assets_stored:
+
+- id: hsm
+  name: HSM
+  technology: hsm
+  puml: KeyManagementService($id, "$name", "$data", "")
+  description: on-premise Harware Security Module (HSM)
+  data_assets_stored:
+  communication_links:
+    - target: kms
+      description: key transfer
+      protocol: ftp # values: see help
+      authentication: session-id # values: none, credentials, session-id, token, client-certificate, two-factor
+      authorization: enduser-identity-propagation # values: none, technical-user, enduser-identity-propagation
+      data_assets_sent: # sequence of IDs to reference
+      data_assets_received: # sequence of IDs to reference
+        - product-catalog
+
+
+- id: logging
+  name: Cloud Logging
+  technology: logging
+  puml: Logging($id, "$name", "$data", "")
+  description: Cloud Monitoring
+  data_assets_stored:
+
+- id: monitoring
+  name: Cloud Monitoring
+  technology: monitoring
+  puml: Monitoring($id, "$name", "$data", "")
+  description: KMS
+  data_assets_stored:
+
+
+trust_boundaries:
+  - id: internet
+    name: Internet
+    description: Internet
+    technology: internet # values: see help
+    puml: package "$name"
+    trust_boundaries_nested: # sequence of IDs to reference
+      - cloud
+    technical_assets_inside:
+      - browser
+    threat_agents_inside:
+      - unauthorized-external-agent
+
+  - id: cloud
+    name: Google Cloud Platform
+    description: Google Cloud
+    technology: internet # values: see help
+    puml: package "$name"
+    trust_boundaries_nested: # sequence of IDs to reference
+      - project
+      - shared_services
+      - security_services
+      - ops_services
+    technical_assets_inside:
+    threat_agents_inside:
+      - unauthorized-external-agent
+
+
+
+  - id: project
+    name: project boa-gke
+    description: Google Project
+    technology: subscription # values: see help
+    puml: package "$name"
+    trust_boundaries_nested: # sequence of IDs to reference
+      - virtual_network
+
+  - id: virtual_network
+    name: VPC
+    description: Virtual Private Cloud
+    technology: vpc # values: see help
+    puml: package "$name"
+    trust_boundaries_nested: # sequence of IDs to reference
+      - public_subnet
+      - private_subnet
+
+  - id: public_subnet
+    name: public subnet
+    description: internet facing zone
+    technology: subnet # values: see help
+    puml: rectangle "$name"
+    technical_assets_inside: # sequence of IDs to reference
+      - waf
+
+  - id: private_subnet
+    name: privat subnet
+    description: Application Network
+    technology: subnet # values: see help
+    puml: rectangle "$name"
+    trust_boundaries_nested: # sequence of IDs to reference
+      - kubernetes_cluster
+
+  - id: kubernetes_cluster
+    name: GKE
+    description: kubernetes cluster
+    technology: kubernetes-cluster # values: see help
+    puml: Cluster_Boundary($id, "$name")
+    trust_boundaries_nested: # sequence of IDs to reference
+      - ns_istio
+      - ns_frontend
+      - ns_accounts
+      - ns_transactions
+
+
+  - id: ns_frontend
+    name: frontend
+    description: kubernetes frontend namespace
+    technology: kubernetes-network-policies # values: see help
+    puml: Namespace_Boundary($id, "$name")
+    technical_assets_inside: # sequence of IDs to reference
+      - frontend
+
+  - id: ns_accounts
+    name: accounts
+    description: kubernetes default namespace
+    technology: kubernetes-network-policies # values: see help
+    puml: Namespace_Boundary($id, "$name")
+    technical_assets_inside: # sequence of IDs to reference
+      - user_service
+      - contacts
+
+  - id: ns_transactions
+    name: transactions
+    description: kubernetes default namespace
+    technology: kubernetes-network-policies # values: see help
+    puml: Namespace_Boundary($id, "$name")
+    technical_assets_inside: # sequence of IDs to reference
+      - ledger_writer
+      - balance_reader
+      - trans_history
+
+  - id: ns_istio
+    name: istion-system
+    description: kubernetes istio-system
+    technology: kubernetes-network-policies # values: see help
+    puml: Namespace_Boundary($id, "$name")
+    technical_assets_inside: # sequence of IDs to reference
+      - ingress
+   
+  - id: shared_services
+    name: project boa-sql
+    description: Azure Shared Services
+    technology: cloud-services # values: see help
+    puml: package "$name"
+    technical_assets_inside: # sequence of IDs to reference
+      - accounts_db
+      - ledger_db
+  
+
+  - id: security_services
+    name: project boa-sec
+    description: Contains Secret Manager and KMS instances for secrets that are specific to the Bank of Anthos application.
+    technology: project # values: see help
+    puml: package "$name"
+    technical_assets_inside: # sequence of IDs to reference
+      - kms
+    
+  - id: ops_services
+    name: project boa-ops
+    description: Used for storing environment logs as well as monitoring the environment instance of the Bank of Anthos application.
+    technology: project # values: see help
+    puml: package "$name"
+    technical_assets_inside: # sequence of IDs to reference
+      - logging
+      - monitoring
+
+  - id: company_network
+    name: Company Network
+    description: trusted on-premise company network
+    technology: on-premise # values: see help
+    puml: package "$name"
+    technical_assets_inside: # sequence of IDs to reference
+      - developer_client
+      - hsm
+    threat_agents_inside:
+      - authorized-employee
+      - unauthorized-employee
