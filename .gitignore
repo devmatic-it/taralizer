@@ -1,9 +1,10 @@
 coverage.txt
 cover.out
 gosec_report.*
-report.*
-diagram.*
+report.png
+diagram.png
 dist
 build/debcvescan
 contrib/
 dist/
+report.html
