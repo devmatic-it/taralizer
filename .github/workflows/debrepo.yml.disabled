@@ -1,8 +1,5 @@
-name: Release
-on:
-  create:
-    tags:
-      - v*
+name: DebianRepository
+on: [push]
 
 jobs:
   release:
@@ -20,7 +17,7 @@ jobs:
       - name: Create release on GitHub
         uses: docker://goreleaser/goreleaser:latest
         with:
-          args: release
+          args: release --snapshot
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
@@ -31,6 +28,8 @@ jobs:
           PUBLIC_KEY: ${{secrets.PUBLIC_KEY}}
           PRIVATE_KEY: ${{secrets.PRIVATE_KEY}}
           REPOSITORY: './docs/debian'
-          NAME: 'taralizer'
+          NAME: 'debcvescan'
+          ARCH: 'amd64'
           OS: 'linux'
           CODENAME: 'buster'
+  

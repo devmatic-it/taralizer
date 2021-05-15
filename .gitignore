@@ -5,4 +5,5 @@ report.*
 diagram.*
 dist
 build/debcvescan
+contrib/
 dist/
