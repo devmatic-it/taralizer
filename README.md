@@ -2,7 +2,7 @@
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/devmatic-it/taralizer)](https://goreportcard.com/report/github.com/devmatic-it/tarlizer)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/devmatic-it/taralizer/blob/master/LICENSE)
-[![codecov](https://codecov.io/gh/devmatic-it/taralizer/branch/master/graph/badge.svg)](https://codecov.io/gh/devmatic-it/taralizer)
+[![codecov](https://codecov.io/gh/devmatic-it/taralizer/branch/main/graph/badge.svg)](https://codecov.io/gh/devmatic-it/taralizer)
 
 The following project performs a Threat and Risk Analysis based on an architecture model defined through simple YAML file.
 We aim to implement the OWASP Application Security Verification Standard (ASVS)(<https://owasp.org/www-project-application-security-verification-standard/>) and also destribute their great database (<https://github.com/OWASP/ASVS/raw/v4.0.2/4.0/docs_en/OWASP%20Application%20Security%20Verification%20Standard%204.0.2-en.csv>).
