@@ -12,6 +12,9 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v1
 
+      - name: Install dependencies graphviz, plantuml and wkhtmltopdf
+        run: sudo apt-get install -y graphviz plantuml wkhtmltopdf
+
       - name: Validates GO releaser config
         uses: docker://goreleaser/goreleaser:latest
         with:
@@ -23,14 +26,3 @@ jobs:
           args: release
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-
-      - name: Create Debian repository
-        uses: devmatic-it/debrepo-action@v1
-        env: 
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-          PUBLIC_KEY: ${{secrets.PUBLIC_KEY}}
-          PRIVATE_KEY: ${{secrets.PRIVATE_KEY}}
-          REPOSITORY: './docs/debian'
-          NAME: 'taralizer'
-          OS: 'linux'
-          CODENAME: 'buster'
