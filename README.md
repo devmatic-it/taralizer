@@ -21,10 +21,15 @@ Taralizer tries to overcome these limitations with the following approach:
 
 ## Installation
 
-### Binary
+### Getting Started
 
 1. Download latest release for your platform: <https://github.com/devmatic-it/taralizer/releases/latest>
-2. extract archive: `tar xvfz taralizer_X.Y.Z_linux_amd64.tgz`
+2. extract archive: `unzip taralizer_X.Y.Z_linux_amd64.zip`
+3. create dataflow diagram diagram.png using graphviz: `./taralizer diagram ./examples/gcp/bank_of_anthos.yaml`
+4. create dataflow diagram diagram.png using plantuml: `./taralizer diagram ./examples/gcp/bank_of_anthos.yaml --engine plantuml`
+5. create example HTML report: `./taralizer report ./examples/gcp/bank_of_anthos.yaml`
+6. open examples HTML report `report.html`on browser
+7. create example PDF report: `./taralizer report ./examples/gcp/bank_of_anthos.yaml --type pdf`
 
 ## Contribute
 
