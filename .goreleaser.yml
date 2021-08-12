@@ -38,9 +38,9 @@ archives:
     files:
       - LICENSE
       - AUTHORS
-      - rules/**/*
-      - templates/*
-      - examples/**/*
+      - rules/**
+      - templates/**
+      - examples/**
 
 # nfpms:  
 #   - id: taralizer
