@@ -37,127 +37,127 @@ archives:
     - taralizer
     files:
       - LICENSE
-      - README.md
       - AUTHORS
       - rules/**/*
-      - templates/**/*
+      - templates/*
+      - examples/**/*
 
-nfpms:  
-  - id: taralizer
-    package_name: taralizer
-    file_name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
-    builds:
-    - taralizer
+# nfpms:  
+#   - id: taralizer
+#     package_name: taralizer
+#     file_name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
+#     builds:
+#     - taralizer
 
-    dependencies:
-      - graphviz
-      - plantuml
-      - wkhtmltopdf
+#     dependencies:
+#       - graphviz
+#       - plantuml
+#       - wkhtmltopdf
 
-    contents:
-      # Basic file that applies to all packagers
-      - src: rules
-        dst: /etc/taralizer/rules
-      - src: templates
-        dst: /etc/taralizer/templates
+#     contents:
+#       # Basic file that applies to all packagers
+#       - src: rules
+#         dst: /etc/taralizer/rules
+#       - src: templates
+#         dst: /etc/taralizer/templates
   
 
-    replacements:      
-      386: i386
+#     replacements:      
+#       386: i386
 
-    vendor: Devmatic IT
-    homepage: https://github.com/devmatic-it/taralizer
-    maintainer: F. Bator <bator@devmatic-it.com>
-    description: Taralizer is a Threat and Risk Analysis tool using the extendable OPA rules engine to implement the OWASP ASVS standard.
-    license: Apache 2.0
-    section: development
-    priority: extra
+#     vendor: Devmatic IT
+#     homepage: https://github.com/devmatic-it/taralizer
+#     maintainer: F. Bator <bator@devmatic-it.com>
+#     description: Taralizer is a Threat and Risk Analysis tool using the extendable OPA rules engine to implement the OWASP ASVS standard.
+#     license: Apache 2.0
+#     section: development
+#     priority: extra
 
-    # Formats to be generated.
-    formats:
-      - deb
-      - rpm
+#     # Formats to be generated.
+#     formats:
+#       - deb
+#       - rpm
 
       
-    bindir: /usr/bin
+#     bindir: /usr/bin
 
-brews:
-  - name: taralizer
-    ids:
-    - taralizer    
+# brews:
+#   - name: taralizer
+#     ids:
+#     - taralizer    
 
-    # GOARM to specify which 32-bit arm version to use if there are multiple versions
-    # from the build section. Brew formulas support atm only one 32-bit version.
-    # Default is 6 for all artifacts or each id if there a multiple versions.
-    goarm: 6
+#     # GOARM to specify which 32-bit arm version to use if there are multiple versions
+#     # from the build section. Brew formulas support atm only one 32-bit version.
+#     # Default is 6 for all artifacts or each id if there a multiple versions.
+#     goarm: 6
 
-    tap:
-      owner: repo-owner
-      name: homebrew-tap
-      # Optionally a token can be provided, if it differs from the token provided to GoReleaser
-      #token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
+#     tap:
+#       owner: repo-owner
+#       name: homebrew-tap
+#       # Optionally a token can be provided, if it differs from the token provided to GoReleaser
+#       #token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
 
-    # Template for the url which is determined by the given Token (github or gitlab)
-    # Default for github is "https://github.com/<repo_owner>/<repo_name>/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
-    # Default for gitlab is "https://gitlab.com/<repo_owner>/<repo_name>/uploads/{{ .ArtifactUploadHash }}/{{ .ArtifactName }}"
-    # Default for gitea is "https://gitea.com/<repo_owner>/<repo_name>/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
-    url_template: " https://github.com/devmatic-it/taralizer/releases/{{ .Tag }}/{{ .ArtifactName }}"
+#     # Template for the url which is determined by the given Token (github or gitlab)
+#     # Default for github is "https://github.com/<repo_owner>/<repo_name>/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
+#     # Default for gitlab is "https://gitlab.com/<repo_owner>/<repo_name>/uploads/{{ .ArtifactUploadHash }}/{{ .ArtifactName }}"
+#     # Default for gitea is "https://gitea.com/<repo_owner>/<repo_name>/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
+#     url_template: " https://github.com/devmatic-it/taralizer/releases/{{ .Tag }}/{{ .ArtifactName }}"
 
-    # Allows you to set a custom download strategy. Note that you'll need
-    # to implement the strategy and add it to your tap repository.
-    # Example: https://docs.brew.sh/Formula-Cookbook#specifying-the-download-strategy-explicitly
-    # Default is empty.
-    download_strategy: CurlDownloadStrategy.
+#     # Allows you to set a custom download strategy. Note that you'll need
+#     # to implement the strategy and add it to your tap repository.
+#     # Example: https://docs.brew.sh/Formula-Cookbook#specifying-the-download-strategy-explicitly
+#     # Default is empty.
+#     download_strategy: CurlDownloadStrategy.
 
-    # Allows you to add a custom require_relative at the top of the formula template
-    # Default is empty
-    custom_require: custom_download_strategy
+#     # Allows you to add a custom require_relative at the top of the formula template
+#     # Default is empty
+#     custom_require: custom_download_strategy
 
-    # Git author used to commit to the repository.
-    # Defaults are shown.
-    commit_author:
-      name: goreleaserbot
-      email: goreleaser@carlosbecker.com
+#     # Git author used to commit to the repository.
+#     # Defaults are shown.
+#     commit_author:
+#       name: goreleaserbot
+#       email: goreleaser@carlosbecker.com
 
-    # Folder inside the repository to put the formula.
-    # Default is the root folder.
-    folder: Formula
+#     # Folder inside the repository to put the formula.
+#     # Default is the root folder.
+#     folder: Formula
 
-    # Caveats for the user of your binary.
-    # Default is empty.
-    caveats: "How to use this binary"
+#     # Caveats for the user of your binary.
+#     # Default is empty.
+#     caveats: "How to use this binary"
 
-    # Your app's homepage.
-    # Default is empty.
-    homepage: "https://github.com/devmatic-it/taralizer"
+#     # Your app's homepage.
+#     # Default is empty.
+#     homepage: "https://github.com/devmatic-it/taralizer"
 
-    # Your app's description.
-    # Default is empty.
-    description: "Taralizer is a Threat and Risk Analysis tool using the extendable OPA rules engine to implement the OWASP ASVS standard."
+#     # Your app's description.
+#     # Default is empty.
+#     description: "Taralizer is a Threat and Risk Analysis tool using the extendable OPA rules engine to implement the OWASP ASVS standard."
 
-    # SPDX identifier of your app's license.
-    # Default is empty.
-    license: "Apache 2.0"
+#     # SPDX identifier of your app's license.
+#     # Default is empty.
+#     license: "Apache 2.0"
 
-    # Setting this will prevent goreleaser to actually try to commit the updated
-    # formula - instead, the formula file will be stored on the dist folder only,
-    # leaving the responsibility of publishing it to the user.
-    # If set to auto, the release will not be uploaded to the homebrew tap
-    # in case there is an indicator for prerelease in the tag e.g. v1.0.0-rc1
-    # Default is false.
-    skip_upload: true
+#     # Setting this will prevent goreleaser to actually try to commit the updated
+#     # formula - instead, the formula file will be stored on the dist folder only,
+#     # leaving the responsibility of publishing it to the user.
+#     # If set to auto, the release will not be uploaded to the homebrew tap
+#     # in case there is an indicator for prerelease in the tag e.g. v1.0.0-rc1
+#     # Default is false.
+#     skip_upload: true
 
 
-    # Packages your package depends on.
-    dependencies:
-      - name: graphviz
-        type: mandatory
-      - name: plantuml
-        type: mandatory
-      - name: wkhtmltopdf
-        type: mandatory
+#     # Packages your package depends on.
+#     dependencies:
+#       - name: graphviz
+#         type: mandatory
+#       - name: plantuml
+#         type: mandatory
+#       - name: wkhtmltopdf
+#         type: mandatory
 
-    # So you can `brew test` your formula.
-    # Default is empty.
-    test: |
-      system "#{bin}/taralizer version"      
+#     # So you can `brew test` your formula.
+#     # Default is empty.
+#     test: |
+#       system "#{bin}/taralizer version"      
