@@ -105,6 +105,30 @@ type Report struct {
 	Customer        string           `yaml:"customer,omitempty"`
 	Date            string           `yaml:"date,omitempty"`
 	Author          Author           `yaml:"author,omitempty"`
+	RuleSet         RuleSet          `yaml:"ruleset,omitempty"`
+}
+
+// rules
+type Rule struct {
+	Id          string `yaml:"id"`
+	Cwe         int64  `yaml:"cwe"`
+	Title       string `yaml:"title"`
+	Description string `yaml:"description"`
+	Mitigation  string `yaml:"mitigation"`
+	Url         string `yaml:"url"`
+	Impact      int64  `yaml:"impact"`
+	Likelihood  int64  `yaml:"likelihood"`
+	Severity    int64  `yaml:"severity"`
+}
+
+// RulSet repesents a ruleset
+type RuleSet struct {
+	Name        string `yaml:"name"`
+	Title       string `yaml:"title"`
+	Description string `yaml:"description,omitempty"`
+	Version     string `yaml:"version,omitempty"`
+	Url         string `yaml:"url,omitempty"`
+	Rules       []Rule `yaml:"rules,omitempty"`
 }
 
 // Load opens the model file and loads it into the Report model

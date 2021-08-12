@@ -34,11 +34,11 @@ security:
 	dist/gosec ./...
 
 test: compile
-	go test -v ${PKG_LIST} 
+	go CGO_ENABLED=0 test -v ${PKG_LIST} 
 
 build:
 	@echo "Building binary..."
-	GOBIN=$(GOBIN) go build -v -ldflags="-X 'cmd.ProductVersion=v1.0.0'"  -o dist/taralizer
+	GOBIN=$(GOBIN) CGO_ENABLED=0 go build -v -ldflags="-X 'cmd.ProductVersion=v1.0.0'"  -o dist/taralizer
 	
 test-coverage:
 	@go test -short -coverprofile cover.out -covermode=atomic ${PKG_LIST} 

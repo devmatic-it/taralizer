@@ -8,3 +8,4 @@ build/debcvescan
 contrib/
 dist/
 report.html
+report.pdf

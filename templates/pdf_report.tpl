@@ -197,6 +197,25 @@ The following risks have been identified:
 
   <h1>About Taralizer</h1>
   <h2>Risk rules checked by Taralizer</h2>
+
+ <h3>{{.RuleSet.Title}} - {{.RuleSet.Version}}</h3>
+ The {{.RuleSet.Title}} is specified <a href="{{.RuleSet.Url}}">HERE</a>
+ <p>The following list provides supported rules:<p>
+{{range .RuleSet.Rules}}  
+    <h4>Rule {{.Id}}</h4>
+    <table>
+        <tr><th>Title</th>  <td> {{.Title}} </td></tr>
+        <tr><th>Description</th>  <td> {{.Description}} </td></tr>
+        <tr><th>CWE</th>  <td> <a href="https://cwe.mitre.org/data/definitions/{{.Cwe}}">{{.Cwe}}</a> </td></tr>
+        <tr><th>Mitigration</th>  <td> {{.Mitigation}} </td></tr>
+        <tr><th>URL</th>  <td> {{.Url}} </td></tr>
+        <tr><th>Base Likelihood</th>  <td> {{likelihood .Likelihood}} </td></tr>
+        <tr><th>Base Impact</th>  <td> {{impact .Impact}} </td></tr>
+
+    </table>
+    </tr>
+{{end}}
+
   <h2>Disclaimer</h2>
   {{.Author.Name}} conducted this threat analysis using the open-source TARALIZER toolkit on the applications and systems that were modeled as of this report's date. 
   Information security threats are continually changing, with new vulnerabilities discovered on a daily basis, and no application can ever be 100% secure no matter how much threat modeling is conducted. It is recommended to execute threat modeling and also penetration testing on a regular basis (for example yearly) to ensure a high ongoing level of security and constantly check for new attack vectors.

@@ -18,25 +18,14 @@ import data.rules.calc_impact
 
 violation[{
     "id":id,
-     "msg": msg, 
+     "msg": msg,     
      "likelihood":likelihood,
      "impact": impact}] {
-    server := input.technical_assets[_]
-    conn := server.communication_links[_]
-    conn.authentication == "none"
-    
-    # add additional exceptions here
-    target := technical_asset_by_id(conn.target)
-    target.technology != "waf"
-    target.technology != "ids"
-    target.technology != "ips"
-    target.technology != "load-balancer"
-    target.technology != "reverse-proxy"
 
-    different_trust_boundaries(conn.target, server.id)
-    
-	id := sprintf("missing-authentication@%v>%v", [server.id, conn.target])
-    msg := sprintf("asset '%v' should authenticate incomming request from '%v' ", [conn.target, server.id])
+    count({x | input.technical_assets[x] ; input.technical_assets[x].technology == "waf"} ) == 0 
+    msg := "No Web Application Firewall (WAF) has been found  in your model"
+	id := "missing-waf"
+	
     likelihood := 1 #unlikely
     impact := calc_impact(2) # medium
 }

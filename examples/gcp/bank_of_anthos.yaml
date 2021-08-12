@@ -26,7 +26,7 @@ data_assets:
     name: A1
     description: Angular and other client-side code delivered by the application.
     confidentiality: 1 # values: public, internal, restricted, confidential, strictly-confidential
-    integrity: 2 # values: archive, operational, important, critical, mission-critical
+    integrity: 1 # values: archive, operational, important, critical, mission-critical
     availability: 1 # values: archive, operational, important, critical, mission-critical
 
   - id: id-token
@@ -63,7 +63,7 @@ data_assets:
     description: root certificates
     quantity: very-few # values: very-few, few, many, very-many
     confidentiality: 3
-    integrity: 3
+    integrity: 2
     availability: 2 
 
 

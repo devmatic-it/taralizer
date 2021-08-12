@@ -1,0 +1,71 @@
+ruleset:
+  name: asvs
+  title: OWASP Application Security Verification Standard
+  description: OWAP security Standard
+  url: https://github.com/OWASP/ASVS/raw/v4.0.2/4.0/OWASP%20Application%20Security%20Verification%20Standard%204.0.2-en.pdf
+  version: 4.0.2
+  rules:
+  - rule:
+    id: missing-authentication
+    title: "Missing Authentication" 
+    description: "Technical assets should autheticate incoming requests. "
+    mitigation: "apply an authentication method to the technical asset."
+    url: "https://cheatsheetseries.owasp.org/cheatsheets/Transport_Layer_Protection_Cheat_Sheet.html"
+    cwe: 306
+    likelihood: 3 # high
+    impact: 2 # medium
+
+  - rule:
+    id: insecure-proto
+    title: "Unencrypted Communication" 
+    description: "Data at transition should be encrypted. "
+    mitigation: "apply an authentication method to the technical asset."
+    url: "https://cheatsheetseries.owasp.org/cheatsheets/Transport_Layer_Protection_Cheat_Sheet.html"
+    cwe: 319
+    likelihood: 3 #high
+    impact: 2 # medium
+
+  - rule:
+    id: missing-vault
+    title: "Missing Vault (Secret Storage)"
+    description: > 
+      In order to avoid the risk of secret leakage via config files (when attacked through vulnerabilities being able to
+      read files like Path-Traversal and others), it is best practice to use a separate hardened process with proper authentication
+      authorization, and audit logging to access config secrets (like credentials, private keys, client certificates, etc.).
+      This component is usually some kind of Vault.
+    url: https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html
+    mitigation: Consider using a Vault (Secret Storage) to securely store and access config secrets (like credentials, private keys, client certificates, etc.)
+    stride: Information Disclosure
+    likelihood: 1 #Low
+    impact: 1 #Low
+    cwe: 522
+
+  - rule:
+    id: missing-waf
+    title: "Missing Web Application Firewall (WAF)"
+    description: >
+      To have a first line of filtering defense, security architectures with web-services or web-applications should include a WAF in front of them.
+      Even though a WAF is not a replacement for security (all components must be secure even without a WAF) it adds another layer of defense to the overall
+      system by delaying some attacks and having easier attack alerting through it
+    url: https://cheatsheetseries.owasp.org/cheatsheets/Virtual_Patching_Cheat_Sheet.html
+    mitigation: "Consider placing a fully-managed Web Application Firewall (WAF) in front of the web-services and/or web-applications" 
+    stride: Tampering
+    likelihood: 1 #low
+    impact: 1 #low
+    cwe: 1008
+
+  - rule:
+    id: cross-site-scripting
+    title: "Cross-Site Scripting (XSS)"
+    description: >
+      For each web application Cross-Site Scripting (XSS) risks might arise. In terms
+      of the overall risk level take other applications running on the same domain into account as well.
+    url: https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html
+    mitigation: > 
+      Try to encode all values sent back to the browser and also handle DOM-manipulations
+      in a safe way to avoid DOM-based XSS. When a third-party product is used instead of custom developed software, 
+      check if the product applies the proper mitigation and ensure a reasonable patch-level.
+    stride: Tampering
+    likelihood: 2 #medium
+    impact: 2 #medim
+    cwe: 79

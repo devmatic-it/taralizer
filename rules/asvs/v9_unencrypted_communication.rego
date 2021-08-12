@@ -15,17 +15,14 @@
 package rules.asvs
 import data.rules.technical_asset_by_id
 import data.rules.different_trust_boundaries
+import data.rules.calc_impact
+
 
 violation[{
     "id":id,
      "msg": msg, 
-     "cwe":cwe,
-     "title":title,
-     "description":description,
-     "mitigation":mitigation,
      "likelihood":likelihood,
-     "impact": impact,
-     "url":url}] {
+     "impact": impact}] {
     server := input.technical_assets[_]
     conn := server.communication_links[_]
     conn.protocol!= "https"
@@ -41,13 +38,9 @@ violation[{
 
     different_trust_boundaries(server.id, conn.target)
     
+
     msg := sprintf("asset '%v' communicating to '%v' uses insecure protocol '%v'", [server.id, conn.target, conn.protocol])
 	id := sprintf("insecure-proto@%v>%v", [server.id, conn.target])
-	title:= "Unencrypted Communication"
-    description:= "Data at transition should be encrypted."
-    mitigation:= "Apply transport layer encryption to the communication link."
-	url:= "https://cheatsheetseries.owasp.org/cheatsheets/Transport_Layer_Protection_Cheat_Sheet.html"
-    cwe := 319
     likelihood := 1 #unlikely
-    impact := 2 # medium
+    impact := calc_impact(2)
 }

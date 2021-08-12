@@ -25,6 +25,14 @@ data_asset_by_id (myid) = asset{
     asset:= input.data_assets[k]
 }
 
+
+calc_impact (base)= base {
+ count({x | input.data_assets[x] ; input.data_assets[x].confidentiality == 3} ) == 0
+ count({x | input.data_assets[x] ; input.data_assets[x].integrity == 3} ) == 0
+ count({x | input.data_assets[x] ; input.data_assets[x].availability == 3} ) ==0 
+} else = base+1
+
+
 different_trust_boundaries(id1, id2){
     some i, j
     input.trust_boundaries[i].technical_assets_inside[_] == id1

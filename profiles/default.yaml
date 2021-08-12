@@ -1,0 +1,232 @@
+name: default
+description: platform-independent model compatible with threagile.io
+technologies:
+  # end-user technologies
+  - id: "browser"
+    alias: 
+      - "browser"
+  - id: "desktop"
+    alias: 
+      - "desktop"
+  - id: "mobile-app"
+    alias: 
+      - "mobile-app"
+  - id: "client-system"
+    alias: 
+      - "client-system"
+  - id: "devops-client"
+    alias: 
+      - "devops-client"
+
+  # networking technologies
+  - id: "waf"
+    alias: 
+      - "waf"
+
+  - id: "load-balancer"
+    alias: 
+      - "load-balancer"
+
+  - id: "reverse-proxy"
+    alias: 
+      - "reverse-proxy"
+
+  - id: "ips"
+    alias: 
+      - "ips"
+
+  - id: "ids"
+    alias: 
+      - "ids"
+
+  - id: "gateway"
+    alias: 
+      - "gateway"
+
+
+# storage technologies
+  - id: "database"
+    alias: 
+      - "database"
+  - id: "database-sql"
+    alias: 
+      - "database-sql"
+  - id: "database-nosql"
+    alias: 
+      - "database-nosql"
+  - id: "file-server"
+    alias: 
+      - "file-server"
+  - id: "local-file-system"
+    alias: 
+      - "local-file-system"
+  - id: "data-lake"
+    alias: 
+      - "data-lake"
+  - id: "block-storage"
+    alias: 
+      - "block-storage"
+
+
+  - id: "web-server"
+    alias: 
+      - "web-server"
+  - id: "web-application"
+    alias: 
+      - "web-application"
+  - id: "web-service-rest"
+    alias: 
+      - "web-service-rest"
+  - id: "web-service-soap"
+    alias: 
+      - "web-service-soap"
+  - id: "ejb"
+    alias: 
+      - "ejb"
+      
+  - id: "erp"
+    alias: 
+      - "erp"
+  - id: "cms"
+    alias: 
+      - "cms"
+  - id: "search-index"
+    alias: 
+      - "search-index"
+  - id: "search-engine"
+    alias: 
+      - "search-engine"
+  - id: "service-registry"
+    alias: 
+      - "service-registry"
+
+# security/authn/authz technologies
+  - id: "identity-provider"
+    alias: 
+      - "identity-provider"
+  - id: "identity-store-database"
+    alias: 
+      - "identity-store-database"
+  - id: "identity-store-ldap"
+    alias: 
+      - "identity-store-ldap"
+  - id: "ldap-server"
+    alias: 
+      - "ldap-server"
+  - id: "hsm"
+    alias: 
+      - "hsm"
+
+  - id: "vault"
+    alias: 
+      - "vault"
+
+  - id: "monitoring"
+    alias: 
+      - "monitoring"
+
+  - id: "logging"
+    alias: 
+      - "logging"
+
+  # Integration technologies
+  - id: "event-listener"
+    alias: 
+      - "event-listener"
+
+
+  - id: "batch-processing"
+    alias: 
+      - "batch-processing"
+
+      
+
+  - id: "message-queue"
+    alias: 
+      - "message-queue"
+
+  - id: "service-mesh"
+    alias: 
+      - "service-mesh"
+
+
+
+  - id: "big-data-platform"
+    alias: 
+      - "big-data-platform"
+
+  - id: "ai"
+    alias: 
+      - "ai"
+
+  - id: "mail-server"
+    alias: 
+      - "mail-server"
+
+
+  - id: "stream-processing"
+    alias: 
+      - "stream-processing"
+
+# CI/CD Pipeline
+  - id: "build-pipeline"
+    alias: 
+      - "build-pipeline"
+
+  - id: "artifact-registry"
+    alias: 
+      - "artifact-registry"
+
+  - id: "sourcecode-repository"
+    alias: 
+      - "sourcecode-repository"
+
+  - id: "code-inspection-platform"
+    alias: 
+      - "code-inspection-platform"
+
+
+# kubernetes
+  - id: "container-platform"
+    alias: 
+      - "container-platform"
+
+  - id: "kubernetes-pod"
+    alias: 
+      - "kubernetes-pod"      
+
+  - id: "kubernetes-ingress"
+    alias: 
+      - "kubernetes-ingress"      
+      
+  - id: "kubernetes-service"
+    alias: 
+      - "kubernetes-service"      
+
+  - id: "kubernetes-deployment"
+    alias: 
+      - "kubernetes-deployment"      
+
+  - id: "kubernetes-configmap"
+    alias: 
+      - "kubernetes-configmap"      
+
+  - id: "kubernetes-statefulset"
+    alias: 
+      - "kubernetes-statefulset"
+
+  - id: "kubernetes-secret"
+    alias: 
+      - "kubernetes-secret"
+
+  - id: "kubernetes-daemonset"
+    alias: 
+      - "kubernetes-daemonset"
+
+  - id: "kubernetes-job"
+    alias: 
+      - "kubernetes-job"      
+
+  - id: "kubernetes-cronjob"
+    alias: 
+      - "kubernetes-cronjob"      
