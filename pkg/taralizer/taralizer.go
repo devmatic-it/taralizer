@@ -22,6 +22,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"path/filepath"
 	"strings"
 )
 
@@ -203,7 +204,13 @@ func (svc *Taralizer) query(fileName string, queryStr string) rego.ResultSet {
 		log.Fatalf("cannot unmarshal model file: %v", err)
 	}
 
-	defaultRulesDir := []string{"./rules/", "/etc/taralizer/rules/", "../../rules/"}
+	ex, err := os.Executable()
+	if err != nil {
+		panic(err)
+	}
+	exPath := filepath.Dir(ex)
+
+	defaultRulesDir := []string{"./rules/", "/etc/taralizer/rules/", exPath + "/rules/", "../../rules/"}
 	rules := []string{}
 	for _, v := range defaultRulesDir {
 		if _, err := os.Stat(v); !os.IsNotExist(err) {
