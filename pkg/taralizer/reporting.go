@@ -20,6 +20,7 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"text/template"
 )
 
@@ -126,7 +127,12 @@ func (svc *ReportEngine) GenerateReport(wr io.Writer, tplFile string, report Rep
 
 // GetTemplateDir returns the directory of the template files
 func (svc *ReportEngine) GetTemplateDir() string {
-	defaultTemplatesDir := []string{"./templates/", "/etc/taralizer/templates/", "../templates/", "../../templates/"}
+	ex, err := os.Executable()
+	if err != nil {
+		panic(err)
+	}
+	exPath := filepath.Dir(ex)
+	defaultTemplatesDir := []string{"./templates/", "/etc/taralizer/templates/", exPath + "/templates/", "../templates/"}
 	templateDir := "NOT_FOUND"
 	for _, v := range defaultTemplatesDir {
 		if _, err := os.Stat(v); !os.IsNotExist(err) {
