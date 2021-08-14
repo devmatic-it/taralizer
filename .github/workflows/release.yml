@@ -29,5 +29,4 @@ jobs:
         with:
           args: release
         env:
-          VERSION: ${{ steps.get_version.outputs.VERSION }}
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
