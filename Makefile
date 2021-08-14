@@ -38,7 +38,7 @@ test: compile
 
 build:
 	@echo "Building binary..."
-	GOBIN=$(GOBIN) CGO_ENABLED=0 go build -v -ldflags="-X 'cmd.ProductVersion=v1.0.0'"  -o dist/taralizer
+	GOBIN=$(GOBIN) CGO_ENABLED=0 go build -v -ldflags="-X 'github.com/devmatic-it/taralizer/cmd.ProductVersion=${GIT_TAG}'"  -o dist/taralizer
 	cp -R templates dist/templates
 
 test-coverage:
