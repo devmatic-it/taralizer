@@ -16,7 +16,7 @@ GOBASE=$(shell pwd)
 GOBIN=$(GOBASE)/dist
 PKG := "github.com/devmatic-it/taralizer"
 PKG_LIST := $(shell go list ${PKG}/... | grep -v /vendor/)
-VERSION := 1.2.3.4
+
 all:  compile test-coverage
 
 compile: build
@@ -38,7 +38,7 @@ test: compile
 
 build:
 	@echo "Building binary..."
-	GOBIN=$(GOBIN) CGO_ENABLED=0 go build -v -ldflags="-X 'github.com/devmatic-it/taralizer/cmd.ProductVersion=${GIT_TAG}'"  -o dist/taralizer
+	GOBIN=$(GOBIN) CGO_ENABLED=0 go build -v -ldflags="-X 'github.com/devmatic-it/taralizer/cmd.ProductVersion=${VERSION}'"  -o dist/taralizer
 	cp -R templates dist/templates
 
 test-coverage:
