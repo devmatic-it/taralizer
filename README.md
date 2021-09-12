@@ -25,11 +25,16 @@ Taralizer currently provides the following features:
 
 - backward compatiblity with Threagile (<https://threagile.io>) model files
 - supports graphviz dot and plantuml flow charts
+![PlantUML](<https://github.com/devmatic-it/taralizer/blob/main/docs/images/diagram_plantuml.png>)
+![GraphViz](<https://github.com/devmatic-it/taralizer/blob/main/docs/images/diagram_graphviz.png>)
+
 - taralizer is packaged for all major devopment environments:
   - MacOSX (x86_64, ARM64 M1)
   - Linux (x86, x86_64, ARM64)
   - Windows (x86, x86_64)
 - support of PDF and HTML reports
+![PDF Report](<https://github.com/devmatic-it/taralizer/blob/main/docs/images/report_pdf.png>)
+![HTML Report](<https://github.com/devmatic-it/taralizer/blob/main/docs/images/report_html.png>)
 
 We demonstate the usage of **Taralizer** on the popular **Bank of Anthos** example application [HERE](<https://github.com/devmatic-it/taralizer/blob/main/examples/gcp/README.md>)
 
