@@ -18,6 +18,6 @@ Once the dataflow diagram is created, a security thread and risk analysis can be
 Currently, only the OWASP Application Security Verification Standard <https://github.com/OWASP/ASVS/raw/v4.0.2/4.0/OWASP%20Application%20Security%20Verification%20Standard%204.0.2-en.pdf> is supported, however Taralizer has been designed to support you on the creation on your own security standard.
 
 - Create an HTML report referencing *diagram.png* file:  `taralizer report bank_of_anthos.yaml`:
-<iframe src="https://github.com/devmatic-it/taralizer/blob/main/examples/gcp/report.html" width="80%" frameborder="0" scrolling="no" />
+<iframe src="https://github.com/devmatic-it/taralizer/blob/main/examples/gcp/report.html" width="80%" frameborder="0" scrolling="no"></iframe>
 - Create a PDF report emedding *diagram.png* file: `taralizer report bank_of_anthos.yaml --type pdf`:
 PDF Report <https://github.com/devmatic-it/taralizer/blob/main/examples/gcp/report.pdf>
