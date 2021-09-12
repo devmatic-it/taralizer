@@ -4,7 +4,7 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/devmatic-it/taralizer/blob/master/LICENSE)
 [![codecov](https://codecov.io/gh/devmatic-it/taralizer/branch/main/graph/badge.svg)](https://codecov.io/gh/devmatic-it/taralizer)
 
-The following project performs a Threat and Risk Analysis based on an architecture model defined through simple YAML file.
+The following project performs a *Threat and Risk Analysis* based on an architecture model defined through simple YAML file.
 We aim to implement the OWASP Application Security Verification Standard (ASVS)(<https://owasp.org/www-project-application-security-verification-standard/>) and also destribute their great database (<https://github.com/OWASP/ASVS/raw/v4.0.2/4.0/docs_en/OWASP%20Application%20Security%20Verification%20Standard%204.0.2-en.csv>).
 Furthermore, we use and distribute MITRE Common Weakness Enumeration (<https://cwe.mitre.org/data/downloads.html>) as a way to classify weaknesses.
 
@@ -31,8 +31,7 @@ Taralizer currently provides the following features:
   - Windows (x86, x86_64)
 - support of PDF and HTML reports
 
-The Bank of Anthos example application provides an example report <https://github.com/devmatic-it/taralizer/blob/main/examples/gcp/README.md>
-
+We demonstate the usage of Taralizer on the popular *Bank of Anthos* example application [HERE](<https://github.com/devmatic-it/taralizer/blob/main/examples/gcp/README.md>)
 ## Installation
 
 ### Getting Started
