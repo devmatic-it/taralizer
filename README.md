@@ -25,6 +25,7 @@ Taralizer currently provides the following features:
 
 - backward compatiblity with Threagile (<https://threagile.io>) model files
 - supports graphviz dot and plantuml flow charts
+
 ![PlantUML](<https://github.com/devmatic-it/taralizer/blob/main/docs/images/diagram_plantuml.png>)
 ![GraphViz](<https://github.com/devmatic-it/taralizer/blob/main/docs/images/diagram_graphviz.png>)
 
@@ -33,6 +34,7 @@ Taralizer currently provides the following features:
   - Linux (x86, x86_64, ARM64)
   - Windows (x86, x86_64)
 - support of PDF and HTML reports
+
 ![PDF Report](<https://github.com/devmatic-it/taralizer/blob/main/docs/images/report_pdf.png>)
 ![HTML Report](<https://github.com/devmatic-it/taralizer/blob/main/docs/images/report_html.png>)
 
