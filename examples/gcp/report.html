@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body{
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 800px;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+td, th {
+  border: 1px solid #ddd;
+  padding: 2px;
+}
+
+img {
+width:100%;
+}
+
+tr:nth-child(even){background-color: #f2f2f2;}
+
+th {
+  padding-top: 4px;
+  padding-bottom: 4px;
+  text-align: left;
+  background-color: #4CAF50;
+  color: white;
+}
+
+.title{
+  font-size:32px;
+}
+</style>
+</head>
+
+<body>
+<span class="title">TARALIZER</span>
+
+<h2>System Description</h2>
+<p>
+The Data Flow Diagram below provides an overview of the analyzed architecture.
+<img src="diagram.png"/>
+</p>
+
+<h3>Trust Boundaries</h3>
+<table>
+<tr>
+  <th>Name</th>
+  <th>Technology</th>
+  <th>Description</th>
+</tr>
+  
+    <tr>
+      <td> Internet</td>  
+      <td> internet</td>  
+      <td> Internet </td>
+    </tr>
+  
+    <tr>
+      <td> Google Cloud Platform</td>  
+      <td> internet</td>  
+      <td> Google Cloud </td>
+    </tr>
+  
+    <tr>
+      <td> project boa-gke</td>  
+      <td> subscription</td>  
+      <td> Google Project </td>
+    </tr>
+  
+    <tr>
+      <td> VPC</td>  
+      <td> vpc</td>  
+      <td> Virtual Private Cloud </td>
+    </tr>
+  
+    <tr>
+      <td> public subnet</td>  
+      <td> subnet</td>  
+      <td> internet facing zone </td>
+    </tr>
+  
+    <tr>
+      <td> privat subnet</td>  
+      <td> subnet</td>  
+      <td> Application Network </td>
+    </tr>
+  
+    <tr>
+      <td> GKE</td>  
+      <td> kubernetes-cluster</td>  
+      <td> kubernetes cluster </td>
+    </tr>
+  
+    <tr>
+      <td> frontend</td>  
+      <td> kubernetes-network-policies</td>  
+      <td> kubernetes frontend namespace </td>
+    </tr>
+  
+    <tr>
+      <td> accounts</td>  
+      <td> kubernetes-network-policies</td>  
+      <td> kubernetes default namespace </td>
+    </tr>
+  
+    <tr>
+      <td> transactions</td>  
+      <td> kubernetes-network-policies</td>  
+      <td> kubernetes default namespace </td>
+    </tr>
+  
+    <tr>
+      <td> istion-system</td>  
+      <td> kubernetes-network-policies</td>  
+      <td> kubernetes istio-system </td>
+    </tr>
+  
+    <tr>
+      <td> project boa-sql</td>  
+      <td> cloud-services</td>  
+      <td> Azure Shared Services </td>
+    </tr>
+  
+    <tr>
+      <td> project boa-sec</td>  
+      <td> project</td>  
+      <td> Contains Secret Manager and KMS instances for secrets that are specific to the Bank of Anthos application. </td>
+    </tr>
+  
+    <tr>
+      <td> project boa-ops</td>  
+      <td> project</td>  
+      <td> Used for storing environment logs as well as monitoring the environment instance of the Bank of Anthos application. </td>
+    </tr>
+  
+    <tr>
+      <td> Company Network</td>  
+      <td> on-premise</td>  
+      <td> trusted on-premise company network </td>
+    </tr>
+
+</table>
+</p>
+
+<h3>Technical Assets</h3>
+<table>
+<tr>
+  <th>Name</th>
+  <th>Technology</th>
+  <th>Description</th>
+</tr>
+  
+    <tr>
+      <td> User</td>  
+      <td> browser</td>  
+      <td> The browser used by the end customer </td>
+    </tr>
+  
+    <tr>
+      <td> DevOps</td>  
+      <td> devops-client</td>  
+      <td> laptop used by developers and operators to manage the system </td>
+    </tr>
+  
+    <tr>
+      <td> WAF</td>  
+      <td> waf</td>  
+      <td> Google Cloud Armor Web Application Firewall </td>
+    </tr>
+  
+    <tr>
+      <td> istio-ingress-gateway</td>  
+      <td> kubernetes-ingress</td>  
+      <td> ISTIO ingress gateway </td>
+    </tr>
+  
+    <tr>
+      <td> frontend</td>  
+      <td> kubernetes-pod</td>  
+      <td> Exposes an HTTP server to serve the website. Contains a login page, a signup page, and a home page. </td>
+    </tr>
+  
+    <tr>
+      <td> User Service</td>  
+      <td> kubernetes-pod</td>  
+      <td>  </td>
+    </tr>
+  
+    <tr>
+      <td> Contacts</td>  
+      <td> kubernetes-pod</td>  
+      <td> Stores a list of additional accounts that are associated with a user. These accounts are listed in the application's Send Payment and Deposit forms. </td>
+    </tr>
+  
+    <tr>
+      <td> User Service</td>  
+      <td> kubernetes-pod</td>  
+      <td> Manages user accounts and authentication. The service signs JWTs that are used for authentication by other services. </td>
+    </tr>
+  
+    <tr>
+      <td> ledger writer</td>  
+      <td> kubernetes-pod</td>  
+      <td> Accepts and validates incoming transactions before writing them to the ledger. </td>
+    </tr>
+  
+    <tr>
+      <td> balance reader</td>  
+      <td> kubernetes-pod</td>  
+      <td> Provides an efficient readable cache of user balances, as read from ledger-db. </td>
+    </tr>
+  
+    <tr>
+      <td> trans history</td>  
+      <td> kubernetes-pod</td>  
+      <td> Provides an efficient readable cache of past transactions, as read from ledger-db. </td>
+    </tr>
+  
+    <tr>
+      <td> accounts-db</td>  
+      <td> database-sql</td>  
+      <td> SQL database </td>
+    </tr>
+  
+    <tr>
+      <td> ledger-db</td>  
+      <td> database-nosql</td>  
+      <td> CloudSQL for hyperledger </td>
+    </tr>
+  
+    <tr>
+      <td> KMS</td>  
+      <td> hsm</td>  
+      <td> Google Key Management Service </td>
+    </tr>
+  
+    <tr>
+      <td> HSM</td>  
+      <td> hsm</td>  
+      <td> on-premise Harware Security Module (HSM) </td>
+    </tr>
+  
+    <tr>
+      <td> Cloud Logging</td>  
+      <td> logging</td>  
+      <td> Cloud Monitoring </td>
+    </tr>
+  
+    <tr>
+      <td> Cloud Monitoring</td>  
+      <td> monitoring</td>  
+      <td> KMS </td>
+    </tr>
+
+</table>
+</p>
+
+
+
+<h2>Problem Description</h2>
+<h3>Data Assets</h3>
+<p>
+The following data assets are used:
+
+<table>
+<tr> 
+  <th>Name</th> 
+  <th>Description</th>
+  <th>C</th>
+  <th>I</th>
+  <th>A</th>
+</tr>
+  
+    <tr>
+      <td>A1</td>  
+      <td> Angular and other client-side code delivered by the application.</td>
+      <td> 1</td>
+      <td> 1</td>
+      <td> 1</td>
+    </tr>
+  
+    <tr>
+      <td>A2</td>  
+      <td> OIDC identity token</td>
+      <td> 2</td>
+      <td> 1</td>
+      <td> 1</td>
+    </tr>
+  
+    <tr>
+      <td>A3</td>  
+      <td> OAuth2 access token</td>
+      <td> 2</td>
+      <td> 1</td>
+      <td> 1</td>
+    </tr>
+  
+    <tr>
+      <td>A4</td>  
+      <td> OAuth2 refresh token</td>
+      <td> 2</td>
+      <td> 1</td>
+      <td> 1</td>
+    </tr>
+  
+    <tr>
+      <td>A5</td>  
+      <td> product catalog</td>
+      <td> 1</td>
+      <td> 1</td>
+      <td> 1</td>
+    </tr>
+  
+    <tr>
+      <td>A6</td>  
+      <td> root certificates</td>
+      <td> 3</td>
+      <td> 2</td>
+      <td> 2</td>
+    </tr>
+
+</table>
+</p>
+
+<h3>Threat Agents</h3>
+<p>
+The following threat agents are used:
+<table>
+<th>Name</th>  <th>Description</th></tr>
+  
+    <tr>
+    <td>TA1</td>  <td> external threat agent </td>
+    </tr>
+  
+    <tr>
+    <td>TA2</td>  <td> authorized employee </td>
+    </tr>
+  
+    <tr>
+    <td>TA3</td>  <td> Employee of the company that is not authorized to access the system </td>
+    </tr>
+
+</table>
+</p>
+
+
+<h2>Risk Assessment</h2>
+
+<h3>Risk Matrix</h3>
+We follow the <a href="https://owasp.org/www-community/OWASP_Risk_Rating_Methodology">OWASP Risk Rating Methodology</a>.
+<table>
+<tbody><tr>
+<th colspan="5" align="center">Overall Risk Severity = Impact x Likelihood</th>
+</tr>
+<tr>
+<td rowspan="4" width="15%" align="center">Impact</t>
+<td bgcolor="#f2f2f2" align="center">HIGH</td> <!--impact legend-->
+<td bgcolor="orange" align="center">Medium</td>
+<td bgcolor="red" align="center">High</td>
+<td bgcolor="darkred" align="center">Critical</td>
+</tr>
+<tr>
+<td bgcolor="#f2f2f2" align="center">MEDIUM</td> <!--impact legend-->
+<td bgcolor="yellow" align="center">Low</td>
+<td bgcolor="orange" align="center">Medium</td>
+<td bgcolor="red" align="center">High</td>
+</tr>
+<tr>
+<td bgcolor="#f2f2f2" align="center">LOW</td> <!--impact legend-->
+<td bgcolor="lightgreen" align="center">Low</td>
+<td bgcolor="yellow" align="center">Low</td>
+<td bgcolor="orange" align="center">Medium</td>
+</tr>
+<tr>
+
+<!-- likelihood legend -->
+<td bgcolor="#f2f2f2" align="center">&nbsp;</td>
+<td bgcolor="#f2f2f2" align="center">LOW</td>
+<td bgcolor="#f2f2f2" align="center">MEDIUM</td>
+<td bgcolor="#f2f2f2" align="center">HIGH</td>
+</tr>
+<tr>
+<td align="center">&nbsp;</td>
+<td colspan="5" align="center">Likelihood</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Identified Risks</h3>
+<p>
+The following risks have been identified:
+<table>
+<tr>
+    <th>ID</th>
+    <th>Likelihood</th>
+    <th>Impact</th>
+    <th>Severity</th>
+    <th>Risk</th>
+</tr>
+
+<tr>
+    <td>0</td>  
+    <td>LOW(1)</td>  
+    <td>HIGH(3)</td>  
+    <td>LOW(3)</td>  
+    <td>
+        <p><a href="https://cwe.mitre.org/data/definitions/319">CWE-319</a> Unencrypted Communication: asset 'hsm' communicating to 'kms' uses insecure protocol 'ftp'</p>
+        <p>Data at transition should be encrypted. </p>
+        <p>Mitigation: apply an authentication method to the technical asset.</p>
+    </td>
+</tr>
+
+</table>
+</p>
+
+</body>
+</html>

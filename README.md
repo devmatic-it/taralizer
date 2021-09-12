@@ -19,6 +19,18 @@ Taralizer tries to overcome these limitations with the following approach:
 - use plantuml or graphviz dot to generate compelling diagrams
 - use of wkhtmltopdf to create PDF reports
 
+## Features
+
+Taralizer currently provides the following features:
+
+- backward compatiblity with Threagile (<https://threagile.io>) model files
+- supports graphviz dot and plantuml flow charts
+- taralizer is packaged for all major devopment environments:
+  - MacOSX (x86_64, ARM64 M1)
+  - Linux (x86, x86_64, ARM64)
+  - Windows (x86, x86_64)
+- support of PDF and HTML reports
+
 ## Installation
 
 ### Getting Started
