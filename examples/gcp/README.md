@@ -10,3 +10,14 @@ This solution demonstrates the application of the Google Cloud Security Foundati
 - Create a HTML report with graphviz diagrams: `taralizer report bank_of_anthos.yaml`
 - Create an HTML report with plantuml diagram:  `taralizer report bank_of_anthos.yaml --engine plantuml`
 - Create a PDF report with graphviz diagrams: `taralizer report bank_of_anthos.yaml --type pdf`
+
+## Example Data Flow Diagrams
+
+### Generated PlantUML Diagram
+
+![GraphViz dot Dataflow Diagram](https://gitgub.com/devmatic-it/taralizer/blob/main/examples/gcp/diagram_graphviz.png)
+
+### Generated Graphviz Dot Diagram
+
+![GraphViz dot Dataflow Diagram](https://gitgub.com/devmatic-it/taralizer/blob/main/examples/gcp/diagram_graphviz.png)
+

@@ -31,6 +31,8 @@ Taralizer currently provides the following features:
   - Windows (x86, x86_64)
 - support of PDF and HTML reports
 
+The Bank of Anthos example application provides an example report <https://github.com/devmatic-it/taralizer/blob/main/examples/gcp/README.md>
+
 ## Installation
 
 ### Getting Started
