@@ -4,14 +4,14 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/devmatic-it/taralizer/blob/master/LICENSE)
 [![codecov](https://codecov.io/gh/devmatic-it/taralizer/branch/main/graph/badge.svg)](https://codecov.io/gh/devmatic-it/taralizer)
 
-The following project performs a *Threat and Risk Analysis* based on an architecture model defined through simple YAML file.
-We aim to implement the OWASP Application Security Verification Standard (ASVS)(<https://owasp.org/www-project-application-security-verification-standard/>) and also destribute their great database (<https://github.com/OWASP/ASVS/raw/v4.0.2/4.0/docs_en/OWASP%20Application%20Security%20Verification%20Standard%204.0.2-en.csv>).
+The following project performs a **Threat and Risk Analysis** based on an architecture model defined through simple YAML file.
+We aim to implement the **OWASP Application Security Verification Standard** (ASVS)(<https://owasp.org/www-project-application-security-verification-standard/>) and also destribute their great database (<https://github.com/OWASP/ASVS/raw/v4.0.2/4.0/docs_en/OWASP%20Application%20Security%20Verification%20Standard%204.0.2-en.csv>).
 Furthermore, we use and distribute MITRE Common Weakness Enumeration (<https://cwe.mitre.org/data/downloads.html>) as a way to classify weaknesses.
 
 ## Motivation
 
-The taralizer project was highly inspired by the Threagile (<https://threagile.io>) project which is a first class threat modelling tool for OWASP ASVP.
-Unfortunately, threagile has some limits in the customization of reports and the extendability with custom rules.
+The **taralizer** project was highly inspired by the **Threagile** (<https://threagile.io>) project which is a first class threat modelling tool for OWASP ASVP.
+Unfortunately, **Threagile** has some limits in the customization of reports and the extendability with custom rules.
 Taralizer tries to overcome these limitations with the following approach:
 
 - Using Golang templating (<https://golang.org/pkg/text/template/>) for all reports and diagrams
@@ -31,7 +31,8 @@ Taralizer currently provides the following features:
   - Windows (x86, x86_64)
 - support of PDF and HTML reports
 
-We demonstate the usage of Taralizer on the popular *Bank of Anthos* example application [HERE](<https://github.com/devmatic-it/taralizer/blob/main/examples/gcp/README.md>)
+We demonstate the usage of **Taralizer** on the popular **Bank of Anthos** example application [HERE](<https://github.com/devmatic-it/taralizer/blob/main/examples/gcp/README.md>)
+
 ## Installation
 
 ### Getting Started
