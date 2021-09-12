@@ -15,9 +15,9 @@ This solution demonstrates the application of the Google Cloud Security Foundati
 
 ### Generated PlantUML Diagram
 
-![GraphViz dot Dataflow Diagram](https://gitgub.com/devmatic-it/taralizer/blob/main/examples/gcp/diagram_graphviz.png)
+<img src="https://github.com/devmatic-it/taralizer/blob/main/examples/gcp/diagram.png" width="100%">
 
 ### Generated Graphviz Dot Diagram
 
-![GraphViz dot Dataflow Diagram](https://gitgub.com/devmatic-it/taralizer/blob/main/examples/gcp/diagram_graphviz.png)
+![GraphViz dot Dataflow Diagram](https://github.com/devmatic-it/taralizer/blob/main/examples/gcp/diagram_graphviz.png)
 
