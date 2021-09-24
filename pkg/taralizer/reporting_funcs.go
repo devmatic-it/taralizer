@@ -20,6 +20,8 @@ import (
 	"text/template"
 )
 
+const REPORT_FMT_STRING = "%s(%d)"
+
 // initalizes additional TPL functions here
 func (svc *ReportEngine) createFuncMap() template.FuncMap {
 	return template.FuncMap{
@@ -47,7 +49,7 @@ func (svc *ReportEngine) severity(severity int64) string {
 		result = "LOW"
 	}
 
-	return fmt.Sprintf("%s(%d)", result, severity)
+	return fmt.Sprintf(REPORT_FMT_STRING, result, severity)
 }
 
 // severity is a helper method to convert severity ids into strings.
@@ -63,7 +65,7 @@ func (svc *ReportEngine) likelihood(severity int64) string {
 		result = "VERY HIGH"
 	}
 
-	return fmt.Sprintf("%s(%d)", result, severity)
+	return fmt.Sprintf(REPORT_FMT_STRING, result, severity)
 }
 
 // severity is a helper method to convert severity ids into strings.
@@ -79,7 +81,7 @@ func (svc *ReportEngine) impact(severity int64) string {
 		result = "VERY HIGH"
 	}
 
-	return fmt.Sprintf("%s(%d)", result, severity)
+	return fmt.Sprintf(REPORT_FMT_STRING, result, severity)
 }
 
 // findTrustedBoundary  is a TPL function that searches a trust boundary by Id

@@ -24,6 +24,9 @@ import (
 	"text/template"
 )
 
+const PDF_REPORT_HTML = "pdf_report.html"
+const PDF_REPORT_COVER_HTML = "pdf_report_cover.html"
+
 // Taralzer struct
 type ReportEngine struct {
 	report Report
@@ -42,8 +45,8 @@ func (svc *ReportEngine) GenerateReportFilePDF(filename string, tplFileReport st
 		log.Fatal(err)
 	}
 
-	svc.GenerateReportFile("pdf_report.html", tplFileReport, report)
-	svc.GenerateReportFile("pdf_report_cover.html", tplFileCover, report)
+	svc.GenerateReportFile(PDF_REPORT_HTML, tplFileReport, report)
+	svc.GenerateReportFile(PDF_REPORT_COVER_HTML, tplFileCover, report)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -58,21 +61,21 @@ func (svc *ReportEngine) GenerateReportFilePDF(filename string, tplFileReport st
 		"--header-line",
 		"--header-font-size", "8",
 		"--header-center", "Threat and Risk Analysis - "+report.Title,
-		"cover", "pdf_report_cover.html",
+		"cover", PDF_REPORT_COVER_HTML,
 		"toc",
-		"pdf_report.html",
+		PDF_REPORT_HTML,
 		filename)
 	err = wkhtmltopdf.Run()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	err = os.Remove("pdf_report.html")
+	err = os.Remove(PDF_REPORT_HTML)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	err = os.Remove("pdf_report_cover.html")
+	err = os.Remove(PDF_REPORT_COVER_HTML)
 	if err != nil {
 		log.Fatal(err)
 	}

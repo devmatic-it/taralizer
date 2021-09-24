@@ -10,6 +10,6 @@ func init() {
 	os.Setenv("GO_ENV", "testing")
 }
 
-func Test_DiagramCmd(t *testing.T) {
+func TestDiagramCmd(t *testing.T) {
 	diagramCmd.Run(diagramCmd, []string{"../examples/gcp/bank_of_anthos.yaml"})
 }
