@@ -43,7 +43,7 @@ func NewTaralizer(ruleset string) *Taralizer {
 // convertMapToRisk converts an untyped instance Risk into a typed one.
 func (svc *Taralizer) convertMapToRisk(input interface{}) Risk {
 	if input == nil {
-		log.Fatal("interface cannot be nil")
+		log.Fatal("convertMapToRisk: interface cannot be nil")
 	}
 
 	data := input.(map[string]interface{})
@@ -86,7 +86,7 @@ func (svc *Taralizer) findRule(id string) *Rule {
 // convertMapToRisk converts an untyped instance Rule into a typed one.
 func (svc *Taralizer) convertMapToRule(input interface{}) Rule {
 	if input == nil {
-		log.Fatal("interface cannot be nil")
+		log.Fatal("convertMapToRule: interface cannot be nil")
 	}
 
 	data := input.(map[string]interface{})
@@ -107,7 +107,7 @@ func (svc *Taralizer) convertMapToRule(input interface{}) Rule {
 // convertMapToRuleSet converts an untyped instance RuleSet
 func (svc *Taralizer) convertMapToRuleSet(input interface{}) RuleSet {
 	if input == nil {
-		log.Fatal("interface cannot be nil")
+		log.Fatal("convertMapToRuleSet: interface cannot be nil")
 	}
 
 	data := input.(map[string]interface{})

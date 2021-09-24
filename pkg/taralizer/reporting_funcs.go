@@ -29,8 +29,8 @@ func (svc *ReportEngine) createFuncMap() template.FuncMap {
 		"findTechnicalAsset":  svc.findTechnicalAsset,
 		"findThreatAgent":     svc.findThreatAgent,
 		"isRootTrustBoundary": svc.isRootTrustBoundary,
-		"likelihood":          svc.likelihood,
-		"impact":              svc.impact,
+		"likelihood":          svc.likelihoodimpact,
+		"impact":              svc.likelihoodimpact,
 		"severity":            svc.severity,
 	}
 
@@ -52,24 +52,8 @@ func (svc *ReportEngine) severity(severity int64) string {
 	return fmt.Sprintf(REPORT_FMT_STRING, result, severity)
 }
 
-// severity is a helper method to convert severity ids into strings.
-func (svc *ReportEngine) likelihood(severity int64) string {
-	result := "NONE"
-	if severity == 1 {
-		result = "LOW"
-	} else if severity == 2 {
-		result = "MEDIUM"
-	} else if severity == 3 {
-		result = "HIGH"
-	} else if severity >= 4 {
-		result = "VERY HIGH"
-	}
-
-	return fmt.Sprintf(REPORT_FMT_STRING, result, severity)
-}
-
-// severity is a helper method to convert severity ids into strings.
-func (svc *ReportEngine) impact(severity int64) string {
+// likelihoodimpact is a helper method to convert likelihood/impact ids into strings.
+func (svc *ReportEngine) likelihoodimpact(severity int64) string {
 	result := "NONE"
 	if severity == 1 {
 		result = "LOW"
