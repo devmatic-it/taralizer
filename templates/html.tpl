@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+ <title>Threat and Risk Analysis for {{.Title}}</title>
 <style>
 body{
   font-family: Arial, Helvetica, sans-serif;
@@ -43,15 +44,15 @@ th {
 <h2>System Description</h2>
 <p>
 The Data Flow Diagram below provides an overview of the analyzed architecture.
-<img src="diagram.png"/>
+<img src="diagram.png" alt="Data Flow Diagram"/>
 </p>
 
 <h3>Trust Boundaries</h3>
-<table>
+<table aria-describedby="Trust Boundaries">
 <tr>
-  <th>Name</th>
-  <th>Technology</th>
-  <th>Description</th>
+  <th scope="col">Name</th>
+  <th scope="col">Technology</th>
+  <th scope="col">Description</th>
 </tr>
 {{range .TrustBoundaries}}  
     <tr>
@@ -64,11 +65,11 @@ The Data Flow Diagram below provides an overview of the analyzed architecture.
 </p>
 
 <h3>Technical Assets</h3>
-<table>
+<table aria-describedby="Technical Assets">
 <tr>
-  <th>Name</th>
-  <th>Technology</th>
-  <th>Description</th>
+  <th scope="col">Name</th>
+  <th scope="col">Technology</th>
+  <th scope="col">Description</th>
 </tr>
 {{range .TechnicalAssets}}  
     <tr>
@@ -87,13 +88,13 @@ The Data Flow Diagram below provides an overview of the analyzed architecture.
 <p>
 The following data assets are used:
 
-<table>
+<table aria-describedby="Data Assets">
 <tr> 
-  <th>Name</th> 
-  <th>Description</th>
-  <th>C</th>
-  <th>I</th>
-  <th>A</th>
+  <th scope="col">Name</th> 
+  <th scope="col">Description</th>
+  <th scope="col">C</th>
+  <th scope="col">I</th>
+  <th scope="col">A</th>
 </tr>
 {{range .DataAssets}}  
     <tr>
@@ -110,8 +111,11 @@ The following data assets are used:
 <h3>Threat Agents</h3>
 <p>
 The following threat agents are used:
-<table>
-<th>Name</th>  <th>Description</th></tr>
+<table aria-describedby="Threat Agents">
+<tr>
+  <th scope="col">Name</th>  
+  <th scope="col">Description</th>
+</tr>
 {{range .ThreatAgents}}  
     <tr>
     <td>{{.Name}}</td>  <td> {{.Description}} </td>
@@ -125,9 +129,9 @@ The following threat agents are used:
 
 <h3>Risk Matrix</h3>
 We follow the <a href="https://owasp.org/www-community/OWASP_Risk_Rating_Methodology">OWASP Risk Rating Methodology</a>.
-<table>
+<table aria-describedby="Risk Matrix">
 <tbody><tr>
-<th colspan="5" align="center">Overall Risk Severity = Impact x Likelihood</th>
+<th scope="col" colspan="5" align="center">Overall Risk Severity = Impact x Likelihood</th>
 </tr>
 <tr>
 <td rowspan="4" width="15%" align="center">Impact</t>
@@ -166,13 +170,13 @@ We follow the <a href="https://owasp.org/www-community/OWASP_Risk_Rating_Methodo
 <h3>Identified Risks</h3>
 <p>
 The following risks have been identified:
-<table>
+<table aria-describedby="Identified Risks">
 <tr>
-    <th>ID</th>
-    <th>Likelihood</th>
-    <th>Impact</th>
-    <th>Severity</th>
-    <th>Risk</th>
+    <th scope="col">ID</th>
+    <th scope="col">Likelihood</th>
+    <th scope="col">Impact</th>
+    <th scope="col">Severity</th>
+    <th scope="col">Risk</th>
 </tr>
 {{range $index, $risk :=.Risks}}
 <tr>
