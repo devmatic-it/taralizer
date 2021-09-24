@@ -3,6 +3,13 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/devmatic-it/taralizer)](https://goreportcard.com/report/github.com/devmatic-it/taralizer)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/devmatic-it/taralizer/blob/master/LICENSE)
 [![codecov](https://codecov.io/gh/devmatic-it/taralizer/branch/main/graph/badge.svg)](https://codecov.io/gh/devmatic-it/taralizer)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=devmatic-it_taralizer&metric=alert_status)](https://sonarcloud.io/dashboard?id=devmatic-it_taralizer)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=devmatic-it_taralizer&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=devmatic-it_taralizer)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=devmatic-it_taralizer&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=devmatic-it_taralizer)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=devmatic-it_taralizer&metric=security_rating)](https://sonarcloud.io/dashboard?id=devmatic-it_taralizer)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=devmatic-it_taralizer&metric=bugs)](https://sonarcloud.io/dashboard?id=devmatic-it_taralizer)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=devmatic-it_taralizer&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=devmatic-it_taralizer)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=devmatic-it_taralizer&metric=code_smells)](https://sonarcloud.io/dashboard?id=devmatic-it_taralizer)
 
 The following project performs a **Threat and Risk Analysis** based on an architecture model defined through simple YAML file.
 We aim to implement the **OWASP Application Security Verification Standard** (ASVS)(<https://owasp.org/www-project-application-security-verification-standard/>) and also destribute their great database (<https://github.com/OWASP/ASVS/raw/v4.0.2/4.0/docs_en/OWASP%20Application%20Security%20Verification%20Standard%204.0.2-en.csv>).
