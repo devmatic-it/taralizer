@@ -59,9 +59,6 @@ func (svc *Taralizer) convertMapToRisk(input interface{}) Risk {
 	msg.Likelihood = GetMapIntValue(data, "likelihood")
 	msg.Impact = GetMapIntValue(data, "impact")
 
-	//	msg.Cwe, _ = data["cwe"].(json.Number).Int64()
-	// TODO: fetch metadata from ruleset
-
 	rule := svc.findRule(msg.Id)
 	if rule != nil {
 		msg.Title = rule.Title
