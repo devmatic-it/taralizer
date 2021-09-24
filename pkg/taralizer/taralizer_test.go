@@ -20,13 +20,13 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestTaralizer_Evaluate(t *testing.T) {
+func TestTaralizerEvaluate(t *testing.T) {
 	i := NewTaralizer("asvs")
 	report := i.Evaluate("../../examples/gcp/bank_of_anthos.yaml")
 	assert.Greater(t, len(report.Risks), 0)
 }
 
-func TestTaralizer_Rules(t *testing.T) {
+func TestTaralizerRules(t *testing.T) {
 	i := NewTaralizer("asvs")
 	rules := i.RuleSet()
 	assert.NotEmpty(t, rules.Rules)
