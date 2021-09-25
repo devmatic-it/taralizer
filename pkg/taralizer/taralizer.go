@@ -23,6 +23,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 )
 
@@ -126,6 +127,29 @@ func (svc *Taralizer) convertMapToRuleSet(input interface{}) RuleSet {
 	return ruleSet
 }
 
+// mitigateRisk reads out the measures from the model to fill in the risk mitigations
+func (report *Report) addRisk(risk Risk) {
+	for _, measure := range report.RiskTracking {
+		match, _ := regexp.MatchString(measure.Id, risk.Id)
+		if match {
+			risk.Action = strings.ToUpper(measure.Action)
+			risk.Mitigation = measure.Justification
+			risk.Status = strings.ToUpper(measure.Status)
+			risk.ResidualLikelihood = measure.ResidualLikelihood
+			risk.ResidualImpact = measure.ResidualImpact
+			risk.ResidualSeverity = risk.ResidualImpact * risk.ResidualLikelihood
+		} else {
+			risk.Action = "TBD"
+			risk.Status = "OPEN"
+			risk.ResidualLikelihood = -1
+			risk.ResidualImpact = -1
+			risk.ResidualSeverity = -1
+		}
+	}
+
+	report.Risks = append(report.Risks, risk)
+}
+
 // Evaluate executes an Open Policy Agent (OPA) query against the rule sets
 // and stores the resulting risks into the returned report.
 func (svc *Taralizer) Evaluate(fileName string) Report {
@@ -140,7 +164,7 @@ func (svc *Taralizer) Evaluate(fileName string) Report {
 		if msg != nil {
 			item := svc.convertMapToRisk(msg)
 			item.Severity = item.Likelihood * item.Impact
-			report.Risks = append(report.Risks, item)
+			report.addRisk(item)
 		}
 	}
 

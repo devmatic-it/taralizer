@@ -16,6 +16,7 @@ table {
 td, th {
   border: 1px solid #ddd;
   padding: 2px;
+  vertical-align: top;
 }
 
 img {
@@ -405,168 +406,246 @@ The following risks have been identified:
     <th scope="col">Impact</th>
     <th scope="col">Severity</th>
     <th scope="col">Risk</th>
+    <th scope="col">Action</th>
+    <th scope="col">Mitigation</th>
+    <th scope="col">Res. Impact</th>
+    <th scope="col">Res. Likelihood</th>
+    <th scope="col">Res. Severity</th>
+    <th scope="col">Res. Status</th>
 </tr>
 
 <tr>
-    <td>0</td>  
+    <td>container-baseimage-backdooring@frontend</td>  
     <td>LOW(1)</td>  
     <td>MEDIUM(2)</td>  
     <td>LOW(2)</td>  
     <td>
-        <p><a href="https://cwe.mitre.org/data/definitions/912">CWE-912</a> Container Base Image Backdooring: asset 'frontend' has risk of container image backdooring through base images</p>
+        <a href="https://cwe.mitre.org/data/definitions/912">CWE-912</a>
+        Container Base Image Backdooring: asset 'frontend' has risk of container image backdooring through base images
         <p>When a technical asset is built using container technologies, Base Image Backdooring risks might arise where base images and other layers used contain vulnerable components or backdoors
-</p>
-        <p>Mitigation: Apply hardening of all container infrastructures (see for example the CIS-Benchmarks for Docker and Kubernetes and the Docker Bench for Security Use only trusted base images of the original vendors, verify digital signatures and apply image creation best practices. Also consider using Google's Distroless base images or otherwise very small base images. Regularly execute container image scans with tools checking the layers for vulnerable components.
-</p>
+</p>        
     </td>
+    <td>MITIGATE</td>
+    <td>Google distroless image is used to mitigate risks.  <p>The product owner accepted the residual risks.</p>
+</td>
+    <td>LOW(1)</td>  
+    <td>MEDIUM(2)</td>  
+    <td>LOW(2)</td>  
+    <td>CLOSED</td>
 </tr>
 
 <tr>
-    <td>1</td>  
+    <td>container-baseimage-backdooring@user_service</td>  
     <td>LOW(1)</td>  
     <td>MEDIUM(2)</td>  
     <td>LOW(2)</td>  
     <td>
-        <p><a href="https://cwe.mitre.org/data/definitions/912">CWE-912</a> Container Base Image Backdooring: asset 'user_service' has risk of container image backdooring through base images</p>
+        <a href="https://cwe.mitre.org/data/definitions/912">CWE-912</a>
+        Container Base Image Backdooring: asset 'user_service' has risk of container image backdooring through base images
         <p>When a technical asset is built using container technologies, Base Image Backdooring risks might arise where base images and other layers used contain vulnerable components or backdoors
-</p>
-        <p>Mitigation: Apply hardening of all container infrastructures (see for example the CIS-Benchmarks for Docker and Kubernetes and the Docker Bench for Security Use only trusted base images of the original vendors, verify digital signatures and apply image creation best practices. Also consider using Google's Distroless base images or otherwise very small base images. Regularly execute container image scans with tools checking the layers for vulnerable components.
-</p>
+</p>        
     </td>
+    <td>MITIGATE</td>
+    <td>Google distroless image is used to mitigate risks.  <p>The product owner accepted the residual risks.</p>
+</td>
+    <td>LOW(1)</td>  
+    <td>MEDIUM(2)</td>  
+    <td>LOW(2)</td>  
+    <td>CLOSED</td>
 </tr>
 
 <tr>
-    <td>2</td>  
+    <td>container-baseimage-backdooring@contacts</td>  
     <td>LOW(1)</td>  
     <td>MEDIUM(2)</td>  
     <td>LOW(2)</td>  
     <td>
-        <p><a href="https://cwe.mitre.org/data/definitions/912">CWE-912</a> Container Base Image Backdooring: asset 'contacts' has risk of container image backdooring through base images</p>
+        <a href="https://cwe.mitre.org/data/definitions/912">CWE-912</a>
+        Container Base Image Backdooring: asset 'contacts' has risk of container image backdooring through base images
         <p>When a technical asset is built using container technologies, Base Image Backdooring risks might arise where base images and other layers used contain vulnerable components or backdoors
-</p>
-        <p>Mitigation: Apply hardening of all container infrastructures (see for example the CIS-Benchmarks for Docker and Kubernetes and the Docker Bench for Security Use only trusted base images of the original vendors, verify digital signatures and apply image creation best practices. Also consider using Google's Distroless base images or otherwise very small base images. Regularly execute container image scans with tools checking the layers for vulnerable components.
-</p>
+</p>        
     </td>
+    <td>MITIGATE</td>
+    <td>Google distroless image is used to mitigate risks.  <p>The product owner accepted the residual risks.</p>
+</td>
+    <td>LOW(1)</td>  
+    <td>MEDIUM(2)</td>  
+    <td>LOW(2)</td>  
+    <td>CLOSED</td>
 </tr>
 
 <tr>
-    <td>3</td>  
+    <td>container-baseimage-backdooring@ledger_writer</td>  
     <td>LOW(1)</td>  
     <td>MEDIUM(2)</td>  
     <td>LOW(2)</td>  
     <td>
-        <p><a href="https://cwe.mitre.org/data/definitions/912">CWE-912</a> Container Base Image Backdooring: asset 'ledger_writer' has risk of container image backdooring through base images</p>
+        <a href="https://cwe.mitre.org/data/definitions/912">CWE-912</a>
+        Container Base Image Backdooring: asset 'ledger_writer' has risk of container image backdooring through base images
         <p>When a technical asset is built using container technologies, Base Image Backdooring risks might arise where base images and other layers used contain vulnerable components or backdoors
-</p>
-        <p>Mitigation: Apply hardening of all container infrastructures (see for example the CIS-Benchmarks for Docker and Kubernetes and the Docker Bench for Security Use only trusted base images of the original vendors, verify digital signatures and apply image creation best practices. Also consider using Google's Distroless base images or otherwise very small base images. Regularly execute container image scans with tools checking the layers for vulnerable components.
-</p>
+</p>        
     </td>
+    <td>MITIGATE</td>
+    <td>Google distroless image is used to mitigate risks.  <p>The product owner accepted the residual risks.</p>
+</td>
+    <td>LOW(1)</td>  
+    <td>MEDIUM(2)</td>  
+    <td>LOW(2)</td>  
+    <td>CLOSED</td>
 </tr>
 
 <tr>
-    <td>4</td>  
+    <td>container-baseimage-backdooring@balance_reader</td>  
     <td>LOW(1)</td>  
     <td>MEDIUM(2)</td>  
     <td>LOW(2)</td>  
     <td>
-        <p><a href="https://cwe.mitre.org/data/definitions/912">CWE-912</a> Container Base Image Backdooring: asset 'balance_reader' has risk of container image backdooring through base images</p>
+        <a href="https://cwe.mitre.org/data/definitions/912">CWE-912</a>
+        Container Base Image Backdooring: asset 'balance_reader' has risk of container image backdooring through base images
         <p>When a technical asset is built using container technologies, Base Image Backdooring risks might arise where base images and other layers used contain vulnerable components or backdoors
-</p>
-        <p>Mitigation: Apply hardening of all container infrastructures (see for example the CIS-Benchmarks for Docker and Kubernetes and the Docker Bench for Security Use only trusted base images of the original vendors, verify digital signatures and apply image creation best practices. Also consider using Google's Distroless base images or otherwise very small base images. Regularly execute container image scans with tools checking the layers for vulnerable components.
-</p>
+</p>        
     </td>
+    <td>MITIGATE</td>
+    <td>Google distroless image is used to mitigate risks.  <p>The product owner accepted the residual risks.</p>
+</td>
+    <td>LOW(1)</td>  
+    <td>MEDIUM(2)</td>  
+    <td>LOW(2)</td>  
+    <td>CLOSED</td>
 </tr>
 
 <tr>
-    <td>5</td>  
+    <td>container-baseimage-backdooring@trans_history</td>  
     <td>LOW(1)</td>  
     <td>MEDIUM(2)</td>  
     <td>LOW(2)</td>  
     <td>
-        <p><a href="https://cwe.mitre.org/data/definitions/912">CWE-912</a> Container Base Image Backdooring: asset 'trans_history' has risk of container image backdooring through base images</p>
+        <a href="https://cwe.mitre.org/data/definitions/912">CWE-912</a>
+        Container Base Image Backdooring: asset 'trans_history' has risk of container image backdooring through base images
         <p>When a technical asset is built using container technologies, Base Image Backdooring risks might arise where base images and other layers used contain vulnerable components or backdoors
-</p>
-        <p>Mitigation: Apply hardening of all container infrastructures (see for example the CIS-Benchmarks for Docker and Kubernetes and the Docker Bench for Security Use only trusted base images of the original vendors, verify digital signatures and apply image creation best practices. Also consider using Google's Distroless base images or otherwise very small base images. Regularly execute container image scans with tools checking the layers for vulnerable components.
-</p>
+</p>        
     </td>
+    <td>MITIGATE</td>
+    <td>Google distroless image is used to mitigate risks.  <p>The product owner accepted the residual risks.</p>
+</td>
+    <td>LOW(1)</td>  
+    <td>MEDIUM(2)</td>  
+    <td>LOW(2)</td>  
+    <td>CLOSED</td>
 </tr>
 
 <tr>
-    <td>6</td>  
+    <td>cross-site-request-forgery@frontend</td>  
     <td>HIGH(3)</td>  
     <td>MEDIUM(2)</td>  
     <td>HIGH(6)</td>  
     <td>
-        <p><a href="https://cwe.mitre.org/data/definitions/352">CWE-352</a> Cross-Site Request Forgery (CSRF): asset 'frontend' has risk of Cross Site Request Forgery(CSRF)</p>
-        <p>When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.</p>
-        <p>Mitigation: Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level
-</p>
+        <a href="https://cwe.mitre.org/data/definitions/352">CWE-352</a>
+        Cross-Site Request Forgery (CSRF): asset 'frontend' has risk of Cross Site Request Forgery(CSRF)
+        <p>When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.</p>        
     </td>
+    <td>TBD</td>
+    <td>Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level
+</td>
+    <td></td>  
+    <td></td>  
+    <td></td>  
+    <td>OPEN</td>
 </tr>
 
 <tr>
-    <td>7</td>  
+    <td>cross-site-request-forgery@user_service</td>  
     <td>HIGH(3)</td>  
     <td>MEDIUM(2)</td>  
     <td>HIGH(6)</td>  
     <td>
-        <p><a href="https://cwe.mitre.org/data/definitions/352">CWE-352</a> Cross-Site Request Forgery (CSRF): asset 'user_service' has risk of Cross Site Request Forgery(CSRF)</p>
-        <p>When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.</p>
-        <p>Mitigation: Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level
-</p>
+        <a href="https://cwe.mitre.org/data/definitions/352">CWE-352</a>
+        Cross-Site Request Forgery (CSRF): asset 'user_service' has risk of Cross Site Request Forgery(CSRF)
+        <p>When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.</p>        
     </td>
+    <td>TBD</td>
+    <td>Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level
+</td>
+    <td></td>  
+    <td></td>  
+    <td></td>  
+    <td>OPEN</td>
 </tr>
 
 <tr>
-    <td>8</td>  
+    <td>cross-site-request-forgery@contacts</td>  
     <td>HIGH(3)</td>  
     <td>MEDIUM(2)</td>  
     <td>HIGH(6)</td>  
     <td>
-        <p><a href="https://cwe.mitre.org/data/definitions/352">CWE-352</a> Cross-Site Request Forgery (CSRF): asset 'contacts' has risk of Cross Site Request Forgery(CSRF)</p>
-        <p>When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.</p>
-        <p>Mitigation: Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level
-</p>
+        <a href="https://cwe.mitre.org/data/definitions/352">CWE-352</a>
+        Cross-Site Request Forgery (CSRF): asset 'contacts' has risk of Cross Site Request Forgery(CSRF)
+        <p>When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.</p>        
     </td>
+    <td>TBD</td>
+    <td>Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level
+</td>
+    <td></td>  
+    <td></td>  
+    <td></td>  
+    <td>OPEN</td>
 </tr>
 
 <tr>
-    <td>9</td>  
+    <td>cross-site-request-forgery@trans_history</td>  
     <td>HIGH(3)</td>  
     <td>MEDIUM(2)</td>  
     <td>HIGH(6)</td>  
     <td>
-        <p><a href="https://cwe.mitre.org/data/definitions/352">CWE-352</a> Cross-Site Request Forgery (CSRF): asset 'trans_history' has risk of Cross Site Request Forgery(CSRF)</p>
-        <p>When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.</p>
-        <p>Mitigation: Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level
-</p>
+        <a href="https://cwe.mitre.org/data/definitions/352">CWE-352</a>
+        Cross-Site Request Forgery (CSRF): asset 'trans_history' has risk of Cross Site Request Forgery(CSRF)
+        <p>When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.</p>        
     </td>
+    <td>TBD</td>
+    <td>Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level
+</td>
+    <td></td>  
+    <td></td>  
+    <td></td>  
+    <td>OPEN</td>
 </tr>
 
 <tr>
-    <td>10</td>  
+    <td>cross-site-request-forgery@balance_reader</td>  
     <td>HIGH(3)</td>  
     <td>MEDIUM(2)</td>  
     <td>HIGH(6)</td>  
     <td>
-        <p><a href="https://cwe.mitre.org/data/definitions/352">CWE-352</a> Cross-Site Request Forgery (CSRF): asset 'balance_reader' has risk of Cross Site Request Forgery(CSRF)</p>
-        <p>When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.</p>
-        <p>Mitigation: Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level
-</p>
+        <a href="https://cwe.mitre.org/data/definitions/352">CWE-352</a>
+        Cross-Site Request Forgery (CSRF): asset 'balance_reader' has risk of Cross Site Request Forgery(CSRF)
+        <p>When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.</p>        
     </td>
+    <td>TBD</td>
+    <td>Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level
+</td>
+    <td></td>  
+    <td></td>  
+    <td></td>  
+    <td>OPEN</td>
 </tr>
 
 <tr>
-    <td>11</td>  
+    <td>cross-site-request-forgery@ledger_writer</td>  
     <td>HIGH(3)</td>  
     <td>MEDIUM(2)</td>  
     <td>HIGH(6)</td>  
     <td>
-        <p><a href="https://cwe.mitre.org/data/definitions/352">CWE-352</a> Cross-Site Request Forgery (CSRF): asset 'ledger_writer' has risk of Cross Site Request Forgery(CSRF)</p>
-        <p>When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.</p>
-        <p>Mitigation: Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level
-</p>
+        <a href="https://cwe.mitre.org/data/definitions/352">CWE-352</a>
+        Cross-Site Request Forgery (CSRF): asset 'ledger_writer' has risk of Cross Site Request Forgery(CSRF)
+        <p>When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.</p>        
     </td>
+    <td>TBD</td>
+    <td>Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level
+</td>
+    <td></td>  
+    <td></td>  
+    <td></td>  
+    <td>OPEN</td>
 </tr>
 
 </table>

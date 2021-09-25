@@ -16,6 +16,7 @@ table {
 td, th {
   border: 1px solid #ddd;
   padding: 2px;
+  vertical-align: top;
 }
 
 img {
@@ -177,18 +178,30 @@ The following risks have been identified:
     <th scope="col">Impact</th>
     <th scope="col">Severity</th>
     <th scope="col">Risk</th>
+    <th scope="col">Action</th>
+    <th scope="col">Mitigation</th>
+    <th scope="col">Res. Impact</th>
+    <th scope="col">Res. Likelihood</th>
+    <th scope="col">Res. Severity</th>
+    <th scope="col">Res. Status</th>
 </tr>
 {{range $index, $risk :=.Risks}}
 <tr>
-    <td>{{$index}}</td>  
+    <td>{{$risk.Id}}</td>  
     <td>{{likelihood $risk.Likelihood}}</td>  
     <td>{{impact $risk.Impact}}</td>  
     <td>{{severity $risk.Severity}}</td>  
     <td>
-        <p><a href="https://cwe.mitre.org/data/definitions/{{$risk.Cwe}}">CWE-{{$risk.Cwe}}</a> {{$risk.Title}}: {{$risk.Message}}</p>
-        <p>{{$risk.Description}}</p>
-        <p>Mitigation: {{$risk.Mitigation}}</p>
+        <a href="https://cwe.mitre.org/data/definitions/{{$risk.Cwe}}">CWE-{{$risk.Cwe}}</a>
+        {{$risk.Title}}: {{$risk.Message}}
+        <p>{{$risk.Description}}</p>        
     </td>
+    <td>{{$risk.Action}}</td>
+    <td>{{$risk.Mitigation}}</td>
+    <td>{{likelihood $risk.ResidualLikelihood}}</td>  
+    <td>{{impact $risk.ResidualImpact}}</td>  
+    <td>{{severity $risk.ResidualSeverity}}</td>  
+    <td>{{$risk.Status}}</td>
 </tr>
 {{end}}
 </table>

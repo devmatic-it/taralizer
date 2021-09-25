@@ -478,3 +478,17 @@ trust_boundaries:
     threat_agents_inside:
       - authorized-employee
       - unauthorized-employee
+
+risk_tracking:
+  - measure:
+    id: container-baseimage-backdooring@*
+    action: mitigate
+    justification: >
+      Google distroless image is used to mitigate risks. 
+      <p>The product owner accepted the residual risks.</p>
+    residual_likelihood: 1
+    residual_impact: 2
+    ticket: ticked-2342
+    checked_by: Ferenc Bator
+    date: 2020-01-04
+    status: closed # values: unchecked, in-discussion, accepted, in-progress, mitigated, false-positive

@@ -38,7 +38,7 @@ func (svc *ReportEngine) createFuncMap() template.FuncMap {
 
 // severity is a helper method to convert severity ids into strings.
 func (svc *ReportEngine) severity(severity int64) string {
-	result := "NONE"
+	result := ""
 	if severity == 9 {
 		result = "CRITICAL"
 	} else if severity >= 6 {
@@ -47,6 +47,10 @@ func (svc *ReportEngine) severity(severity int64) string {
 		result = "MEDIUM"
 	} else if severity >= 1 {
 		result = "LOW"
+	} else if severity >= 0 {
+		result = "NONE"
+	} else {
+		return ""
 	}
 
 	return fmt.Sprintf(REPORT_FMT_STRING, result, severity)
@@ -54,8 +58,10 @@ func (svc *ReportEngine) severity(severity int64) string {
 
 // likelihoodimpact is a helper method to convert likelihood/impact ids into strings.
 func (svc *ReportEngine) likelihoodimpact(severity int64) string {
-	result := "NONE"
-	if severity == 1 {
+	result := ""
+	if severity == 0 {
+		result = "NONE"
+	} else if severity == 1 {
 		result = "LOW"
 	} else if severity == 2 {
 		result = "MEDIUM"
@@ -63,6 +69,8 @@ func (svc *ReportEngine) likelihoodimpact(severity int64) string {
 		result = "HIGH"
 	} else if severity >= 4 {
 		result = "VERY HIGH"
+	} else {
+		return ""
 	}
 
 	return fmt.Sprintf(REPORT_FMT_STRING, result, severity)

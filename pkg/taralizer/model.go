@@ -24,16 +24,33 @@ import (
 
 // Defines a risk identifed in model
 type Risk struct {
-	Id          string `yaml:"id"`
-	Cwe         int64  `yaml:"cwe"`
-	Title       string `yaml:"title"`
-	Description string `yaml:"description"`
-	Mitigation  string `yaml:"mitigation"`
-	Message     string `yaml:"message"`
-	Url         string `yaml:"url"`
-	Impact      int64  `yaml:"impact"`
-	Likelihood  int64  `yaml:"likelihood"`
-	Severity    int64  `yaml:"severity"`
+	Id                 string `yaml:"id"`
+	Cwe                int64  `yaml:"cwe"`
+	Title              string `yaml:"title"`
+	Description        string `yaml:"description"`
+	Message            string `yaml:"message"`
+	Url                string `yaml:"url"`
+	Impact             int64  `yaml:"impact"`
+	Likelihood         int64  `yaml:"likelihood"`
+	Severity           int64  `yaml:"severity"`
+	Action             string `yaml:"action"`
+	Mitigation         string `yaml:"mitigation"`
+	ResidualImpact     int64  `yaml:"residual_impact"`
+	ResidualLikelihood int64  `yaml:"residual_likelihood"`
+	ResidualSeverity   int64  `yaml:"residual_severity"`
+	Status             string `yaml:"status"`
+}
+
+type Measure struct {
+	Id                 string `yaml:"id"`
+	Action             string `yaml:"action"`
+	Justification      string `yaml:"justification"`
+	Ticket             string `yaml:"ticket"`
+	CheckedBy          string `yaml:"checked_by"`
+	ResidualImpact     int64  `yaml:"residual_impact"`
+	ResidualLikelihood int64  `yaml:"residual_likelihood"`
+	ResidualSeverity   int64  `yaml:"residual_severity"`
+	Status             string `yaml:"status"`
 }
 
 type ThreatAgent struct {
@@ -100,6 +117,7 @@ type Report struct {
 	TechnicalAssets []TechnicalAsset `yaml:"technical_assets,omitempty"`
 	TrustBoundaries []TrustBoundary  `yaml:"trust_boundaries,omitempty"`
 	Risks           []Risk           `yaml:"risks,omitempty"`
+	RiskTracking    []Measure        `yaml:"risk_tracking,omitempty"`
 	Title           string           `yaml:"title,omitempty"`
 	Version         string           `yaml:"version,omitempty"`
 	Customer        string           `yaml:"customer,omitempty"`
