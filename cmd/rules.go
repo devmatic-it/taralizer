@@ -27,7 +27,7 @@ var rulesCmd = &cobra.Command{
 	Long:  `provides a list of installed rules.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		t := taralizer.NewTaralizer(ruleSet)
-		rs := t.RuleSet()
+		rs := t.RuleSet(ruleSet)
 		fmt.Printf("%s (%s) %s\n", rs.Title, rs.Name, rs.Version)
 		for _, v := range rs.Rules {
 			fmt.Printf("  %s - %s: %s\n", v.Id, v.Title, v.Description)

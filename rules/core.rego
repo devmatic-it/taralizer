@@ -52,3 +52,47 @@ direct_connection(id1, id2){
     input.technical_assets[i].id == id1
     input.technical_assets[i].communication_links[_].target == id2
 }
+
+# all end user technologies
+is_end_user_technology("browser")
+is_end_user_technology("mobile-app")
+is_end_user_technology("client-system")
+is_end_user_technology("desktop")
+is_end_user_technology("devops-client")
+is_end_user_technology("iot-device")
+
+# applications that understand http/https and are usually accessed from the web
+is_web_application_technology("erp")
+is_web_application_technology("cms")
+is_web_application_technology("identity-provider")
+is_web_application_technology("web-server")
+is_web_application_technology("web-application")
+is_web_application_technology("kubernetes-pod")
+is_web_application_technology("kubernetes-deployment")
+is_web_application_technology("kubernetes-statefulset")
+is_web_application_technology("web-service-rest")
+is_web_application_technology("web-service-soap")
+
+# all web access protocols
+is_web_access_protocol("http")
+is_web_access_protocol("https")
+
+# all encrypted protocols
+is_encrypted_protocol("https")
+is_encrypted_protocol("ssh")
+is_encrypted_protocol("scp")
+is_encrypted_protocol("kek")
+is_encrypted_protocol("sql_encrypted")
+is_encrypted_protocol("nosql_encrypted")
+is_encrypted_protocol("ftps")
+is_encrypted_protocol("sftp")
+is_encrypted_protocol("smtps")
+
+is_unencrypted_protocol(protocol){
+    not is_encrypted_protocol(protocol)
+}
+
+is_database_protocol("sql")
+is_database_protocol("sql_encrypted")
+is_database_protocol("nosql")
+is_database_protocol("nosql_encrypted")

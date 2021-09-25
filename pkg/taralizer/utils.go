@@ -5,17 +5,32 @@ import (
 	"log"
 )
 
-func GetMapIntValue(data map[string]interface{}, key string) int64 {
+func GetMapIntValue(data map[string]interface{}, key string, location string) int64 {
 	result := int64(-1)
 	val, exists := data[key]
 	if exists {
 		valNum, exists := val.(json.Number)
 		if exists {
 			result, _ = valNum.Int64()
+		} else {
+			log.Fatalf("Parse Error in %s: Given key '%s' is not a number", location, key)
 		}
+	} else {
+		log.Fatalf("Parse Error in %s: Cannot find key '%s' in given map", location, key)
 	}
 
 	return result
+}
+
+func GetMapStringValue(data map[string]interface{}, key string, location string) string {
+	val, exists := data[key]
+	if exists {
+		return val.(string)
+	} else {
+		log.Fatalf("Parse Error in %s: Cannot find key '%s' in given map", location, key)
+	}
+
+	return ""
 }
 
 type StringWriter struct {

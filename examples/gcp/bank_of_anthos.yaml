@@ -308,7 +308,7 @@ technical_assets:
   communication_links:
     - target: kms
       description: key transfer
-      protocol: ftp # values: see help
+      protocol: kek # values: see help
       authentication: session-id # values: none, credentials, session-id, token, client-certificate, two-factor
       authorization: enduser-identity-propagation # values: none, technical-user, enduser-identity-propagation
       data_assets_sent: # sequence of IDs to reference

@@ -69,3 +69,34 @@ ruleset:
     likelihood: 2 #medium
     impact: 2 #medim
     cwe: 79
+
+  - rule:
+    id: container-baseimage-backdooring
+    title: "Container Base Image Backdooring"
+    description: >
+      When a technical asset is built using container technologies, Base Image Backdooring risks might arise where
+      base images and other layers used contain vulnerable components or backdoors
+    url: https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html
+    mitigation: >
+      Apply hardening of all container infrastructures (see for example the CIS-Benchmarks for Docker and Kubernetes and the Docker Bench for Security
+      Use only trusted base images of the original vendors, verify digital signatures and apply image creation best practices.
+      Also consider using Google's Distroless base images or otherwise very small base images.
+      Regularly execute container image scans with tools checking the layers for vulnerable components.
+    stride: Tampering
+    likelihood: 2
+    impact: 2
+    cwe: 912
+
+  - rule:
+    id: cross-site-request-forgery
+    title: Cross-Site Request Forgery (CSRF)
+    description: When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.
+    url: https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html
+    mitigation: >
+      Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests).
+      When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag.
+      When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level
+    stride: Spoofing
+    likelihood: 3
+    impact: 1
+    cwe: 352

@@ -11,27 +11,29 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 package rules.asvs
-import data.rules.technical_asset_by_id
 import data.rules.different_trust_boundaries
 import data.rules.calc_impact
-import data.rules.is_unencrypted_protocol
-
+import data.rules.is_web_access_protocol
+import data.rules.is_web_application_technology
 
 violation[{
     "id":id,
      "msg": msg, 
      "likelihood":likelihood,
      "impact": impact}] {
-    server := input.technical_assets[_]
+    server := input.technical_assets[_]    
     conn := server.communication_links[_]
-    is_unencrypted_protocol(conn.protocol)
+    is_web_access_protocol(conn.protocol)    
     different_trust_boundaries(server.id, conn.target)
-    
 
-    msg := sprintf("asset '%v' communicating to '%v' uses insecure protocol '%v'", [server.id, conn.target, conn.protocol])
-	id := sprintf("insecure-proto@%v>%v", [server.id, conn.target])
-    likelihood := 1 #unlikely
-    impact := calc_impact(2)
+    some k
+    input.technical_assets[k].id == conn.target
+    target:= input.technical_assets[k]    
+    is_web_application_technology(target.technology)
+
+	id := sprintf("cross-site-request-forgery@%v", [conn.target])
+    msg := sprintf("asset '%v' has risk of Cross Site Request Forgery(CSRF)", [conn.target])
+    likelihood := 3
+    impact := calc_impact(1) # low
 }

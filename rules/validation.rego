@@ -25,25 +25,32 @@ validation[{"id":id,"msg": msg}] {
 
 validation[{"id":id,"msg": msg}] {
     server := input.technical_assets[_]
-    server.technology != "waf"
-    server.technology != "load-balancer"
-    server.technology != "reverse-proxy"    
-    server.technology != "ips"
-    server.technology != "ids"
+
+    #end user
     server.technology != "browser"
     server.technology != "desktop"
-    server.technology != "mobile-app"
-    server.technology != "web-server"
-    server.technology != "client-system"
-    server.technology != "web-application"
-    server.technology != "database"
-    server.technology != "database-sql"
-    server.technology != "database-nosql"
     server.technology != "devops-client"
-    server.technology != "file-server"
+    server.technology != "mobile-app"
     server.technology != "client-system"
+    server.technology != "iot-device"
+
+    # networking    
+    server.technology != "load-balancer"
+    server.technology != "reverse-proxy"    
+    server.technology != "gateway"
+
+    # security
+    server.technology != "waf"
+    server.technology != "ips"
+    server.technology != "ids"
+    server.technology != "hsm"
+    server.technology != "vault"
+    server.technology != "identity-provider"
+
+    # compute
+    server.technology != "web-server"
+    server.technology != "web-application"
     server.technology != "local-file-system"
-    server.technology != "erp"
     server.technology != "cms"
     server.technology != "web-service-rest"
     server.technology != "web-service-soap"
@@ -51,25 +58,30 @@ validation[{"id":id,"msg": msg}] {
     server.technology != "search-index"
     server.technology != "search-engine"
     server.technology != "service-registry"
-    server.technology != "identity-provider"
-    server.technology != "identity-store-database"
-    server.technology != "identity-store-ldap"
-    server.technology != "ldap-server"
     server.technology != "event-listener"
     server.technology != "container-platform"
-    server.technology != "batch-processing"
-    server.technology != "gateway"
-    server.technology != "hsm"
-    server.technology != "message-queue"
     server.technology != "service-mesh"
-    server.technology != "vault"
+    server.technology != "ai"
+
+    #integration
+    server.technology != "batch-processing"
+    server.technology != "message-queue"
+    server.technology != "stream-processing"
+
+    #database and storage
     server.technology != "data-lake"
     server.technology != "big-data-platform"
-    server.technology != "ai"
+    server.technology != "database"
+    server.technology != "database-sql"
+    server.technology != "database-nosql"
+    server.technology != "erp"
+    server.technology != "block-storage"
     server.technology != "mail-server"
     server.technology != "file-server"
-    server.technology != "stream-processing"
-    
+    server.technology != "ldap-server"
+    server.technology != "identity-store-database"
+    server.technology != "identity-store-ldap"
+
     #CI/CD
     server.technology != "build-pipeline"
     server.technology != "artifact-registry"
@@ -92,7 +104,6 @@ validation[{"id":id,"msg": msg}] {
     server.technology != "monitoring"
     server.technology != "logging"
 
-    server.technology != "block-storage"
 
     msg := sprintf("asset '%v' using unsupported technology '%v'", [server.id, server.technology])
 	id := sprintf("core@%v", [server.id])

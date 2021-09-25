@@ -26,6 +26,9 @@ import (
 	"strings"
 )
 
+const RULSET_YAML = "ruleset.yaml"
+const RULE_REGO = "rego rule"
+
 // Taralzer struct
 type Taralizer struct {
 	ctx     context.Context
@@ -36,7 +39,7 @@ type Taralizer struct {
 func NewTaralizer(ruleset string) *Taralizer {
 	instance := Taralizer{}
 	instance.ctx = context.TODO()
-	instance.ruleset = instance.RuleSet()
+	instance.ruleset = instance.RuleSet(ruleset)
 	return &instance
 }
 
@@ -48,16 +51,12 @@ func (svc *Taralizer) convertMapToRisk(input interface{}) Risk {
 
 	data := input.(map[string]interface{})
 	msg := Risk{
-		Id: data["id"].(string),
-		//		Title:       data["title"].(string),
-		//		Description: data["description"].(string),
-		//		Mitigation:  data["mitigation"].(string),
-		//		Url:         data["url"].(string),
-		Message: data["msg"].(string),
+		Id:      GetMapStringValue(data, "id", RULE_REGO),
+		Message: GetMapStringValue(data, "msg", RULE_REGO),
 	}
 
-	msg.Likelihood = GetMapIntValue(data, "likelihood")
-	msg.Impact = GetMapIntValue(data, "impact")
+	msg.Likelihood = GetMapIntValue(data, "likelihood", RULE_REGO)
+	msg.Impact = GetMapIntValue(data, "impact", RULE_REGO)
 
 	rule := svc.findRule(msg.Id)
 	if rule != nil {
@@ -86,18 +85,19 @@ func (svc *Taralizer) convertMapToRule(input interface{}) Rule {
 		log.Fatal("convertMapToRule: interface cannot be nil")
 	}
 
+	loc := svc.ruleset.Name + "/" + RULSET_YAML
 	data := input.(map[string]interface{})
 	msg := Rule{
-		Id:          data["id"].(string),
-		Title:       data["title"].(string),
-		Description: data["description"].(string),
-		Mitigation:  data["mitigation"].(string),
-		Url:         data["url"].(string),
+		Id:          GetMapStringValue(data, "id", loc),
+		Title:       GetMapStringValue(data, "title", loc),
+		Description: GetMapStringValue(data, "description", loc),
+		Mitigation:  GetMapStringValue(data, "mitigation", loc),
+		Url:         GetMapStringValue(data, "url", loc),
 	}
 
-	msg.Cwe = GetMapIntValue(data, "cwe")
-	msg.Likelihood = GetMapIntValue(data, "likelihood")
-	msg.Impact = GetMapIntValue(data, "impact")
+	msg.Cwe = GetMapIntValue(data, "cwe", loc)
+	msg.Likelihood = GetMapIntValue(data, "likelihood", loc)
+	msg.Impact = GetMapIntValue(data, "impact", loc)
 	return msg
 }
 
@@ -107,13 +107,14 @@ func (svc *Taralizer) convertMapToRuleSet(input interface{}) RuleSet {
 		log.Fatal("convertMapToRuleSet: interface cannot be nil")
 	}
 
+	loc := svc.ruleset.Name + "/" + RULSET_YAML
 	data := input.(map[string]interface{})
 	ruleSet := RuleSet{
-		Name:        data["name"].(string),
-		Title:       data["title"].(string),
-		Description: data["description"].(string),
-		Version:     data["version"].(string),
-		Url:         data["url"].(string),
+		Name:        GetMapStringValue(data, "name", loc),
+		Title:       GetMapStringValue(data, "title", loc),
+		Description: GetMapStringValue(data, "description", loc),
+		Version:     GetMapStringValue(data, "version", loc),
+		Url:         GetMapStringValue(data, "url", loc),
 		Rules:       []Rule{},
 	}
 
@@ -163,18 +164,20 @@ func (svc *Taralizer) Validate(fileName string) []string {
 }
 
 // RulesSet returns the rules of the given rulset
-func (svc *Taralizer) RuleSet() RuleSet {
+func (svc *Taralizer) RuleSet(rs string) RuleSet {
 
-	results := svc.queryString("data.asvs.ruleset")
+	results := svc.queryString("data." + rs + ".ruleset")
 
 	// load model into structured report
-	ruleset := RuleSet{}
+	svc.ruleset = RuleSet{}
+	svc.ruleset.Name = rs
+
 	if len(results) == 1 {
 		data := results[0].Expressions[0].Value.(map[string]interface{})
-		ruleset = svc.convertMapToRuleSet(data)
+		svc.ruleset = svc.convertMapToRuleSet(data)
 	}
 
-	return ruleset
+	return svc.ruleset
 }
 
 // // Evaluate executes an Open Policy Agent (OPA) query against the rule sets calling the given query 'queryStr'

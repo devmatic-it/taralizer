@@ -28,6 +28,6 @@ func TestTaralizerEvaluate(t *testing.T) {
 
 func TestTaralizerRules(t *testing.T) {
 	i := NewTaralizer("asvs")
-	rules := i.RuleSet()
+	rules := i.RuleSet("asvs")
 	assert.NotEmpty(t, rules.Rules)
 }
