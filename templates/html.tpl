@@ -19,6 +19,42 @@ td, th {
   vertical-align: top;
 }
 
+.impact3,.likelihood3{
+  background-color: red;
+  color: white;
+}
+
+.impact2, .likelihood2{
+  background-color: orange;
+}
+
+.impact1, .likelihood1{
+  background-color: lightgreen;
+}
+
+.serverity1{
+  background-color: lightgreen;
+}
+
+.serverity2{
+  background-color: yellow;
+}
+
+.serverity3, .serverity4{
+  background-color: orange;
+}
+
+.serverity6{
+  background-color: red;
+  color: white;
+}
+
+.serverity9{
+  background-color: darkred;
+  color: white;
+}
+
+
 img {
 width:100%;
 }
@@ -136,19 +172,19 @@ We follow the <a href="https://owasp.org/www-community/OWASP_Risk_Rating_Methodo
 </tr>
 <tr>
 <td rowspan="4" style="text-align: center;width:15%;">Impact</t>
-<td style="text-align:center;background-color:#f2f2f2;">HIGH</td> <!--impact legend-->
+<td class="impact3" style="text-align:center;">HIGH</td> <!--impact legend-->
 <td style="text-align:center;background-color:orange;">Medium</td>
 <td style="text-align:center;background-color:red;">High</td>
 <td style="text-align:center;background-color:darkred;">Critical</td>
 </tr>
 <tr>
-<td style="text-align:center;background-color:#f2f2f2;">MEDIUM</td> <!--impact legend-->
+<td class="impact2" style="text-align:center;">MEDIUM</td> <!--impact legend-->
 <td style="text-align:yellow;background-color:yellow;">Low</td>
 <td style="text-align:center;background-color:orange;">Medium</td>
 <td style="text-align:center;background-color:red;">High</td>
 </tr>
 <tr>
-<td style="text-align:center;background-color:#f2f2f2;">LOW</td> <!--impact legend-->
+<td class="impact1" style="text-align:center;">LOW</td> <!--impact legend-->
 <td style="text-align:center;background-color:lightgreen;">Low</td>
 <td style="text-align:center;background-color:yellow;">Low</td>
 <td style="text-align:center;background-color:orange;">Medium</td>
@@ -157,9 +193,9 @@ We follow the <a href="https://owasp.org/www-community/OWASP_Risk_Rating_Methodo
 
 <!-- likelihood legend -->
 <td style="text-align:center;background-color:#f2f2f2;">&nbsp;</td>
-<td style="text-align:center;background-color:#f2f2f2;">LOW</td>
-<td style="text-align:center;background-color:#f2f2f2;">MEDIUM</td>
-<td style="text-align:center;background-color:#f2f2f2;">HIGH</td>
+<td class="likelihood1" style="text-align:center;">LOW</td>
+<td class="likelihood2" style="text-align:center;">MEDIUM</td>
+<td class="likelihood3" style="text-align:center;">HIGH</td>
 </tr>
 <tr>
 <td style="text-align:center;">&nbsp;</td>
@@ -188,9 +224,9 @@ The following risks have been identified:
 {{range $index, $risk :=.Risks}}
 <tr>
     <td>{{$risk.Id}}</td>  
-    <td>{{likelihood $risk.Likelihood}}</td>  
-    <td>{{impact $risk.Impact}}</td>  
-    <td>{{severity $risk.Severity}}</td>  
+    <td class="likelihood{{$risk.Likelihood}}">{{likelihood $risk.Likelihood}}</td>  
+    <td class="impact{{$risk.Impact}}">{{impact $risk.Impact}}</td>  
+    <td class="serverity{{$risk.Severity}}">{{severity $risk.Severity}}</td>  
     <td>
         <a href="https://cwe.mitre.org/data/definitions/{{$risk.Cwe}}">CWE-{{$risk.Cwe}}</a>
         {{$risk.Title}}: {{$risk.Message}}
@@ -198,9 +234,9 @@ The following risks have been identified:
     </td>
     <td>{{$risk.Action}}</td>
     <td>{{$risk.Mitigation}}</td>
-    <td>{{likelihood $risk.ResidualLikelihood}}</td>  
-    <td>{{impact $risk.ResidualImpact}}</td>  
-    <td>{{severity $risk.ResidualSeverity}}</td>  
+    <td class="likelihood{{$risk.ResidualLikelihood}}">{{likelihood $risk.ResidualLikelihood}}</td>  
+    <td class="impact{{$risk.ResidualImpact}}">{{impact $risk.ResidualImpact}}</td>  
+    <td class="serverity{{$risk.ResidualSeverity}}">{{severity $risk.ResidualSeverity}}</td>  
     <td>{{$risk.Status}}</td>
 </tr>
 {{end}}

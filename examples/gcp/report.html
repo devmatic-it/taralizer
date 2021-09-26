@@ -16,7 +16,44 @@ table {
 td, th {
   border: 1px solid #ddd;
   padding: 2px;
+  vertical-align: top;
 }
+
+.impact3,.likelihood3{
+  background-color: red;
+  color: white;
+}
+
+.impact2, .likelihood2{
+  background-color: orange;
+}
+
+.impact1, .likelihood1{
+  background-color: lightgreen;
+}
+
+.serverity1{
+  background-color: lightgreen;
+}
+
+.serverity2{
+  background-color: yellow;
+}
+
+.serverity3, .serverity4{
+  background-color: orange;
+}
+
+.serverity6{
+  background-color: red;
+  color: white;
+}
+
+.serverity9{
+  background-color: darkred;
+  color: white;
+}
+
 
 img {
 width:100%;
@@ -363,19 +400,19 @@ We follow the <a href="https://owasp.org/www-community/OWASP_Risk_Rating_Methodo
 </tr>
 <tr>
 <td rowspan="4" style="text-align: center;width:15%;">Impact</t>
-<td style="text-align:center;background-color:#f2f2f2;">HIGH</td> <!--impact legend-->
+<td class="impact3" style="text-align:center;">HIGH</td> <!--impact legend-->
 <td style="text-align:center;background-color:orange;">Medium</td>
 <td style="text-align:center;background-color:red;">High</td>
 <td style="text-align:center;background-color:darkred;">Critical</td>
 </tr>
 <tr>
-<td style="text-align:center;background-color:#f2f2f2;">MEDIUM</td> <!--impact legend-->
+<td class="impact2" style="text-align:center;">MEDIUM</td> <!--impact legend-->
 <td style="text-align:yellow;background-color:yellow;">Low</td>
 <td style="text-align:center;background-color:orange;">Medium</td>
 <td style="text-align:center;background-color:red;">High</td>
 </tr>
 <tr>
-<td style="text-align:center;background-color:#f2f2f2;">LOW</td> <!--impact legend-->
+<td class="impact1" style="text-align:center;">LOW</td> <!--impact legend-->
 <td style="text-align:center;background-color:lightgreen;">Low</td>
 <td style="text-align:center;background-color:yellow;">Low</td>
 <td style="text-align:center;background-color:orange;">Medium</td>
@@ -384,9 +421,9 @@ We follow the <a href="https://owasp.org/www-community/OWASP_Risk_Rating_Methodo
 
 <!-- likelihood legend -->
 <td style="text-align:center;background-color:#f2f2f2;">&nbsp;</td>
-<td style="text-align:center;background-color:#f2f2f2;">LOW</td>
-<td style="text-align:center;background-color:#f2f2f2;">MEDIUM</td>
-<td style="text-align:center;background-color:#f2f2f2;">HIGH</td>
+<td class="likelihood1" style="text-align:center;">LOW</td>
+<td class="likelihood2" style="text-align:center;">MEDIUM</td>
+<td class="likelihood3" style="text-align:center;">HIGH</td>
 </tr>
 <tr>
 <td style="text-align:center;">&nbsp;</td>
@@ -405,18 +442,246 @@ The following risks have been identified:
     <th scope="col">Impact</th>
     <th scope="col">Severity</th>
     <th scope="col">Risk</th>
+    <th scope="col">Action</th>
+    <th scope="col">Mitigation</th>
+    <th scope="col">Res. Impact</th>
+    <th scope="col">Res. Likelihood</th>
+    <th scope="col">Res. Severity</th>
+    <th scope="col">Res. Status</th>
 </tr>
 
 <tr>
-    <td>0</td>  
-    <td>LOW(1)</td>  
-    <td>HIGH(3)</td>  
-    <td>LOW(3)</td>  
+    <td>container-baseimage-backdooring@frontend</td>  
+    <td class="likelihood1">LOW(1)</td>  
+    <td class="impact2">MEDIUM(2)</td>  
+    <td class="serverity2">LOW(2)</td>  
     <td>
-        <p><a href="https://cwe.mitre.org/data/definitions/319">CWE-319</a> Unencrypted Communication: asset 'hsm' communicating to 'kms' uses insecure protocol 'ftp'</p>
-        <p>Data at transition should be encrypted. </p>
-        <p>Mitigation: apply an authentication method to the technical asset.</p>
+        <a href="https://cwe.mitre.org/data/definitions/912">CWE-912</a>
+        Container Base Image Backdooring: asset 'frontend' has risk of container image backdooring through base images
+        <p>When a technical asset is built using container technologies, Base Image Backdooring risks might arise where base images and other layers used contain vulnerable components or backdoors
+</p>        
     </td>
+    <td>MITIGATE</td>
+    <td>Google distroless image is used to mitigate risks.  <p>The product owner accepted the residual risks.</p>
+</td>
+    <td class="likelihood1">LOW(1)</td>  
+    <td class="impact2">MEDIUM(2)</td>  
+    <td class="serverity2">LOW(2)</td>  
+    <td>CLOSED</td>
+</tr>
+
+<tr>
+    <td>container-baseimage-backdooring@user_service</td>  
+    <td class="likelihood1">LOW(1)</td>  
+    <td class="impact2">MEDIUM(2)</td>  
+    <td class="serverity2">LOW(2)</td>  
+    <td>
+        <a href="https://cwe.mitre.org/data/definitions/912">CWE-912</a>
+        Container Base Image Backdooring: asset 'user_service' has risk of container image backdooring through base images
+        <p>When a technical asset is built using container technologies, Base Image Backdooring risks might arise where base images and other layers used contain vulnerable components or backdoors
+</p>        
+    </td>
+    <td>MITIGATE</td>
+    <td>Google distroless image is used to mitigate risks.  <p>The product owner accepted the residual risks.</p>
+</td>
+    <td class="likelihood1">LOW(1)</td>  
+    <td class="impact2">MEDIUM(2)</td>  
+    <td class="serverity2">LOW(2)</td>  
+    <td>CLOSED</td>
+</tr>
+
+<tr>
+    <td>container-baseimage-backdooring@contacts</td>  
+    <td class="likelihood1">LOW(1)</td>  
+    <td class="impact2">MEDIUM(2)</td>  
+    <td class="serverity2">LOW(2)</td>  
+    <td>
+        <a href="https://cwe.mitre.org/data/definitions/912">CWE-912</a>
+        Container Base Image Backdooring: asset 'contacts' has risk of container image backdooring through base images
+        <p>When a technical asset is built using container technologies, Base Image Backdooring risks might arise where base images and other layers used contain vulnerable components or backdoors
+</p>        
+    </td>
+    <td>MITIGATE</td>
+    <td>Google distroless image is used to mitigate risks.  <p>The product owner accepted the residual risks.</p>
+</td>
+    <td class="likelihood1">LOW(1)</td>  
+    <td class="impact2">MEDIUM(2)</td>  
+    <td class="serverity2">LOW(2)</td>  
+    <td>CLOSED</td>
+</tr>
+
+<tr>
+    <td>container-baseimage-backdooring@ledger_writer</td>  
+    <td class="likelihood1">LOW(1)</td>  
+    <td class="impact2">MEDIUM(2)</td>  
+    <td class="serverity2">LOW(2)</td>  
+    <td>
+        <a href="https://cwe.mitre.org/data/definitions/912">CWE-912</a>
+        Container Base Image Backdooring: asset 'ledger_writer' has risk of container image backdooring through base images
+        <p>When a technical asset is built using container technologies, Base Image Backdooring risks might arise where base images and other layers used contain vulnerable components or backdoors
+</p>        
+    </td>
+    <td>MITIGATE</td>
+    <td>Google distroless image is used to mitigate risks.  <p>The product owner accepted the residual risks.</p>
+</td>
+    <td class="likelihood1">LOW(1)</td>  
+    <td class="impact2">MEDIUM(2)</td>  
+    <td class="serverity2">LOW(2)</td>  
+    <td>CLOSED</td>
+</tr>
+
+<tr>
+    <td>container-baseimage-backdooring@balance_reader</td>  
+    <td class="likelihood1">LOW(1)</td>  
+    <td class="impact2">MEDIUM(2)</td>  
+    <td class="serverity2">LOW(2)</td>  
+    <td>
+        <a href="https://cwe.mitre.org/data/definitions/912">CWE-912</a>
+        Container Base Image Backdooring: asset 'balance_reader' has risk of container image backdooring through base images
+        <p>When a technical asset is built using container technologies, Base Image Backdooring risks might arise where base images and other layers used contain vulnerable components or backdoors
+</p>        
+    </td>
+    <td>MITIGATE</td>
+    <td>Google distroless image is used to mitigate risks.  <p>The product owner accepted the residual risks.</p>
+</td>
+    <td class="likelihood1">LOW(1)</td>  
+    <td class="impact2">MEDIUM(2)</td>  
+    <td class="serverity2">LOW(2)</td>  
+    <td>CLOSED</td>
+</tr>
+
+<tr>
+    <td>container-baseimage-backdooring@trans_history</td>  
+    <td class="likelihood1">LOW(1)</td>  
+    <td class="impact2">MEDIUM(2)</td>  
+    <td class="serverity2">LOW(2)</td>  
+    <td>
+        <a href="https://cwe.mitre.org/data/definitions/912">CWE-912</a>
+        Container Base Image Backdooring: asset 'trans_history' has risk of container image backdooring through base images
+        <p>When a technical asset is built using container technologies, Base Image Backdooring risks might arise where base images and other layers used contain vulnerable components or backdoors
+</p>        
+    </td>
+    <td>MITIGATE</td>
+    <td>Google distroless image is used to mitigate risks.  <p>The product owner accepted the residual risks.</p>
+</td>
+    <td class="likelihood1">LOW(1)</td>  
+    <td class="impact2">MEDIUM(2)</td>  
+    <td class="serverity2">LOW(2)</td>  
+    <td>CLOSED</td>
+</tr>
+
+<tr>
+    <td>cross-site-request-forgery@frontend</td>  
+    <td class="likelihood3">HIGH(3)</td>  
+    <td class="impact2">MEDIUM(2)</td>  
+    <td class="serverity6">HIGH(6)</td>  
+    <td>
+        <a href="https://cwe.mitre.org/data/definitions/352">CWE-352</a>
+        Cross-Site Request Forgery (CSRF): asset 'frontend' has risk of Cross Site Request Forgery(CSRF)
+        <p>When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.</p>        
+    </td>
+    <td>TBD</td>
+    <td>Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level
+</td>
+    <td class="likelihood-1"></td>  
+    <td class="impact-1"></td>  
+    <td class="serverity-1"></td>  
+    <td>OPEN</td>
+</tr>
+
+<tr>
+    <td>cross-site-request-forgery@user_service</td>  
+    <td class="likelihood3">HIGH(3)</td>  
+    <td class="impact2">MEDIUM(2)</td>  
+    <td class="serverity6">HIGH(6)</td>  
+    <td>
+        <a href="https://cwe.mitre.org/data/definitions/352">CWE-352</a>
+        Cross-Site Request Forgery (CSRF): asset 'user_service' has risk of Cross Site Request Forgery(CSRF)
+        <p>When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.</p>        
+    </td>
+    <td>TBD</td>
+    <td>Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level
+</td>
+    <td class="likelihood-1"></td>  
+    <td class="impact-1"></td>  
+    <td class="serverity-1"></td>  
+    <td>OPEN</td>
+</tr>
+
+<tr>
+    <td>cross-site-request-forgery@contacts</td>  
+    <td class="likelihood3">HIGH(3)</td>  
+    <td class="impact2">MEDIUM(2)</td>  
+    <td class="serverity6">HIGH(6)</td>  
+    <td>
+        <a href="https://cwe.mitre.org/data/definitions/352">CWE-352</a>
+        Cross-Site Request Forgery (CSRF): asset 'contacts' has risk of Cross Site Request Forgery(CSRF)
+        <p>When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.</p>        
+    </td>
+    <td>TBD</td>
+    <td>Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level
+</td>
+    <td class="likelihood-1"></td>  
+    <td class="impact-1"></td>  
+    <td class="serverity-1"></td>  
+    <td>OPEN</td>
+</tr>
+
+<tr>
+    <td>cross-site-request-forgery@trans_history</td>  
+    <td class="likelihood3">HIGH(3)</td>  
+    <td class="impact2">MEDIUM(2)</td>  
+    <td class="serverity6">HIGH(6)</td>  
+    <td>
+        <a href="https://cwe.mitre.org/data/definitions/352">CWE-352</a>
+        Cross-Site Request Forgery (CSRF): asset 'trans_history' has risk of Cross Site Request Forgery(CSRF)
+        <p>When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.</p>        
+    </td>
+    <td>TBD</td>
+    <td>Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level
+</td>
+    <td class="likelihood-1"></td>  
+    <td class="impact-1"></td>  
+    <td class="serverity-1"></td>  
+    <td>OPEN</td>
+</tr>
+
+<tr>
+    <td>cross-site-request-forgery@balance_reader</td>  
+    <td class="likelihood3">HIGH(3)</td>  
+    <td class="impact2">MEDIUM(2)</td>  
+    <td class="serverity6">HIGH(6)</td>  
+    <td>
+        <a href="https://cwe.mitre.org/data/definitions/352">CWE-352</a>
+        Cross-Site Request Forgery (CSRF): asset 'balance_reader' has risk of Cross Site Request Forgery(CSRF)
+        <p>When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.</p>        
+    </td>
+    <td>TBD</td>
+    <td>Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level
+</td>
+    <td class="likelihood-1"></td>  
+    <td class="impact-1"></td>  
+    <td class="serverity-1"></td>  
+    <td>OPEN</td>
+</tr>
+
+<tr>
+    <td>cross-site-request-forgery@ledger_writer</td>  
+    <td class="likelihood3">HIGH(3)</td>  
+    <td class="impact2">MEDIUM(2)</td>  
+    <td class="serverity6">HIGH(6)</td>  
+    <td>
+        <a href="https://cwe.mitre.org/data/definitions/352">CWE-352</a>
+        Cross-Site Request Forgery (CSRF): asset 'ledger_writer' has risk of Cross Site Request Forgery(CSRF)
+        <p>When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.</p>        
+    </td>
+    <td>TBD</td>
+    <td>Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level
+</td>
+    <td class="likelihood-1"></td>  
+    <td class="impact-1"></td>  
+    <td class="serverity-1"></td>  
+    <td>OPEN</td>
 </tr>
 
 </table>
