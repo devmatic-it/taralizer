@@ -74,7 +74,10 @@ technical_assets:
   description: The browser used by the end customer
   puml: Client($id, "$name", "")
   used_as_client_by_human: true
-  out_of_scope: true
+  out_of_scope: false
+  data_assets_processed: # sequence of IDs to reference
+        - client-application
+        - product-cat
   communication_links:
     - target: waf
       description: Link to waf
