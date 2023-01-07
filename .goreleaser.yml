@@ -49,6 +49,7 @@ archives:
       - AUTHORS
       - rules/**
       - templates/**
+      - profiles/**
       - examples/**
 
 # nfpms:  
@@ -90,19 +91,19 @@ archives:
       
 #     bindir: /usr/bin
 
-# brews:
-#   - name: taralizer
-#     ids:
-#     - taralizer    
+brews:
+   - name: taralizer
+     ids:
+     - taralizer    
 
 #     # GOARM to specify which 32-bit arm version to use if there are multiple versions
 #     # from the build section. Brew formulas support atm only one 32-bit version.
 #     # Default is 6 for all artifacts or each id if there a multiple versions.
 #     goarm: 6
 
-#     tap:
-#       owner: repo-owner
-#       name: homebrew-tap
+     tap:
+       owner: repo-owner
+       name: homebrew-tap
 #       # Optionally a token can be provided, if it differs from the token provided to GoReleaser
 #       #token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
 
@@ -110,7 +111,7 @@ archives:
 #     # Default for github is "https://github.com/<repo_owner>/<repo_name>/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
 #     # Default for gitlab is "https://gitlab.com/<repo_owner>/<repo_name>/uploads/{{ .ArtifactUploadHash }}/{{ .ArtifactName }}"
 #     # Default for gitea is "https://gitea.com/<repo_owner>/<repo_name>/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
-#     url_template: " https://github.com/devmatic-it/taralizer/releases/{{ .Tag }}/{{ .ArtifactName }}"
+     url_template: " https://github.com/devmatic-it/taralizer/releases/{{ .Tag }}/{{ .ArtifactName }}"
 
 #     # Allows you to set a custom download strategy. Note that you'll need
 #     # to implement the strategy and add it to your tap repository.
@@ -138,15 +139,15 @@ archives:
 
 #     # Your app's homepage.
 #     # Default is empty.
-#     homepage: "https://github.com/devmatic-it/taralizer"
+     homepage: "https://github.com/devmatic-it/taralizer"
 
 #     # Your app's description.
 #     # Default is empty.
-#     description: "Taralizer is a Threat and Risk Analysis tool using the extendable OPA rules engine to implement the OWASP ASVS standard."
+     description: "Taralizer is a Threat and Risk Analysis tool using the extendable OPA rules engine to implement the OWASP ASVS standard."
 
 #     # SPDX identifier of your app's license.
 #     # Default is empty.
-#     license: "Apache 2.0"
+     license: "Apache 2.0"
 
 #     # Setting this will prevent goreleaser to actually try to commit the updated
 #     # formula - instead, the formula file will be stored on the dist folder only,
@@ -158,15 +159,15 @@ archives:
 
 
 #     # Packages your package depends on.
-#     dependencies:
-#       - name: graphviz
-#         type: mandatory
+     dependencies:
+       - name: graphviz
+         type: mandatory
 #       - name: plantuml
 #         type: mandatory
-#       - name: wkhtmltopdf
-#         type: mandatory
+       - name: wkhtmltopdf
+         type: mandatory
 
 #     # So you can `brew test` your formula.
 #     # Default is empty.
-#     test: |
-#       system "#{bin}/taralizer version"      
+     test: |
+       system "#{bin}/taralizer version"      
