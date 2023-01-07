@@ -14,7 +14,7 @@
 package taralizer
 
 import (
-	"io/ioutil"
+	"io"
 	"log"
 	"os"
 	"path/filepath"
@@ -181,7 +181,7 @@ func Load(fileName string) Report {
 		log.Fatalf("cannot load model file: %v", err)
 	}
 
-	data, err := ioutil.ReadAll(jsonFile)
+	data, err := io.ReadAll(jsonFile)
 	if err != nil {
 		log.Fatalf("Load: ReadAll error: %v", err)
 	}
@@ -241,7 +241,7 @@ func LoadProfileSet(fileName string) ProfileSet {
 		log.Fatalf("cannot load profile file: %v", err)
 	}
 
-	data, err := ioutil.ReadAll(jsonFile)
+	data, err := io.ReadAll(jsonFile)
 	if err != nil {
 		log.Fatalf("Load: ReadAll error: %v", err)
 	}

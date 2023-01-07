@@ -5,7 +5,7 @@
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//	http://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,7 +19,7 @@ import (
 	"fmt"
 	"github.com/open-policy-agent/opa/rego"
 	"gopkg.in/yaml.v3"
-	"io/ioutil"
+	"io"
 	"log"
 	"os"
 	"path/filepath"
@@ -216,7 +216,7 @@ func (svc *Taralizer) query(fileName string, queryStr string) rego.ResultSet {
 		log.Fatalf("cannot load model file: %v", err)
 	}
 
-	data, err := ioutil.ReadAll(jsonFile)
+	data, err := io.ReadAll(jsonFile)
 	var model interface{}
 	if err != nil {
 		log.Fatalf("cannot read file: %v", err)
