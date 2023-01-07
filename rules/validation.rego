@@ -14,6 +14,32 @@
 package rules
 
 ###############################################################################
+# validation of trust_boundaries
+###############################################################################
+validation[{"id":id,"msg": msg}] {
+    trust_boundary := input.trust_boundaries[_]
+    trust_boundary.technology == null
+    msg := sprintf("trust_boundary '%v' using unknown technology, please specify it", [trust_boundary.id])
+	id := sprintf("core@%v", [trust_boundary.id])
+}
+
+validation[{"id":id,"msg": msg}] {
+    trust_boundary := input.trust_boundaries[_]
+    trust_boundary.technology != "internet"
+    trust_boundary.technology != "cloud"
+    trust_boundary.technology != "cloud-services"
+    trust_boundary.technology != "on-premise"
+    trust_boundary.technology != "vpc"
+    trust_boundary.technology != "subnet"
+    trust_boundary.technology != "project"
+    trust_boundary.technology != "kubernetes-cluster"
+    trust_boundary.technology != "kubernetes-network-policies"
+	msg := sprintf("trust_boundary '%v' using unsupported technology '%v'", [trust_boundary.id, trust_boundary.technology])
+    id := sprintf("core@%v", [trust_boundary.id])
+}
+
+
+###############################################################################
 # validation of technical_assets
 ###############################################################################
 validation[{"id":id,"msg": msg}] {
@@ -113,7 +139,7 @@ validation[{"id":id,"msg": msg}] {
 validation[{"id":id,"msg": msg}] {
     server := input.technical_assets[_]
     data_processed := server.data_assets_processed[_]
-    count({x | input.data_assets[x] ; input.technical_assets[x] == data_processed} ) == 0
+    count({x | input.data_assets[x] ; input.data_assets[x].id == data_processed} ) == 0
     msg := sprintf("technical asset '%v' processing data that is not defined as data asset. Please define data asset '%v'", [server.id, data_processed])
 	id := sprintf("missing-data-asset-processed@%v", [server.id])
 }
@@ -121,7 +147,7 @@ validation[{"id":id,"msg": msg}] {
 validation[{"id":id,"msg": msg}] {
     server := input.technical_assets[_]
     data_stored := server.data_assets_stored[_]
-    count({x | input.data_assets[x] ; input.technical_assets[x] == data_stored} ) == 0
+    count({x | input.data_assets[x] ; input.data_assets[x].id == data_stored} ) == 0
     msg := sprintf("technical asset '%v' storing data that is not defined as data asset. Please define data asset '%v'", [server.id, data_stored])
 	id := sprintf("missing-data-asset-stored@%v", [server.id])
 }
@@ -171,7 +197,7 @@ validation[{"id":id,"msg": msg}] {
     conn := server.communication_links[_]
     data_sent := conn.data_assets_sent[_]
 
-    count({x | input.data_assets[x] ; input.technical_assets[x] == data_sent} ) == 0
+    count({x | input.data_assets[x] ; input.data_assets[x].id == data_sent} ) == 0
 
     msg := sprintf("technical asset '%v' sends data to '%v' which is not defined. Please define data asset '%v'", [server.id,  conn.target, data_sent])
 	id := sprintf("core-missing-data-sent@%v>%v", [server.id, conn.target])
@@ -183,7 +209,7 @@ validation[{"id":id,"msg": msg}] {
     conn := server.communication_links[_]
     data_received := conn.data_assets_received[_]
 
-    count({x | input.data_assets[x] ; input.technical_assets[x] == data_received} ) == 0
+    count({x | input.data_assets[x] ; input.data_assets[x].id == data_received} ) == 0
 
     msg := sprintf("technical asset '%v' received data from '%v' which is not defined. Please define data asset '%v'", [server.id,  conn.target, data_received])
 	id := sprintf("core-missing-data-received@%v>%v", [server.id, conn.target])
@@ -195,9 +221,14 @@ validation[{"id":id,"msg": msg}] {
     conn := server.communication_links[_]
     data_received := conn.data_assets_received[_]
 
+    some k
+    input.technical_assets[k].id == conn.target
+    target:= input.technical_assets[k]    
+
     count({x | server.data_assets_processed[x] ; server.data_assets_processed[x] == data_received} ) == 0
     count({x | server.data_assets_stored[x] ; server.data_assets_stored[x] == data_received} ) == 0
 
-    msg := sprintf("technical asset '%v' received data from '%v' which is not processed or stored. Please process/store data asset '%v'", [server.id,  conn.target, data_received])
+
+    msg := sprintf("technical asset '%v' received data from '%v' which is not processed or stored. Please process/store data asset '%v'", [target.id,  server.id, data_received])
 	id := sprintf("core-missing-data-assets-handling@%v>%v", [server.id, conn.target])
 }

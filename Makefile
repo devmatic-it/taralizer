@@ -40,10 +40,15 @@ build:
 	@echo "Building binary..."
 	GOBIN=$(GOBIN) CGO_ENABLED=0 go build -v -ldflags="-X 'github.com/devmatic-it/taralizer/cmd.ProductVersion=${VERSION}'"  -o dist/taralizer
 	cp -R templates dist/templates
+	cp -R profiles dist/profiles
 
 test-coverage:
 	@go test -short -coverprofile cover.out -covermode=atomic ${PKG_LIST} 
 	@cat cover.out >> coverage.txt
+
+antlr:
+	@echo "Executing ANTLR to generate terraform parser..."	
+	antlr4 -Dlanguage=Go  -no-visitor -package terraform terraform.g4
 
 clean:
 	@echo "Cleanup dependencies..."	

@@ -16,9 +16,9 @@ threat_agents:
     name: TA2
     description: authorized employee
 
-  - id: unauthorized-employee
+  - id: unauthorized-insider
     name: TA3
-    description: Employee of the company that is not authorized to access the system
+    description: Employee/Contractor of the company that is not authorized to access the system
 
 
 data_assets:
@@ -50,21 +50,82 @@ data_assets:
     integrity: 1 # values: archive, operational, important, critical, mission-critical
     availability: 1 # values: archive, operational, important, critical, mission-critical
 
-  - id: product-catalog
+  - id: transaction
     name: A5
-    description: product catalog
-    quantity: very-few # values: very-few, few, many, very-many
-    confidentiality: 1 
-    integrity: 1
-    availability: 1 
+    description: active/ongoing bank transactions
+    quantity: many # values: very-few, few, many, very-many
+    confidentiality: 3
+    integrity: 2
+    availability: 2
+
+  - id: transaction-history
+    name: A6
+    description: bank transaction history
+    quantity: many # values: very-few, few, many, very-many
+    confidentiality: 3
+    integrity: 2
+    availability: 2
+
+  - id: account-balance
+    name: A7
+    description: account balance of client
+    quantity: many # values: very-few, few, many, very-many
+    confidentiality: 3
+    integrity: 2
+    availability: 2
 
   - id: root-ca
-    name: A6
+    name: A8
     description: root certificates
     quantity: very-few # values: very-few, few, many, very-many
     confidentiality: 3
     integrity: 2
     availability: 2 
+
+  - id: session-id
+    name: A9
+    description: Session ID
+    quantity: many # values: very-few, few, many, very-many
+    confidentiality: 2
+    integrity: 2
+    availability: 2 
+
+  - id: user-info
+    name: A10
+    description: personal-related end user information like e-mail to identity user
+
+  - id: user-credentials
+    name: A11
+    description: passwort of a user
+    quantity: many # values: very-few, few, many, very-many
+    confidentiality: 3
+    integrity: 2
+    availability: 2 
+
+  - id: user-contacts
+    name: A12
+    description: contacts of the customer from past transactions
+    quantity: many # values: very-few, few, many, very-many
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+
+  - id: ledger-db-credentials
+    name: A13
+    description: credentials to access ledger db
+    quantity: many # values: very-few, few, many, very-many
+    confidentiality: 3
+    integrity: 2
+    availability: 2
+
+  - id: accounts-db-credentials
+    name: A14
+    description: credentials to access ledger db
+    quantity: many # values: very-few, few, many, very-many
+    confidentiality: 3
+    integrity: 2
+    availability: 2
+
 
 
 technical_assets:
@@ -76,8 +137,12 @@ technical_assets:
   used_as_client_by_human: true
   out_of_scope: false
   data_assets_processed: # sequence of IDs to reference
-        - client-application
-        - product-cat
+        - client-application-code
+        - user-info
+        - user-contacts
+        - transaction
+        - transaction-history
+        - session-id
   communication_links:
     - target: waf
       description: Link to waf
@@ -85,9 +150,9 @@ technical_assets:
       authentication: session-id # values: none, credentials, session-id, token, client-certificate, two-factor
       authorization: enduser-identity-propagation # values: none, technical-user, enduser-identity-propagation
       data_assets_sent: # sequence of IDs to reference
+        - session-id        
       data_assets_received: # sequence of IDs to reference
-        - client-application-code
-        - product-catalog
+        - client-application-code        
 
 - id: developer_client  
   name: DevOps
@@ -103,9 +168,9 @@ technical_assets:
       authentication: none # values: none, credentials, session-id, token, client-certificate, two-factor
       authorization: none # values: none, technical-user, enduser-identity-propagation
       data_assets_sent: # sequence of IDs to reference
+        - session-id
       data_assets_received: # sequence of IDs to reference
         - client-application-code
-        - product-catalog
 
 - id: waf
   name: WAF
@@ -113,6 +178,15 @@ technical_assets:
   puml: CloudArmor($id, "$name", "$data", "")
   description: Google Cloud Armor Web Application Firewall
   internet: true
+  data_assets_processed:
+    - session-id
+    - client-application-code
+    - user-info
+    - user-contacts
+    - transaction
+    - transaction-history
+    - account-balance
+
   communication_links:
     - target: ingress
       description: Link to app
@@ -120,23 +194,32 @@ technical_assets:
       authentication: session-id # values: none, credentials, session-id, token, client-certificate, two-factor
       authorization: enduser-identity-propagation # values: none, technical-user, enduser-identity-propagation
       data_assets_sent: # sequence of IDs to reference
+        - session-id
       data_assets_received: # sequence of IDs to reference
         - client-application-code
-        - product-catalog
+        - user-info
 
 - id: ingress
   name: istio-ingress-gateway
   technology: kubernetes-ingress
   puml: KubernetesSvc($id,"$name", "$data")
   description: ISTIO ingress gateway
+  data_assets_processed:
+    - user-info
+    - session-id
+    - transaction
+    - transaction-history
+    - account-balance
+    - user-contacts
   communication_links:
     - target: frontend
       protocol: https # values: see help
       authentication: session-id # values: none, credentials, session-id, token, client-certificate, two-factor
       authorization: enduser-identity-propagation # values: none, technical-user, enduser-identity-propagation
       data_assets_sent: # sequence of IDs to reference
+        - session-id      
       data_assets_received: # sequence of IDs to reference
-        - product-catalog
+        - user-info
 
 - id: frontend
   name: frontend
@@ -149,47 +232,57 @@ technical_assets:
       authentication: session-id # values: none, credentials, session-id, token, client-certificate, two-factor
       authorization: enduser-identity-propagation # values: none, technical-user, enduser-identity-propagation
       data_assets_sent: # sequence of IDs to reference
+        - id-token
+        - access-token      
       data_assets_received: # sequence of IDs to reference
-        - product-catalog
+        - user-info
 
     - target: contacts
       protocol: https # values: see help
       authentication: session-id # values: none, credentials, session-id, token, client-certificate, two-factor
       authorization: enduser-identity-propagation # values: none, technical-user, enduser-identity-propagation
       data_assets_sent: # sequence of IDs to reference
+        - id-token
+        - access-token      
       data_assets_received: # sequence of IDs to reference
-        - product-catalog
-
+        - user-contacts
 
     - target: trans_history
       protocol: https # values: see help
       authentication: session-id # values: none, credentials, session-id, token, client-certificate, two-factor
       authorization: enduser-identity-propagation # values: none, technical-user, enduser-identity-propagation
       data_assets_sent: # sequence of IDs to reference
+        - id-token
+        - access-token      
       data_assets_received: # sequence of IDs to reference
-        - product-catalog
+        - transaction-history
 
     - target: balance_reader
       protocol: https # values: see help
       authentication: session-id # values: none, credentials, session-id, token, client-certificate, two-factor
       authorization: enduser-identity-propagation # values: none, technical-user, enduser-identity-propagation
       data_assets_sent: # sequence of IDs to reference
+        - id-token
+        - access-token
       data_assets_received: # sequence of IDs to reference
-        - product-catalog
+        - account-balance
 
     - target: ledger_writer
       protocol: https # values: see help
       authentication: session-id # values: none, credentials, session-id, token, client-certificate, two-factor
       authorization: enduser-identity-propagation # values: none, technical-user, enduser-identity-propagation
       data_assets_sent: # sequence of IDs to reference
-      data_assets_received: # sequence of IDs to reference
-        - product-catalog
-
+        - id-token
+        - access-token
+        - transaction
+      data_assets_received: # sequence of IDs to reference        
 
 - id: user_service
   name: User Service
   technology: kubernetes-pod
   puml: KubernetesPod($id, "$name", "$data") 
+  data_assets_processed:
+    - user-info
   communication_links:
     - target: accounts_db
       description: Link to database
@@ -197,14 +290,22 @@ technical_assets:
       authentication: session-id # values: none, credentials, session-id, token, client-certificate, two-factor
       authorization: enduser-identity-propagation # values: none, technical-user, enduser-identity-propagation
       data_assets_sent: # sequence of IDs to reference
+        - id-token
+        - access-token
       data_assets_received: # sequence of IDs to reference
-        - product-catalog
+        - id-token
+        - access-token
+        - refresh-token
 
 - id: contacts
   name: Contacts
   technology: kubernetes-pod
   puml: KubernetesPod($id, "$name", "$data") 
   description: Stores a list of additional accounts that are associated with a user. These accounts are listed in the application's Send Payment and Deposit forms.
+  data_assets_processed:
+    - id-token
+    - access-token
+    - user-contacts
   communication_links:
     - target: accounts_db
       description: Link to database
@@ -212,8 +313,10 @@ technical_assets:
       authentication: session-id # values: none, credentials, session-id, token, client-certificate, two-factor
       authorization: enduser-identity-propagation # values: none, technical-user, enduser-identity-propagation
       data_assets_sent: # sequence of IDs to reference
+        - id-token
+        - access-token
       data_assets_received: # sequence of IDs to reference
-        - product-catalog
+        - user-contacts
 
 
 - id: user_service
@@ -221,6 +324,12 @@ technical_assets:
   technology: kubernetes-pod
   puml: KubernetesPod($id, "$name", "$data") 
   description: Manages user accounts and authentication. The service signs JWTs that are used for authentication by other services.
+  data_assets_processed:    
+    - id-token
+    - access-token
+    - refresh-token
+    - user-info
+    - accounts-db-credentials
   communication_links:
     - target: accounts_db
       description: Link to database
@@ -228,14 +337,32 @@ technical_assets:
       authentication: session-id # values: none, credentials, session-id, token, client-certificate, two-factor
       authorization: enduser-identity-propagation # values: none, technical-user, enduser-identity-propagation
       data_assets_sent: # sequence of IDs to reference
+        - accounts-db-credentials
+        - session-id
+
       data_assets_received: # sequence of IDs to reference
-        - product-catalog
+        - user-info
+
+- id: accounts_db
+  name: accounts-db
+  technology: database-sql
+  puml: CloudSQL($id, "$name", "$data", "")
+  description: SQL database  
+  data_assets_stored:
+    - session-id
+    - user-info
+    - accounts-db-credentials
 
 - id: ledger_writer
   name: ledger writer
   technology: kubernetes-pod
   puml: KubernetesPod($id, "$name", "$data")
   description: Accepts and validates incoming transactions before writing them to the ledger.
+  data_assets_processed:
+        - id-token
+        - access-token
+        - transaction
+
   communication_links:
     - target: ledger_db
       description: Link to database
@@ -243,14 +370,22 @@ technical_assets:
       authentication: session-id # values: none, credentials, session-id, token, client-certificate, two-factor
       authorization: enduser-identity-propagation # values: none, technical-user, enduser-identity-propagation
       data_assets_sent: # sequence of IDs to reference
+        - id-token
+        - access-token
+        - transaction
+
       data_assets_received: # sequence of IDs to reference
-        - product-catalog
 
 - id: balance_reader
   name: balance reader
   technology: kubernetes-pod
   puml: KubernetesPod($id, "$name", "$data") 
   description: Provides an efficient readable cache of user balances, as read from ledger-db.
+  data_assets_processed:
+    - id-token
+    - access-token
+    - account-balance
+
   communication_links:
     - target: ledger_db
       description: Link to database
@@ -258,14 +393,20 @@ technical_assets:
       authentication: session-id # values: none, credentials, session-id, token, client-certificate, two-factor
       authorization: enduser-identity-propagation # values: none, technical-user, enduser-identity-propagation
       data_assets_sent: # sequence of IDs to reference
+        - id-token
+        - access-token
       data_assets_received: # sequence of IDs to reference
-        - product-catalog
+        - account-balance
 
 - id: trans_history
   name: trans history
   technology: kubernetes-pod
   puml: KubernetesPod($id, "$name", "$data") 
   description: Provides an efficient readable cache of past transactions, as read from ledger-db.
+  data_assets_processed:
+    - id-token
+    - access-token
+    - transaction-history
   communication_links:
     - target: ledger_db
       description: Link to database
@@ -273,17 +414,10 @@ technical_assets:
       authentication: session-id # values: none, credentials, session-id, token, client-certificate, two-factor
       authorization: enduser-identity-propagation # values: none, technical-user, enduser-identity-propagation
       data_assets_sent: # sequence of IDs to reference
+        - id-token
+        - access-token
       data_assets_received: # sequence of IDs to reference
-        - product-catalog
-
-
-- id: accounts_db
-  name: accounts-db
-  technology: database-sql
-  puml: CloudSQL($id, "$name", "$data", "")
-  description: SQL database
-  data_assets_stored:
-    - product-catalog
+        - transaction-history
 
 - id: ledger_db
   name: ledger-db
@@ -291,9 +425,7 @@ technical_assets:
   puml: CloudSQL($id, "$name", "$data", "")
   description: CloudSQL for hyperledger 
   data_assets_stored:
-    - id-token
-    - access-token
-    - refresh-token
+    - transaction
 
 - id: kms
   name: KMS
@@ -301,6 +433,9 @@ technical_assets:
   puml: KeyManagementService($id, "$name", "$data", "")
   description: Google Key Management Service
   data_assets_stored:
+    - root-ca
+    - ledger-db-credentials
+    - accounts-db-credentials
 
 - id: hsm
   name: HSM
@@ -308,6 +443,9 @@ technical_assets:
   puml: KeyManagementService($id, "$name", "$data", "")
   description: on-premise Harware Security Module (HSM)
   data_assets_stored:
+    - root-ca
+    - ledger-db-credentials
+    - accounts-db-credentials
   communication_links:
     - target: kms
       description: key transfer
@@ -315,8 +453,10 @@ technical_assets:
       authentication: session-id # values: none, credentials, session-id, token, client-certificate, two-factor
       authorization: enduser-identity-propagation # values: none, technical-user, enduser-identity-propagation
       data_assets_sent: # sequence of IDs to reference
-      data_assets_received: # sequence of IDs to reference
-        - product-catalog
+        - root-ca
+        - ledger-db-credentials
+        - accounts-db-credentials
+      data_assets_received: # sequence of IDs to reference        
 
 
 - id: logging
@@ -361,12 +501,10 @@ trust_boundaries:
     threat_agents_inside:
       - unauthorized-external-agent
 
-
-
   - id: project
     name: project boa-gke
     description: Google Project
-    technology: subscription # values: see help
+    technology: project # values: see help
     puml: package "$name"
     trust_boundaries_nested: # sequence of IDs to reference
       - virtual_network
@@ -480,7 +618,7 @@ trust_boundaries:
       - hsm
     threat_agents_inside:
       - authorized-employee
-      - unauthorized-employee
+      - unauthorized-insider
 
 risk_tracking:
   - measure:

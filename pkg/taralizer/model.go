@@ -4,7 +4,7 @@
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//	http://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,6 +17,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"gopkg.in/yaml.v3"
@@ -91,6 +92,7 @@ type TechnicalAsset struct {
 	OutOfScope          bool                `yaml:"out_of_scope,omitempty"`
 	Internet            bool                `yaml:"internet,omitempty"`
 	DataAssetsStored    []string            `yaml:"data_assets_stored,omitempty"`
+	DataAssetsProcessed []string            `yaml:"data_assets_processed,omitempty"`
 	CommunicationLinks  []CommunicationLink `yaml:"communication_links,omitempty"`
 }
 
@@ -147,6 +149,22 @@ type RuleSet struct {
 	Version     string `yaml:"version,omitempty"`
 	Url         string `yaml:"url,omitempty"`
 	Rules       []Rule `yaml:"rules,omitempty"`
+}
+
+// Technology represents a mapping to cloud technology
+type Technology struct {
+	Id        string `yaml:"id"`
+	Name      string `yaml:"name"`
+	Type      string `yaml:"type"`
+	Terraform string `yaml:"terraform"`
+}
+
+// ProfileSet represents a mapping profile to cloud technologies
+type ProfileSet struct {
+	Name              string       `yaml:"name"`
+	Description       string       `yaml:"description,omitempty"`
+	TerraformProvider string       `yaml:"terraform_provider,omitempty"`
+	Technologies      []Technology `yaml:"technologies,omitempty"`
 }
 
 // Load opens the model file and loads it into the Report model
@@ -207,4 +225,50 @@ func findDataAsset(report *Report, id string) *DataAsset {
 		}
 	}
 	return nil
+}
+
+// LoadProfileSet opens a profile file and loads it into the ProfileSet model
+// Please, node that the Risks property is empty.
+func LoadProfileSet(fileName string) ProfileSet {
+	profileSet := ProfileSet{}
+
+	/* #nosec G304 */
+	jsonFile, err := os.Open(getProfileDir() + fileName)
+	/* #nosec G307 */
+	defer jsonFile.Close()
+
+	if err != nil {
+		log.Fatalf("cannot load profile file: %v", err)
+	}
+
+	data, err := ioutil.ReadAll(jsonFile)
+	if err != nil {
+		log.Fatalf("Load: ReadAll error: %v", err)
+	}
+
+	// unmarshal for report
+	err = yaml.Unmarshal([]byte(data), &profileSet)
+	if err != nil {
+		log.Fatalf("Load: unmarksall error: %v", err)
+	}
+
+	return profileSet
+}
+
+// getProfileDir returns the directory of the profile files
+func getProfileDir() string {
+	ex, err := os.Executable()
+	if err != nil {
+		panic(err)
+	}
+	exPath := filepath.Dir(ex)
+	defaultProfileDir := []string{"./profiles/", "/etc/profiles/", exPath + "/profiles/", "../profiles/", "../../profiles/"}
+	profileDir := "NOT_FOUND"
+	for _, v := range defaultProfileDir {
+		if _, err := os.Stat(v); !os.IsNotExist(err) {
+			profileDir = v
+			break
+		}
+	}
+	return profileDir
 }

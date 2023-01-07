@@ -32,6 +32,7 @@ func (svc *ReportEngine) createFuncMap() template.FuncMap {
 		"likelihood":          svc.likelihoodimpact,
 		"impact":              svc.likelihoodimpact,
 		"severity":            svc.severity,
+		"dataAssetNames":      svc.getDataAssetNames,
 	}
 
 }
@@ -86,6 +87,37 @@ func (svc *ReportEngine) findTrustedBoundary(id string) *TrustBoundary {
 
 	log.Printf("WARN Trust Boundary %s not found.\n", id)
 	return nil
+}
+
+// findDataAsset  is a TPL function that returns the name of the data asset
+func (svc *ReportEngine) findDataAsset(id string) *DataAsset {
+	for i := 0; i < len(svc.report.DataAssets); i++ {
+		if svc.report.DataAssets[i].Id == id {
+			return &svc.report.DataAssets[i]
+		}
+	}
+
+	log.Printf("WARN Data Asset %s not found.\n", id)
+	return nil
+}
+
+// getDataAssetName  is a TPL function that returns the name of the data asset
+func (svc *ReportEngine) getDataAssetNames(ids []string) string {
+	if len(ids) == 0 {
+		return ""
+	}
+	result := "["
+	for i := 0; i < len(ids); i++ {
+		da := svc.findDataAsset(ids[i])
+		if da != nil {
+			result += da.Name
+			if i < len(ids)-1 {
+				result += ", "
+			}
+		}
+	}
+	result += "]"
+	return result
 }
 
 // findTrustTechnicalAsset  is a TPL function that searches a technical asset by Id

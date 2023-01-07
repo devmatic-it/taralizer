@@ -1,4 +1,4 @@
-// Package main Debian CVE Tracker Analyzer
+// Package terraform Debian CVE Tracker Analyzer
 // Copyright 2019 debcvescan authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,7 +12,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-package taralizer
+package terraform
 
 import (
 	"testing"
@@ -20,14 +20,9 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestLoad(t *testing.T) {
-	report := Load("../../examples/gcp/bank_of_anthos.yaml")
-	assert.Greater(t, len(report.DataAssets), 0)
+func TestTerraformImport(t *testing.T) {
+	tf := NewTerraform()
+	report := tf.ImportFromFile("../../examples/gcp/terraform/main.tf")
 	assert.Greater(t, len(report.TechnicalAssets), 0)
 	assert.Greater(t, len(report.TrustBoundaries), 0)
-}
-
-func TestLoadProfileSet(t *testing.T) {
-	profileSet := LoadProfileSet("default.yaml")
-	assert.Greater(t, len(profileSet.Technologies), 0)
 }

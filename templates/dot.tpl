@@ -20,7 +20,7 @@ fontcolor=blue;
 {{ end }}
 {{ range $assetName := .TechnicalAssetsInside }}
 {{ $asset := findTechnicalAsset $assetName}}
-{{$asset.Id}}[label="{{$asset.Name}}"];
+{{$asset.Id}}[label="{{$asset.Name}}\n{{dataAssetNames $asset.DataAssetsProcessed}}\n{{dataAssetNames $asset.DataAssetsStored}}"];
 {{ end }}}
 {{ end }}
 {{range $boundary := .TrustBoundaries}}
@@ -29,6 +29,6 @@ fontcolor=blue;
 {{end}}{{end}}
 
 {{range $asset := .TechnicalAssets}}{{ $conns := .CommunicationLinks }}
-{{range $conn := $conns}} {{$asset.Id}} -> {{$conn.Target}} [label="{{$conn.Protocol}}"];
+{{range $conn := $conns}} {{$asset.Id}} -> {{$conn.Target}} [fontcolor="red", label="{{$conn.Protocol}}",  headlabel="{{dataAssetNames $conn.DataAssetsSent}}", taillabel="{{dataAssetNames $conn.DataAssetsReceived}}"];
 {{end}}{{end}}
 }

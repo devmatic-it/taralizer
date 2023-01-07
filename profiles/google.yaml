@@ -1,6 +1,6 @@
-name: default
-description: platform-independent model compatible with threagile.io
-terraform_provider:
+name: Google Cloud
+description: Google Cloud model
+terraform_provider: google
 technologies:
   # end-user technologies
   - id: "browser"
@@ -47,7 +47,7 @@ technologies:
   - id: "vpc"
     name: "vpc"
     type: "trust_boundary"
-    terraform: ""
+    terraform: "google_compute_network"
 
   - id: "subnet"
     name: "subnet"
@@ -91,18 +91,18 @@ technologies:
     terraform: ""
 
 # storage technologies
-  - id: "data base"
+  - id: "database"
     name: "database"
     type: "technical_asset"
     terraform: ""
 
   - id: "database-sql"
-    name: "database-sql"
+    name: "Cloud SQL"
     type: "technical_asset"
     terraform: ""
 
   - id: "database-nosql"
-    name: "database-nosql"
+    name: "Datastore"
     type: "technical_asset"
     terraform: ""
 
@@ -117,7 +117,7 @@ technologies:
     terraform: ""
 
   - id: "data-lake"
-    name: "data-lake"
+    name: "Big Query"
     type: "technical_asset"
     terraform: ""
 
@@ -129,27 +129,26 @@ technologies:
   - id: "web-server"
     name: "web-server"
     type: "technical_asset"
-    terraform: ""
+    terraform: "google_compute_instance"
 
   - id: "web-application"
     name: "web-application"
     type: "technical_asset"
-    terraform: ""
+    terraform: "google_compute_instance"
 
   - id: "web-service-rest"
     name: "web-service-rest"
     type: "technical_asset"
-    terraform: ""
+    terraform: "google_compute_instance"
 
   - id: "web-service-soap"
     name: "web-service-soap"
     type: "technical_asset"
-    terraform: ""
+    terraform: "google_compute_instance"
 
   - id: "ejb"
     name: "ejb"
-    type: "technical_asset"
-    terraform: ""    
+    terraform: ""
 
   - id: "erp"
     name: "erp"
@@ -178,7 +177,7 @@ technologies:
 
 # security/authn/authz technologies
   - id: "identity-provider"
-    name: "identity-provider"
+    name: "Cloud Identity"
     type: "technical_asset"
     terraform: ""
 
@@ -198,44 +197,44 @@ technologies:
     terraform: ""
 
   - id: "hsm"
-    name: "hsm"
+    name: "Cloud Key Management"
     type: "technical_asset"
     terraform: ""
 
   - id: "vault"
-    name: "vault"
+    name: "Cloud Secret"
     type: "technical_asset"
     terraform: ""
 
   - id: "monitoring"
-    name: "monitoring"
+    name: "Cloud Monitoring"
     type: "technical_asset"
     terraform: ""
 
   - id: "logging"
-    name: "logging"
+    name: "Cloud Logging"
     type: "technical_asset"
     terraform: ""
 
   # Integration technologies
   - id: "event-listener"
-    name: "event-listener"
+    name: "Cloud Functions"
     type: "technical_asset"
     terraform: ""
 
 
   - id: "batch-processing"
-    name: "batch-processing"
+    name: "Dataproc"
     type: "technical_asset"
     terraform: ""
     
   - id: "message-queue"
-    name: "message-queue"
+    name: "Cloud Pub/Sub"
     type: "technical_asset"
     terraform: ""
 
   - id: "service-mesh"
-    name: "service-mesh"
+    name: "Athos Dervice Mesh"
     type: "technical_asset"
     terraform: ""
 
@@ -245,7 +244,7 @@ technologies:
     terraform: ""
 
   - id: "ai"
-    name: "ai"
+    name: "VertexAI"
     type: "technical_asset"
     terraform: ""
 
@@ -255,13 +254,13 @@ technologies:
     terraform: ""
 
   - id: "stream-processing"
-    name: "stream-processing"
+    name: "Dataflow"
     type: "technical_asset"
     terraform: ""
 
 # CI/CD Pipeline
   - id: "build-pipeline"
-    name: "build-pipeline"
+    name: "Cloud Build"
     type: "technical_asset"
     terraform: ""
 
@@ -283,18 +282,18 @@ technologies:
 
 # kubernetes
   - id: "container-platform"
-    name: "container-platform"
+    name: "Google Kubernetes Engine"
     type: "technical_asset"
     terraform: ""
 
   - id: "kubernetes-pod"
-    name: "kubernetes-pod"      
+    name: "kubernetes-pod"
     type: "technical_asset"
 
   - id: "kubernetes-ingress"
     name: "kubernetes-ingress"      
     type: "technical_asset"
-    terraform: ""
+    terraform: ""    
       
   - id: "kubernetes-service"
     name: "kubernetes-service"      
