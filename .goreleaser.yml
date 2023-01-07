@@ -38,9 +38,10 @@ changelog:
     - '^docs:'
     - '^test:'
 
-archives:
+archives:  
   - id: taralizer
-    format: zip
+    rlcp: true
+    format: zip    
     builds:
     - taralizer
     files:
