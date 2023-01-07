@@ -102,8 +102,8 @@ brews:
 #     goarm: 6
 
      tap:
-       owner: repo-owner
-       name: homebrew-tap
+       owner: devmatic-it
+       name: taralizer
 #       # Optionally a token can be provided, if it differs from the token provided to GoReleaser
 #       #token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
 
