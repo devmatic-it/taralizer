@@ -221,12 +221,29 @@ func mermaidDFD(report Report) string {
 		}
 	}
 
-	// Generate communication links
+	// Generate communication links with labels.
 	for _, asset := range report.TechnicalAssets {
 		for _, conn := range asset.CommunicationLinks {
-			b.WriteString(fmt.Sprintf("    %s --> %s\n", asset.Id, conn.Target))
+			label := buildLinkLabel(conn)
+			if label != "" {
+				b.WriteString(fmt.Sprintf("    %s -->|%s| %s\n", asset.Id, label, conn.Target))
+			} else {
+				b.WriteString(fmt.Sprintf("    %s --> %s\n", asset.Id, conn.Target))
+			}
 		}
 	}
 
 	return b.String()
+}
+
+// buildLinkLabel constructs a human-readable label from a CommunicationLink
+// using only Protocol and Description: "<Protocol> / <Description>".
+func buildLinkLabel(conn CommunicationLink) string {
+	if conn.Protocol == "" {
+		return ""
+	}
+	if conn.Description == "" {
+		return conn.Protocol
+	}
+	return conn.Protocol + " / " + conn.Description
 }

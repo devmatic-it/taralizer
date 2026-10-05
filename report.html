@@ -148,22 +148,22 @@ flowchart TD
         developer_client
         hsm
     end
-    browser --> waf
-    developer_client --> waf
-    waf --> ingress
-    ingress --> frontend
-    frontend --> user_service
-    frontend --> contacts
-    frontend --> trans_history
-    frontend --> balance_reader
-    frontend --> ledger_writer
-    user_service --> accounts_db
-    contacts --> accounts_db
-    user_service --> accounts_db
-    ledger_writer --> ledger_db
-    balance_reader --> ledger_db
-    trans_history --> ledger_db
-    hsm --> kms
+    browser -->|https / Link to waf| waf
+    developer_client -->|https / Link to waf| waf
+    waf -->|https / Link to app| ingress
+    ingress -->|https| frontend
+    frontend -->|https| user_service
+    frontend -->|https| contacts
+    frontend -->|https| trans_history
+    frontend -->|https| balance_reader
+    frontend -->|https| ledger_writer
+    user_service -->|sql_encrypted / Link to database| accounts_db
+    contacts -->|sql_encrypted / Link to database| accounts_db
+    user_service -->|sql_encrypted / Link to database| accounts_db
+    ledger_writer -->|sql_encrypted / Link to database| ledger_db
+    balance_reader -->|sql_encrypted / Link to database| ledger_db
+    trans_history -->|sql_encrypted / Link to database| ledger_db
+    hsm -->|kek / key transfer| kms
 
 </pre>
 
