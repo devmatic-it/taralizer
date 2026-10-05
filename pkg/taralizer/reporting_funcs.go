@@ -17,6 +17,7 @@ package taralizer
 import (
 	"fmt"
 	"log"
+	"strings"
 	"text/template"
 )
 
@@ -34,6 +35,7 @@ func (svc *ReportEngine) createFuncMap(report Report) template.FuncMap {
 		"impact":              func(s int64) string           { return likelihoodimpact(s) },
 		"severity":            func(s int64) string           { return severity(s) },
 		"dataAssetNames":      func(ids []string) string      { return getDataAssetNames(report, ids) },
+		"replaceAll":          func(old, new, s string) string { return strings.ReplaceAll(s, old, new) },
 	}
 }
 

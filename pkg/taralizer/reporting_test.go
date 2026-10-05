@@ -17,6 +17,7 @@ package taralizer
 import (
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 )
 
@@ -56,4 +57,60 @@ func TestGenerateReportFilePDFChromedp(t *testing.T) {
 		t.Fatal("Generated PDF is empty")
 	}
 	t.Logf("Generated PDF: %d bytes", info.Size())
+}
+
+func TestGenerateReportFileMarkdown(t *testing.T) {
+	report, err := Load("../../examples/gcp/bank_of_anthos.yaml")
+	if err != nil {
+		t.Fatalf("Failed to load model: %v", err)
+	}
+
+	engine := NewReportEngine()
+	tmpDir := t.TempDir()
+	outputPath := filepath.Join(tmpDir, "test_report.md")
+
+	err = engine.GenerateReportFileMarkdown(outputPath,
+		"../../templates/markdown_report.tpl", report)
+	if err != nil {
+		t.Fatalf("Failed to generate markdown: %v", err)
+	}
+
+	// Verify file exists and is non-empty
+	info, err := os.Stat(outputPath)
+	if err != nil {
+		t.Fatalf("Markdown file not found: %v", err)
+	}
+	if info.Size() == 0 {
+		t.Fatal("Generated markdown is empty")
+	}
+	t.Logf("Generated markdown: %d bytes", info.Size())
+
+	// Verify content contains expected sections
+	content, err := os.ReadFile(outputPath)
+	if err != nil {
+		t.Fatalf("Failed to read generated markdown: %v", err)
+	}
+	text := string(content)
+
+	// Check for mermaid block
+	if !strings.Contains(text, "```mermaid") {
+		t.Error("Generated markdown does not contain a mermaid code block")
+	}
+
+	// Check for key sections
+	expectedSections := []string{
+		"# Threat and Risk Analysis",
+		"## Trust Boundaries",
+		"## Technical Assets",
+		"## Data Assets",
+		"## Threat Agents",
+		"## Risk Assessment",
+		"## Methodology",
+		"## About Taralizer",
+	}
+	for _, section := range expectedSections {
+		if !strings.Contains(text, section) {
+			t.Errorf("Generated markdown missing section: %s", section)
+		}
+	}
 }

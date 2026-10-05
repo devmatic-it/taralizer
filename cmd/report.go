@@ -53,6 +53,13 @@ var (
 					fmt.Fprintf(os.Stderr, "Error generating PDF report: %v\n", err)
 					os.Exit(1)
 				}
+			} else if reportType == "markdown" {
+				err := r.GenerateReportFileMarkdown(reportFile+".md",
+					tplDir+"markdown_report.tpl", report)
+				if err != nil {
+					fmt.Fprintf(os.Stderr, "Error generating markdown report: %v\n", err)
+					os.Exit(1)
+				}
 			} else {
 				err := r.GenerateReportFile(reportFile+".html",
 					tplDir+"html.tpl", report)

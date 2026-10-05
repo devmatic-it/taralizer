@@ -1,112 +1,113 @@
-# Task List: Replace wkhtmltopdf with chromedp
+# Task List: Markdown Report with Embedded Mermaid
 
-## Phase 1: Core Implementation
+## Phase 1: Template
 
-### Task 1: Implement `GenerateReportFilePDFChromedp` ✅
+### Task 1: Create `templates/markdown_report.tpl` ✅
 
-**Description:** Implemented the PDF generation function using chromedp. The function renders the cover and report HTML templates, combines them into a single HTML document with a page break, writes to a temp file, navigates to it via chromedp, and uses CDP's `Page.printToPDF` to generate the PDF.
+**Description:** Created a markdown template that embeds the mermaid DFD and includes all report sections (trust boundaries, technical assets, data assets, threat agents, risk assessment, methodology/rules).
 
 **Acceptance criteria:**
-- [x] Function renders both `pdf_report_cover.tpl` and `pdf_report.tpl` templates using existing `GenerateReport` method
-- [x] HTML content is combined with a CSS `page-break-after: always` between cover and report
-- [x] Combined HTML is written to a temp file (e.g., `/tmp/taralizer-report-XXXXX.html`)
-- [x] chromedp context is created with reasonable timeout (30s)
-- [x] chromedp navigates to the temp HTML file
-- [x] CDP `Page.printToPDF` is called to output the PDF
-- [x] Temp HTML file is cleaned up via `defer`
-- [x] PDF path is returned to the caller
+- [x] Header with title, version, date, author, customer
+- [x] Embedded mermaid DFD as ` ```mermaid ` code block using `flowchart TD`
+- [x] Trust boundaries, technical assets, data assets, threat agents as markdown tables
+- [x] Risk assessment table with severity/likelihood labels
+- [x] Methodology/rules section
+- [x] Uses existing template functions (`severity`, `likelihood`, `findTrustedBoundary`, etc.)
 
 **Verification:**
-- [x] Build succeeds: `go build ./pkg/taralizer/...`
-- [x] Function signature: `func (svc *ReportEngine) GenerateReportFilePDFChromedp(filename string, tplFileReport string, tplFileCover string, report Report) error`
+- [x] Template renders without errors
 
-**Dependencies:** None (foundation task)
+**Dependencies:** None
 
 **Files likely touched:**
-- `pkg/taralizer/reporting.go`
+- `templates/markdown_report.tpl`
 
-**Estimated scope:** S (1-2 files)
+**Estimated scope:** S (1 file)
 
 ---
 
-### Task 2: Update `GenerateReportFilePDF` Error Handling ✅
+### Task 2: Implement `GenerateReportFileMarkdown` ✅
 
-**Description:** Updated `GenerateReportFilePDF` to return `error` instead of calling `log.Fatal`. Updated `cmd/report.go` to check the error and print a user-friendly message.
+**Description:** Added `GenerateReportFileMarkdown` to `ReportEngine` that generates a markdown report from a single template file.
 
 **Acceptance criteria:**
-- [x] `GenerateReportFilePDF` returns `error` instead of calling `log.Fatal`
-- [x] `cmd/report.go` checks the error and prints a user-friendly message
-- [x] Existing HTML report generation (`GenerateReportFile`) is unaffected
+- [x] Function signature: `func (svc *ReportEngine) GenerateReportFileMarkdown(filename string, tplFile string, report Report) error`
+- [x] Reuses existing `renderTemplate` and `createFuncMap` (no duplication)
+- [x] Returns `error` (consistent with KISS refactoring)
 
 **Verification:**
-- [x] Build succeeds: `go build ./...`
-- [x] `cmd/report.go` handles both `reportType == "pdf"` and `reportType == "html"` correctly
+- [x] Build succeeds: `go build ./pkg/taralizer/...`
 
 **Dependencies:** Task 1
 
 **Files likely touched:**
 - `pkg/taralizer/reporting.go`
-- `cmd/report.go`
 
-**Estimated scope:** XS (1-2 files)
+**Estimated scope:** XS (1 file, ~10 lines)
 
 ---
 
-## Checkpoint: After Tasks 1-2 ✅
+### Task 3: Update `cmd/report.go` ✅
 
-- [x] `go build ./...` succeeds (with Makefile)
-- [x] `go test -v ./pkg/taralizer/...` all 6 tests pass
-- [x] Manual test: `./dist/taralizer report examples/gcp/bank_of_anthos.yaml --type pdf --out report` produces a valid 4-page PDF (288KB)
-- [x] Manual test: HTML report generation works (22KB)
-- [x] Manual test: `diagram` command works
+**Description:** Added a `markdown` branch to the report command that calls `GenerateReportFileMarkdown` and outputs a `.md` file.
+
+**Acceptance criteria:**
+- [x] `taralizer report model.yaml --type markdown --out report` generates `report.md`
+- [x] Error handling consistent with existing PDF/HTML branches
+- [x] No changes to existing HTML or PDF report types
+
+**Verification:**
+- [x] Build succeeds: `go build ./...`
+- [x] Manual test: `./dist/taralizer report examples/gcp/bank_of_anthos.yaml --type markdown --out report`
+
+**Dependencies:** Task 2
+
+**Files likely touched:**
+- `cmd/report.go`
+
+**Estimated scope:** XS (1 file, ~10 lines)
+
+---
+
+## Checkpoint: After Tasks 1-3 ✅
+
+- [x] `go build ./...` succeeds
+- [x] Manual test: `./dist/taralizer report examples/gcp/bank_of_anthos.yaml --type markdown --out report` generates valid 26KB `.md` file with embedded mermaid DFD
+- [x] Manual test: Existing HTML and PDF reports unaffected
+- [x] Review with human before proceeding
 
 ---
 
 ## Phase 2: Testing
 
-### Task 3: Add Integration Test for PDF Generation ✅
+### Task 4: Add Integration Test for Markdown Report ✅
 
-**Description:** Added an integration test that loads a sample model, generates a PDF, and verifies the output file exists and is non-empty.
+**Description:** Added a test that generates a markdown report and verifies the output contains expected sections and a mermaid code block.
 
 **Acceptance criteria:**
 - [x] Test loads `examples/gcp/bank_of_anthos.yaml`
-- [x] Test calls `GenerateReportFilePDFChromedp` (or `GenerateReportFilePDF`)
-- [x] Test verifies PDF file is created and is > 0 bytes (125KB)
-- [x] Test cleans up the generated PDF after verification (via `t.TempDir()`)
-- [x] Test handles missing Chrome gracefully (test will fail with error message if Chrome not installed)
+- [x] Test calls `GenerateReportFileMarkdown`
+- [x] Test verifies `.md` file is created and is > 0 bytes (12,293 bytes)
+- [x] Test verifies output contains ` ```mermaid ` block
+- [x] Test verifies output contains expected tables (trust boundaries, risks, etc.)
 
 **Verification:**
-- [x] Tests pass: `go test -v ./pkg/taralizer/...` (all 6 tests pass)
+- [x] Tests pass: `go test -v ./pkg/taralizer/...` (all 7 tests pass)
 - [x] Build succeeds: `go build ./...`
 
-**Dependencies:** Task 1
+**Dependencies:** Task 2
 
 **Files likely touched:**
 - `pkg/taralizer/reporting_test.go`
 
-**Estimated scope:** S (1-2 files)
+**Estimated scope:** S (1 file)
 
 ---
 
 ## Checkpoint: Complete ✅
 
-- [x] All tests pass: `go test -v ./...` (PASS, 6/6 tests)
+- [x] All tests pass: `go test -v ./...` (PASS, 7/7 tests)
 - [x] Build succeeds: `go build ./...` (with Makefile)
-- [x] Manual verification: PDF (288KB), HTML (22KB) both generated correctly
-- [x] README updated with Chrome/Chromium requirement note
-- [x] KISS refactoring applied (see below)
-
-## KISS Refactoring Applied
-
-| Change | Before | After |
-|--------|--------|-------|
-| `ReportEngine` struct | Had unused `report Report` field | Empty struct (no state) |
-| `GenerateReportFilePDF` | 1-line no-op wrapper | Removed (renamed `Chromedp` variant) |
-| Unused constants | 2 unused constants (`PDF_REPORT_HTML`, `PDF_REPORT_COVER_HTML`) | Removed |
-| `diagram.png` copy | 15 lines of fragile copy logic | Removed (document user workflow) |
-| `renderTemplate` | Used hidden `svc.report` field | Takes `report Report` parameter |
-| `createFuncMap` | Used hidden `svc.report` field | Takes `report Report` parameter |
-| `GetTemplateDir` | Returns `"NOT_FOUND"` sentinel | Returns `(string, error)` |
-| `GenerateReportFile` | Uses `panic` for errors | Returns `error` |
-| `reporting_funcs.go` | 130 lines with `svc.report` references | 95 lines, explicit `Report`/`*Report` params |
-| Total lines (reporting.go) | ~160 | ~125 |
+- [x] Manual verification: Markdown report (26KB) generated correctly with embedded mermaid DFD
+- [x] README updated with markdown report documentation
+- [x] Ready for review

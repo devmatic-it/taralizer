@@ -110,6 +110,17 @@ func (svc *ReportEngine) GenerateReportFile(filename string, tplFile string, rep
 	return svc.GenerateReport(fo, tplFile, report)
 }
 
+// GenerateReportFileMarkdown generates a markdown report with embedded mermaid DFD.
+func (svc *ReportEngine) GenerateReportFileMarkdown(filename string, tplFile string, report Report) error {
+	fo, err := os.Create(filename)
+	if err != nil {
+		return fmt.Errorf("create %s: %w", filename, err)
+	}
+	defer fo.Close()
+
+	return svc.GenerateReport(fo, tplFile, report)
+}
+
 // GenerateReport renders tplFile into wr.
 func (svc *ReportEngine) GenerateReport(wr io.Writer, tplFile string, report Report) error {
 	return svc.renderTemplate(wr, tplFile, report)
