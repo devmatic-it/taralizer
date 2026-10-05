@@ -1,15 +1,7 @@
 # Taralizer - The Threat and Risk Analyzer
 
-[![Go Report Card](https://goreportcard.com/badge/github.com/devmatic-it/taralizer)](https://goreportcard.com/report/github.com/devmatic-it/taralizer)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/devmatic-it/taralizer/blob/master/LICENSE)
 [![codecov](https://codecov.io/gh/devmatic-it/taralizer/branch/main/graph/badge.svg)](https://codecov.io/gh/devmatic-it/taralizer)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=devmatic-it_taralizer&metric=alert_status)](https://sonarcloud.io/dashboard?id=devmatic-it_taralizer)
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=devmatic-it_taralizer&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=devmatic-it_taralizer)
-[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=devmatic-it_taralizer&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=devmatic-it_taralizer)
-[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=devmatic-it_taralizer&metric=security_rating)](https://sonarcloud.io/dashboard?id=devmatic-it_taralizer)
-[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=devmatic-it_taralizer&metric=bugs)](https://sonarcloud.io/dashboard?id=devmatic-it_taralizer)
-[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=devmatic-it_taralizer&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=devmatic-it_taralizer)
-[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=devmatic-it_taralizer&metric=code_smells)](https://sonarcloud.io/dashboard?id=devmatic-it_taralizer)
 
 The following project performs a **Threat and Risk Analysis** based on an architecture model defined through simple YAML file.
 We aim to implement the **OWASP Application Security Verification Standard** (ASVS)(<https://owasp.org/www-project-application-security-verification-standard/>) and also destribute their great database (<https://github.com/OWASP/ASVS/raw/v4.0.2/4.0/docs_en/OWASP%20Application%20Security%20Verification%20Standard%204.0.2-en.csv>).
@@ -24,7 +16,7 @@ Taralizer tries to overcome these limitations with the following approach:
 - Using Golang templating (<https://golang.org/pkg/text/template/>) for all reports and diagrams
 - Use the Open Policy Agent (OPA) engine (<https://www.openpolicyagent.org>) to allow extentabilty
 - use plantuml or graphviz dot to generate compelling diagrams
-- use of wkhtmltopdf to create PDF reports
+- uses the 'chromedp' library to create PDF reports (requires Chrome or Chromium installed).
 
 ## Features
 
@@ -59,6 +51,8 @@ We demonstate the usage of **Taralizer** on the popular **Bank of Anthos** examp
 6. open examples HTML report `report.html`on browser
 7. create example PDF report: `./taralizer report ./examples/gcp/bank_of_anthos.yaml --type pdf`
 
+**Note:** PDF report generation requires Chrome or Chromium to be installed on your system (`google-chrome`, `chromium-browser`, or `chromium`). This is a dependency of the chromedp library, which drives headless Chrome via the DevTools Protocol.
+
 ## Contribute
 
 ### New Issues
@@ -83,7 +77,7 @@ This work has been inspired and would not be possible without the following awes
 - Open Policy Agent (<https://www.openpolicyagent.org>)
 - PlantUML (<https://plantuml.com>)
 - GraphViz (<https://graphviz.org>)
-- WKhtmltoPDF (<https://wkhtmltopdf.org>)
+- chromedp (<https://github.com/chromedp/chromedp>)
 - OWASP Application Security Verification Standard <https://owasp.org/www-project-application-security-verification-standard/>
 - Common Weakness Enumeration (<https://cwe.mitre.org/index.html>)
 - GoRleaser Builder Image (<https://github.com/goreleaser/goreleaser>)

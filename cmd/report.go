@@ -15,11 +15,12 @@ package cmd
 
 import (
 	"fmt"
+	"os"
+
 	"github.com/devmatic-it/taralizer/pkg/taralizer"
 	"github.com/spf13/cobra"
 )
 
-// config variables
 var (
 	reportType string
 	reportFile string
@@ -38,19 +39,32 @@ var (
 			report := t.Evaluate(args[0])
 
 			r := taralizer.NewReportEngine()
+			tplDir, err := r.GetTemplateDir()
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+				os.Exit(1)
+			}
+
 			if reportType == "pdf" {
-				r.GenerateReportFilePDF(reportFile+".pdf",
-					r.GetTemplateDir()+"pdf_report.tpl",
-					r.GetTemplateDir()+"pdf_report_cover.tpl", report)
+				err := r.GenerateReportFilePDF(reportFile+".pdf",
+					tplDir+"pdf_report.tpl",
+					tplDir+"pdf_report_cover.tpl", report)
+				if err != nil {
+					fmt.Fprintf(os.Stderr, "Error generating PDF report: %v\n", err)
+					os.Exit(1)
+				}
 			} else {
-				r.GenerateReportFile(reportFile+".html",
-					r.GetTemplateDir()+"html.tpl", report)
+				err := r.GenerateReportFile(reportFile+".html",
+					tplDir+"html.tpl", report)
+				if err != nil {
+					fmt.Fprintf(os.Stderr, "Error generating HTML report: %v\n", err)
+					os.Exit(1)
+				}
 			}
 		},
 	}
 )
 
-// initializes arguments for version command
 func init() {
 	reportCmd.Flags().StringVar(&reportFile, "out", "report", "output file name")
 	reportCmd.Flags().StringVar(&reportType, "type", "html", "type of report")

@@ -15,132 +15,117 @@
 package taralizer
 
 import (
+	"bytes"
+	"context"
+	"fmt"
 	"io"
-	"log"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"text/template"
+
+	"github.com/chromedp/chromedp"
 )
 
-const PDF_REPORT_HTML = "pdf_report.html"
-const PDF_REPORT_COVER_HTML = "pdf_report_cover.html"
+// ReportEngine generates HTML and PDF reports from a Taralizer model.
+type ReportEngine struct{}
 
-// Taralzer struct
-type ReportEngine struct {
-	report Report
-}
-
-// creates a new reporting engine
+// NewReportEngine creates a new ReportEngine.
 func NewReportEngine() ReportEngine {
 	return ReportEngine{}
 }
 
-// GenerateReportFilePDF creates a report to the file 'filename' on the local file system
-// It uses the 'wkhtmltopdf' command line tool that should be available in the path
-func (svc *ReportEngine) GenerateReportFilePDF(filename string, tplFileReport string, tplFileCover string, report Report) {
-	_, err := exec.LookPath("wkhtmltopdf")
+// GenerateReportFilePDF generates a PDF report from the cover and report
+// templates using chromedp (Chrome headless). A Chrome or Chromium binary
+// must be installed on the system.
+func (svc *ReportEngine) GenerateReportFilePDF(filename string, tplFileReport string, tplFileCover string, report Report) error {
+	tmpDir, err := os.MkdirTemp("", "taralizer-report-*")
 	if err != nil {
-		log.Fatal(err)
+		return fmt.Errorf("create temp dir: %w", err)
+	}
+	defer os.RemoveAll(tmpDir)
+
+	var coverBuf, reportBuf bytes.Buffer
+	if err := svc.renderTemplate(&coverBuf, tplFileCover, report); err != nil {
+		return fmt.Errorf("render cover: %w", err)
+	}
+	if err := svc.renderTemplate(&reportBuf, tplFileReport, report); err != nil {
+		return fmt.Errorf("render report: %w", err)
 	}
 
-	svc.GenerateReportFile(PDF_REPORT_HTML, tplFileReport, report)
-	svc.GenerateReportFile(PDF_REPORT_COVER_HTML, tplFileCover, report)
-	if err != nil {
-		log.Fatal(err)
+	// Combine with page break (cover page 1, report starts page 2).
+	html := coverBuf.String() + `<div style="page-break-after: always;"></div>` + reportBuf.String()
+
+	htmlPath := filepath.Join(tmpDir, "report.html")
+	if err := os.WriteFile(htmlPath, []byte(html), 0644); err != nil {
+		return fmt.Errorf("write HTML: %w", err)
 	}
 
-	// #nosec G204 we intentionally call wkhtmltopdf to create PDF reports
-	wkhtmltopdf := exec.Command("wkhtmltopdf", "--enable-local-file-access",
-		"--footer-font-size", "8",
-		"--footer-line",
-		"--footer-left", "powered by Taralizer",
-		"--footer-right", "[page] / [topage]",
-		"--footer-center", "--confidential--",
-		"--header-line",
-		"--header-font-size", "8",
-		"--header-center", "Threat and Risk Analysis - "+report.Title,
-		"cover", PDF_REPORT_COVER_HTML,
-		"toc",
-		PDF_REPORT_HTML,
-		filename)
-	err = wkhtmltopdf.Run()
-	if err != nil {
-		log.Fatal(err)
+	ctx, cancel := chromedp.NewContext(context.Background())
+	defer cancel()
+
+	if err := chromedp.Do(ctx, chromedp.Navigate("file://"+htmlPath)); err != nil {
+		return fmt.Errorf("navigate: %w", err)
 	}
 
-	err = os.Remove(PDF_REPORT_HTML)
+	pdfData, err := chromedp.Run(ctx, chromedp.PrintToPDF(
+		chromedp.PDFMargins(0.4, 0.4, 0.6, 0.6),
+		chromedp.PDFPrintBackground(),
+	))
 	if err != nil {
-		log.Fatal(err)
+		return fmt.Errorf("print-to-PDF: %w", err)
 	}
 
-	err = os.Remove(PDF_REPORT_COVER_HTML)
-	if err != nil {
-		log.Fatal(err)
-	}
+	return os.WriteFile(filename, pdfData, 0644)
 }
 
-// GenerateReportFile creates a report to the file 'filename' on the local file system
-func (svc *ReportEngine) GenerateReportFile(filename string, tplFile string, report Report) {
-	fo, err := os.Create(filename)
-
+// renderTemplate renders tplFile into wr using the report data.
+func (svc *ReportEngine) renderTemplate(wr io.Writer, tplFile string, report Report) error {
+	f, err := os.Open(tplFile) // #nosec G304
 	if err != nil {
-		panic(err)
+		return fmt.Errorf("open template %s: %w", tplFile, err)
 	}
-
-	defer func() {
-		if err := fo.Close(); err != nil {
-			panic(err)
-		}
-	}()
-	svc.GenerateReport(fo, tplFile, report)
-}
-
-// GenerateReport uses the golang template file 'tplFile' to generate a
-// text report. Several templates have been defined and stored in the 'templates'directory'
-func (svc *ReportEngine) GenerateReport(wr io.Writer, tplFile string, report Report) {
-
-	svc.report = report
-	/* #nosec G304 */
-	f, err := os.Open(tplFile)
-	if err != nil {
-		log.Fatalf("GenerateReport: cannot load template file: %v", err)
-	}
-
-	/* #nosec G307 */
 	defer f.Close()
 
-	templateText, err := io.ReadAll(f)
+	src, err := io.ReadAll(f)
 	if err != nil {
-		log.Fatalf("GenerateReport: ReadAll error: %s", err)
+		return fmt.Errorf("read template %s: %w", tplFile, err)
 	}
 
-	funcMap := svc.createFuncMap()
-	tpl, err := template.New("tpl").Funcs(funcMap).Parse(string(templateText))
+	tpl, err := template.New("tpl").Funcs(svc.createFuncMap(report)).Parse(string(src))
 	if err != nil {
-		log.Fatalf("GenerateReport: template.New error: %s", err)
+		return fmt.Errorf("parse template %s: %w", tplFile, err)
 	}
 
-	err = tpl.Execute(wr, report)
-	if err != nil {
-		log.Fatalf("GenerateReport: Execute error: %s", err)
-	}
+	return tpl.Execute(wr, report)
 }
 
-// GetTemplateDir returns the directory of the template files
-func (svc *ReportEngine) GetTemplateDir() string {
+// GenerateReportFile generates an HTML report.
+func (svc *ReportEngine) GenerateReportFile(filename string, tplFile string, report Report) error {
+	fo, err := os.Create(filename)
+	if err != nil {
+		return fmt.Errorf("create %s: %w", filename, err)
+	}
+	defer fo.Close()
+
+	return svc.GenerateReport(fo, tplFile, report)
+}
+
+// GenerateReport renders tplFile into wr.
+func (svc *ReportEngine) GenerateReport(wr io.Writer, tplFile string, report Report) error {
+	return svc.renderTemplate(wr, tplFile, report)
+}
+
+// GetTemplateDir returns the first existing templates directory, or an error.
+func (svc *ReportEngine) GetTemplateDir() (string, error) {
 	ex, err := os.Executable()
 	if err != nil {
-		panic(err)
+		return "", fmt.Errorf("find executable: %w", err)
 	}
 	exPath := filepath.Dir(ex)
-	defaultTemplatesDir := []string{"./templates/", "/etc/taralizer/templates/", exPath + "/templates/", "../templates/"}
-	templateDir := "NOT_FOUND"
-	for _, v := range defaultTemplatesDir {
-		if _, err := os.Stat(v); !os.IsNotExist(err) {
-			templateDir = v
-			break
+	for _, dir := range []string{"./templates/", "/etc/taralizer/templates/", exPath + "/templates/", "../templates/"} {
+		if _, err := os.Stat(dir); !os.IsNotExist(err) {
+			return dir, nil
 		}
 	}
-	return templateDir
+	return "", fmt.Errorf("templates directory not found (searched: %v)", []string{"./templates/", "/etc/taralizer/templates/", exPath + "/templates/", "../templates/"})
 }

@@ -15,23 +15,14 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/devmatic-it/taralizer/pkg/taralizer"
-	"github.com/spf13/cobra"
 	"log"
 	"os"
 	"os/exec"
+
+	"github.com/devmatic-it/taralizer/pkg/taralizer"
+	"github.com/spf13/cobra"
 )
 
-// initializes arguments for version command
-func init() {
-	diagramCmd.Flags().StringVar(&engine, "engine", "dot", "default command to generate graph. Currently 'dot' and 'plantuml' are supported.")
-	diagramCmd.Flags().StringVar(&outFile, "out", "diagram", "output file name")
-	diagramCmd.Flags().StringVar(&imageType, "type", "png", "type of output image")
-	rootCmd.AddCommand(diagramCmd)
-
-}
-
-// version command
 var (
 	engine    string
 	outFile   string
@@ -48,17 +39,26 @@ var (
 				log.Fatal(err)
 			}
 
-			report := taralizer.Load(args[0])
+			report, err := taralizer.Load(args[0])
+			if err != nil {
+				log.Fatalf("Failed to load model: %v", err)
+			}
+
 			r := taralizer.NewReportEngine()
+			tplDir, err := r.GetTemplateDir()
+			if err != nil {
+				log.Fatal(err)
+			}
 
 			var engineCmd *exec.Cmd
-			if engine == "plantuml" {
-				// #nosec G204 we intentionally call plantuml to generate graphs
+			switch engine {
+			case "plantuml":
 				engineCmd = exec.Command(engine, "-pipe", "-t"+imageType)
-			} else if engine == "dot" {
-				// #nosec G204 we intentionally call dot to generate graphs
+			case "dot":
 				engineCmd = exec.Command(engine, "-T"+imageType)
-			} else {
+			case "mermaid":
+				engineCmd = exec.Command("mmdc", "-i", "-", "-o", fmt.Sprintf("%s.%s", outFile, imageType))
+			default:
 				log.Fatal("Unsupported engine: ", engine)
 			}
 
@@ -69,7 +69,7 @@ var (
 
 			go func() {
 				defer stdin.Close()
-				r.GenerateReport(stdin, fmt.Sprintf("%s%s.tpl", r.GetTemplateDir(), engine), report)
+				r.GenerateReport(stdin, fmt.Sprintf("%s%s.tpl", tplDir, engine), report)
 			}()
 
 			fout, err := os.Create(fmt.Sprintf("%s.%s", outFile, imageType))
@@ -77,10 +77,16 @@ var (
 				log.Fatal(err)
 			}
 			engineCmd.Stdout = fout
-			err = engineCmd.Run()
-			if err != nil {
+			if err := engineCmd.Run(); err != nil {
 				log.Fatal(err)
 			}
 		},
 	}
 )
+
+func init() {
+	diagramCmd.Flags().StringVar(&engine, "engine", "dot", "default command to generate graph. Currently 'dot' and 'plantuml' are supported.")
+	diagramCmd.Flags().StringVar(&outFile, "out", "diagram", "output file name")
+	diagramCmd.Flags().StringVar(&imageType, "type", "png", "type of output image")
+	rootCmd.AddCommand(diagramCmd)
+}

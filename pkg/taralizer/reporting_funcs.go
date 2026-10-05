@@ -22,93 +22,72 @@ import (
 
 const REPORT_FMT_STRING = "%s(%d)"
 
-// initalizes additional TPL functions here
-func (svc *ReportEngine) createFuncMap() template.FuncMap {
+// createFuncMap returns template functions bound to the given report.
+func (svc *ReportEngine) createFuncMap(report Report) template.FuncMap {
+	rp := &report
 	return template.FuncMap{
-		"findTrustedBoundary": svc.findTrustedBoundary,
-		"findTechnicalAsset":  svc.findTechnicalAsset,
-		"findThreatAgent":     svc.findThreatAgent,
-		"isRootTrustBoundary": svc.isRootTrustBoundary,
-		"likelihood":          svc.likelihoodimpact,
-		"impact":              svc.likelihoodimpact,
-		"severity":            svc.severity,
-		"dataAssetNames":      svc.getDataAssetNames,
+		"findTrustedBoundary": func(id string) *TrustBoundary { return findTrustBoundary(rp, id) },
+		"findTechnicalAsset":  func(id string) *TechnicalAsset { return findTechnicalAsset(rp, id) },
+		"findThreatAgent":     func(id string) *ThreatAgent   { return findThreatAgent(rp, id) },
+		"isRootTrustBoundary": func(id string) bool           { return isRootTrustBoundary(rp, id) },
+		"likelihood":          func(s int64) string           { return likelihoodimpact(s) },
+		"impact":              func(s int64) string           { return likelihoodimpact(s) },
+		"severity":            func(s int64) string           { return severity(s) },
+		"dataAssetNames":      func(ids []string) string      { return getDataAssetNames(report, ids) },
 	}
-
 }
 
-// severity is a helper method to convert severity ids into strings.
-func (svc *ReportEngine) severity(severity int64) string {
-	result := ""
-	if severity == 9 {
-		result = "CRITICAL"
-	} else if severity >= 6 {
-		result = "HIGH"
-	} else if severity >= 4 {
-		result = "MEDIUM"
-	} else if severity >= 1 {
-		result = "LOW"
-	} else if severity >= 0 {
-		result = "NONE"
-	} else {
+func severity(severity int64) string {
+	switch {
+	case severity == 9:
+		return fmt.Sprintf(REPORT_FMT_STRING, "CRITICAL", severity)
+	case severity >= 6:
+		return fmt.Sprintf(REPORT_FMT_STRING, "HIGH", severity)
+	case severity >= 4:
+		return fmt.Sprintf(REPORT_FMT_STRING, "MEDIUM", severity)
+	case severity >= 1:
+		return fmt.Sprintf(REPORT_FMT_STRING, "LOW", severity)
+	case severity >= 0:
+		return fmt.Sprintf(REPORT_FMT_STRING, "NONE", severity)
+	default:
 		return ""
 	}
-
-	return fmt.Sprintf(REPORT_FMT_STRING, result, severity)
 }
 
-// likelihoodimpact is a helper method to convert likelihood/impact ids into strings.
-func (svc *ReportEngine) likelihoodimpact(severity int64) string {
-	result := ""
-	if severity == 0 {
-		result = "NONE"
-	} else if severity == 1 {
-		result = "LOW"
-	} else if severity == 2 {
-		result = "MEDIUM"
-	} else if severity == 3 {
-		result = "HIGH"
-	} else if severity >= 4 {
-		result = "VERY HIGH"
-	} else {
+func likelihoodimpact(severity int64) string {
+	switch {
+	case severity == 0:
+		return fmt.Sprintf(REPORT_FMT_STRING, "NONE", severity)
+	case severity == 1:
+		return fmt.Sprintf(REPORT_FMT_STRING, "LOW", severity)
+	case severity == 2:
+		return fmt.Sprintf(REPORT_FMT_STRING, "MEDIUM", severity)
+	case severity == 3:
+		return fmt.Sprintf(REPORT_FMT_STRING, "HIGH", severity)
+	case severity >= 4:
+		return fmt.Sprintf(REPORT_FMT_STRING, "VERY HIGH", severity)
+	default:
 		return ""
 	}
-
-	return fmt.Sprintf(REPORT_FMT_STRING, result, severity)
 }
 
-// findTrustedBoundary  is a TPL function that searches a trust boundary by Id
-func (svc *ReportEngine) findTrustedBoundary(id string) *TrustBoundary {
-	for i := 0; i < len(svc.report.TrustBoundaries); i++ {
-		if svc.report.TrustBoundaries[i].Id == id {
-			return &svc.report.TrustBoundaries[i]
+func findTrustBoundary(report *Report, id string) *TrustBoundary {
+	for i := range report.TrustBoundaries {
+		if report.TrustBoundaries[i].Id == id {
+			return &report.TrustBoundaries[i]
 		}
 	}
-
 	log.Printf("WARN Trust Boundary %s not found.\n", id)
 	return nil
 }
 
-// findDataAsset  is a TPL function that returns the name of the data asset
-func (svc *ReportEngine) findDataAsset(id string) *DataAsset {
-	for i := 0; i < len(svc.report.DataAssets); i++ {
-		if svc.report.DataAssets[i].Id == id {
-			return &svc.report.DataAssets[i]
-		}
-	}
-
-	log.Printf("WARN Data Asset %s not found.\n", id)
-	return nil
-}
-
-// getDataAssetName  is a TPL function that returns the name of the data asset
-func (svc *ReportEngine) getDataAssetNames(ids []string) string {
+func getDataAssetNames(report Report, ids []string) string {
 	if len(ids) == 0 {
 		return ""
 	}
 	result := "["
-	for i := 0; i < len(ids); i++ {
-		da := svc.findDataAsset(ids[i])
+	for i, id := range ids {
+		da := findDataAsset(&report, id)
 		if da != nil {
 			result += da.Name
 			if i < len(ids)-1 {
@@ -116,39 +95,33 @@ func (svc *ReportEngine) getDataAssetNames(ids []string) string {
 			}
 		}
 	}
-	result += "]"
-	return result
+	return result + "]"
 }
 
-// findTrustTechnicalAsset  is a TPL function that searches a technical asset by Id
-func (svc *ReportEngine) findTechnicalAsset(id string) *TechnicalAsset {
-	for i := 0; i < len(svc.report.TechnicalAssets); i++ {
-		if svc.report.TechnicalAssets[i].Id == id {
-			return &svc.report.TechnicalAssets[i]
+func findTechnicalAsset(report *Report, id string) *TechnicalAsset {
+	for i := range report.TechnicalAssets {
+		if report.TechnicalAssets[i].Id == id {
+			return &report.TechnicalAssets[i]
 		}
 	}
-
 	log.Printf("WARN Technical Asset %s not found.\n", id)
 	return nil
 }
 
-// findThreatAgent  is a TPL function that searches threat agents by Id
-func (svc *ReportEngine) findThreatAgent(id string) *ThreatAgent {
-	for i := 0; i < len(svc.report.ThreatAgents); i++ {
-		if svc.report.ThreatAgents[i].Id == id {
-			return &svc.report.ThreatAgents[i]
+func findThreatAgent(report *Report, id string) *ThreatAgent {
+	for i := range report.ThreatAgents {
+		if report.ThreatAgents[i].Id == id {
+			return &report.ThreatAgents[i]
 		}
 	}
-
 	log.Printf("WARN Threat Agent %s not found.\n", id)
 	return nil
 }
 
-// isRootTrustBoundary is a TPL function that determines if a trust boundary is a top-level trust boundary
-func (svc *ReportEngine) isRootTrustBoundary(id string) bool {
-	for i := 0; i < len(svc.report.TrustBoundaries); i++ {
-		for j := 0; j < len(svc.report.TrustBoundaries[i].TrustBoundariesNested); j++ {
-			if svc.report.TrustBoundaries[i].TrustBoundariesNested[j] == id {
+func isRootTrustBoundary(report *Report, id string) bool {
+	for i := range report.TrustBoundaries {
+		for j := range report.TrustBoundaries[i].TrustBoundariesNested {
+			if report.TrustBoundaries[i].TrustBoundariesNested[j] == id {
 				return false
 			}
 		}
