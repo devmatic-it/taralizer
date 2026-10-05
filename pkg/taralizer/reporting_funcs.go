@@ -35,7 +35,12 @@ func (svc *ReportEngine) createFuncMap(report Report) template.FuncMap {
 		"impact":              func(s int64) string           { return likelihoodimpact(s) },
 		"severity":            func(s int64) string           { return severity(s) },
 		"dataAssetNames":      func(ids []string) string      { return getDataAssetNames(report, ids) },
-		"replaceAll":          func(old, new, s string) string { return strings.ReplaceAll(s, old, new) },
+		"replaceAll":          func(old, new, s string) string      { return strings.ReplaceAll(s, old, new) },
+		"sanitizeMermaidID":   func(name string) string           { return sanitizeMermaidID(name) },
+		"mermaidDFD":          func() string { return mermaidDFD(report) },
+		"markdownDFD":         func() string { return mermaidDFD(report) },
+		"repeat":              func(s string, count int) string { return strings.Repeat(s, count) },
+		"add":                 func(a, b int) int              { return a + b },
 	}
 }
 
@@ -129,4 +134,99 @@ func isRootTrustBoundary(report *Report, id string) bool {
 		}
 	}
 	return true
+}
+
+// sanitizeMermaidID converts a string to a valid Mermaid subgraph ID by
+// replacing spaces and special characters with underscores.
+func sanitizeMermaidID(name string) string {
+	result := strings.ReplaceAll(name, " ", "_")
+	result = strings.ReplaceAll(result, "-", "_")
+	// Replace any remaining special characters with underscores
+	var sanitized strings.Builder
+	for _, r := range result {
+		if (r >= 'a' && r <= 'z') || (r >= 'A' && r <= 'Z') || (r >= '0' && r <= '9') || r == '_' {
+			sanitized.WriteRune(r)
+		} else {
+			sanitized.WriteRune('_')
+		}
+	}
+	return sanitized.String()
+}
+
+// mermaidDFD generates the mermaid DFD source for the report.
+func mermaidDFD(report Report) string {
+	var b strings.Builder
+	b.WriteString("flowchart TD\n")
+
+	// Collect all unique threat agents and technical assets first,
+	// then define them once at the root level (mermaid does not allow
+	// duplicate node definitions across subgraphs).
+	seenTA := make(map[string]bool)
+	seenAsset := make(map[string]bool)
+
+	// First pass: collect all nodes
+	for _, tb := range report.TrustBoundaries {
+		for _, taID := range tb.ThreatAgentsInside {
+			seenTA[taID] = true
+		}
+		for _, assetID := range tb.TechnicalAssetsInside {
+			seenAsset[assetID] = true
+		}
+	}
+
+	// Second pass: generate root-level node definitions
+	for _, ta := range report.ThreatAgents {
+		if seenTA[ta.Id] {
+			b.WriteString(fmt.Sprintf("    %s[\"%s\"]\n", ta.Id, ta.Name))
+		}
+	}
+	for _, asset := range report.TechnicalAssets {
+		if seenAsset[asset.Id] {
+			b.WriteString(fmt.Sprintf("    %s[\"%s\"]\n", asset.Id, asset.Name))
+		}
+	}
+
+	// Helper to generate a trust boundary subgraph with proper nesting depth.
+	var genBoundary func(*TrustBoundary, int)
+	genBoundary = func(tb *TrustBoundary, depth int) {
+		indent := strings.Repeat("    ", depth)
+		subgraphID := sanitizeMermaidID(tb.Name)
+		b.WriteString(fmt.Sprintf("%ssubgraph %s [\"%s\"]\n", indent, subgraphID, tb.Name))
+		contentIndent := strings.Repeat("    ", depth+1)
+		for _, taID := range tb.ThreatAgentsInside {
+			b.WriteString(fmt.Sprintf("%s%s\n", contentIndent, taID))
+		}
+		for _, nestedID := range tb.TrustBoundariesNested {
+			for _, nested := range report.TrustBoundaries {
+				if nested.Id == nestedID {
+					genBoundary(&nested, depth+1)
+					break
+				}
+			}
+		}
+		// Skip nodes whose ID matches the subgraph ID to avoid
+		// mermaid conflicts between subgraph and node identifiers.
+		for _, assetID := range tb.TechnicalAssetsInside {
+			if assetID != subgraphID {
+				b.WriteString(fmt.Sprintf("%s%s\n", contentIndent, assetID))
+			}
+		}
+		b.WriteString(fmt.Sprintf("%send\n", indent))
+	}
+
+	// Generate root trust boundaries
+	for _, tb := range report.TrustBoundaries {
+		if isRootTrustBoundary(&report, tb.Id) {
+			genBoundary(&tb, 1)
+		}
+	}
+
+	// Generate communication links
+	for _, asset := range report.TechnicalAssets {
+		for _, conn := range asset.CommunicationLinks {
+			b.WriteString(fmt.Sprintf("    %s --> %s\n", asset.Id, conn.Target))
+		}
+	}
+
+	return b.String()
 }

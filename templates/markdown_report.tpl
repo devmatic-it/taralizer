@@ -12,38 +12,7 @@
 ### Data Flow Diagram
 
 ```mermaid
-flowchart TD
-    {{ define "generateTrustBoundary" }}
-    subgraph {{ .Name | replaceAll " " "_" }} ["{{ .Name }}"]
-        {{ range $taName := .ThreatAgentsInside }}
-            {{ $ta := findThreatAgent $taName }}
-                {{ $ta.Id }}["{{ $ta.Name }}"]
-        {{ end }}
-
-        {{ range $boundaryName := .TrustBoundariesNested }}
-            {{ $boundary := findTrustedBoundary $boundaryName }}
-                {{ template "generateTrustBoundary" $boundary }}
-        {{ end }}
-
-        {{ range $assetName := .TechnicalAssetsInside }}
-            {{ $asset := findTechnicalAsset $assetName }}
-                {{ $asset.Id }}["{{ $asset.Name }}"]
-        {{ end }}
-    end
-    {{ end }}
-
-    {{ range $boundary := .TrustBoundaries }}
-        {{ if isRootTrustBoundary $boundary.Id }}
-            {{ template "generateTrustBoundary" $boundary }}
-        {{ end }}
-    {{ end }}
-
-    {{ range $asset := .TechnicalAssets }}
-        {{ $conns := .CommunicationLinks }}
-        {{ range $conn := $conns }}
-            {{ $asset.Id }} --> {{ $conn.Target }}
-        {{ end }}
-    {{ end }}
+{{ markdownDFD }}
 ```
 
 ### Trust Boundaries

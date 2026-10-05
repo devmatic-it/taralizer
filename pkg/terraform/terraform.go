@@ -64,7 +64,11 @@ func NewTreeShapeListener(report *taralizer.Report) *TreeShapeListener {
 
 func (listener *TreeShapeListener) ExitProvider(ctx *ProviderContext) {
 	fmt.Printf("Provider: %s\n", listener.currentResourceType)
-	listener.profile = taralizer.LoadProfileSet(fmt.Sprintf("%s.yaml", listener.currentResourceType))
+	var err error
+	listener.profile, err = taralizer.LoadProfileSet(fmt.Sprintf("%s.yaml", listener.currentResourceType))
+	if err != nil {
+		log.Fatalf("terraform.ImportFromFile: cannot load profile set %v", err)
+	}
 }
 
 func (listener *TreeShapeListener) ExitResource(ctx *ResourceContext) {

@@ -13,10 +13,10 @@ The **taralizer** project was highly inspired by the **Threagile** (<https://thr
 Unfortunately, **Threagile** has some limits in the customization of reports and the extendability with custom rules.
 Taralizer tries to overcome these limitations with the following approach:
 
-- Using Golang templating (<https://golang.org/pkg/text/template/>) for all reports and diagrams
+- Using Golang templating (<https://golang.org/pkg/text/template/>) for all reports
 - Use the Open Policy Agent (OPA) engine (<https://www.openpolicyagent.org>) to allow extentabilty
-- use plantuml or graphviz dot to generate compelling diagrams
-- uses the 'chromedp' library to create PDF reports (requires Chrome or Chromium installed).
+- Use the 'chromedp' library to create PDF reports (requires Chrome or Chromium installed)
+- Embed mermaid.js in HTML/PDF reports to render Data Flow Diagrams inline (no external tools needed)
 
 ## Features
 
@@ -27,11 +27,10 @@ Taralizer currently provides the following features:
   - MacOSX (x86_64, ARM64 M1)
   - Linux (x86, x86_64, ARM64)
   - Windows (x86, x86_64)
-- supports graphviz dot and plantuml flow charts
-
-![PlantUML](<https://github.com/devmatic-it/taralizer/blob/main/docs/images/diagram_plantuml.png>)
-![GraphViz](<https://github.com/devmatic-it/taralizer/blob/main/docs/images/diagram_graphviz.png>)
-
+- three report types:
+  - **HTML** — self-contained report with inline DFD (renders via mermaid.js)
+  - **PDF** — self-contained report with inline DFD (rendered by chromedp)
+  - **Markdown** — DFD embedded as mermaid text (renders natively in GitHub, GitLab, VS Code)
 - support of PDF and HTML reports
 
 ![PDF Report](<https://github.com/devmatic-it/taralizer/blob/main/docs/images/report_pdf.png>)
@@ -45,13 +44,14 @@ We demonstate the usage of **Taralizer** on the popular **Bank of Anthos** examp
 
 1. Download latest release for your platform: <https://github.com/devmatic-it/taralizer/releases/latest>
 2. extract archive: `unzip taralizer_X.Y.Z_linux_amd64.zip`
-3. create dataflow diagram diagram.png using graphviz: `./taralizer diagram ./examples/gcp/bank_of_anthos.yaml`
-4. create dataflow diagram diagram.png using plantuml: `./taralizer diagram ./examples/gcp/bank_of_anthos.yaml --engine plantuml`
-5. create example HTML report: `./taralizer report ./examples/gcp/bank_of_anthos.yaml`
-6. open examples HTML report `report.html`on browser
-7. create example PDF report: `./taralizer report ./examples/gcp/bank_of_anthos.yaml --type pdf`
+3. create example HTML report: `./taralizer report ./examples/gcp/bank_of_anthos.yaml`
+4. open examples HTML report `report.html` on browser (DFD renders via mermaid.js)
+5. create example PDF report: `./taralizer report ./examples/gcp/bank_of_anthos.yaml --type pdf`
+6. create example Markdown report: `./taralizer report ./examples/gcp/bank_of_anthos.yaml --type markdown`
 
 **Note:** PDF report generation requires Chrome or Chromium to be installed on your system (`google-chrome`, `chromium-browser`, or `chromium`). This is a dependency of the chromedp library, which drives headless Chrome via the DevTools Protocol.
+
+**Note:** HTML reports load mermaid.js from a CDN at render time. PDF reports are self-contained since the DFD is rendered during generation.
 
 ## Contribute
 
@@ -75,9 +75,8 @@ This work has been inspired and would not be possible without the following awes
 
 - Threagile - Agile Threat Modelling (<https://threagile.io>)
 - Open Policy Agent (<https://www.openpolicyagent.org>)
-- PlantUML (<https://plantuml.com>)
-- GraphViz (<https://graphviz.org>)
 - chromedp (<https://github.com/chromedp/chromedp>)
+- mermaid.js (<https://mermaid.js.org>)
 - OWASP Application Security Verification Standard <https://owasp.org/www-project-application-security-verification-standard/>
 - Common Weakness Enumeration (<https://cwe.mitre.org/index.html>)
 - GoRleaser Builder Image (<https://github.com/goreleaser/goreleaser>)

@@ -2,35 +2,42 @@ package taralizer
 
 import (
 	"encoding/json"
-	"log"
+	"fmt"
+	"log/slog"
 )
 
-func GetMapIntValue(data map[string]interface{}, key string, location string) int64 {
+func GetMapIntValue(data map[string]interface{}, key string, location string) (int64, error) {
 	result := int64(-1)
 	val, exists := data[key]
 	if exists {
-		valNum, exists := val.(json.Number)
-		if exists {
-			result, _ = valNum.Int64()
+		valNum, ok := val.(json.Number)
+		if ok {
+			res, err := valNum.Int64()
+			if err != nil {
+				return 0, fmt.Errorf("parse error in %s: key '%s' is not a valid number", location, key)
+			}
+			result = res
 		} else {
-			log.Fatalf("Parse Error in %s: Given key '%s' is not a number", location, key)
+			return 0, fmt.Errorf("parse error in %s: key '%s' is not a number", location, key)
 		}
 	} else {
-		log.Fatalf("Parse Error in %s: Cannot find key '%s' in given map", location, key)
+		return 0, fmt.Errorf("parse error in %s: cannot find key '%s' in given map", location, key)
 	}
 
-	return result
+	return result, nil
 }
 
-func GetMapStringValue(data map[string]interface{}, key string, location string) string {
+func GetMapStringValue(data map[string]interface{}, key string, location string) (string, error) {
 	val, exists := data[key]
 	if exists {
-		return val.(string)
+		str, ok := val.(string)
+		if !ok {
+			return "", fmt.Errorf("parse error in %s: key '%s' is not a string", location, key)
+		}
+		return str, nil
 	} else {
-		log.Fatalf("Parse Error in %s: Cannot find key '%s' in given map", location, key)
+		return "", fmt.Errorf("parse error in %s: cannot find key '%s' in given map", location, key)
 	}
-
-	return ""
 }
 
 type StringWriter struct {
@@ -38,7 +45,6 @@ type StringWriter struct {
 }
 
 func NewStringWriter(buf *string) StringWriter {
-
 	w := StringWriter{}
 	w.buf = buf
 	return w
@@ -46,7 +52,7 @@ func NewStringWriter(buf *string) StringWriter {
 
 func (sw StringWriter) Write(p []byte) (n int, err error) {
 	str := string(p)
-	log.Println(str)
+	slog.Info("writing to string buffer", "content", str)
 	*sw.buf = *sw.buf + str
 	return len(str), nil
 }

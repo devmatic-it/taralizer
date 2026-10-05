@@ -14,8 +14,9 @@
 package taralizer
 
 import (
+	"fmt"
 	"io"
-	"log"
+	
 	"os"
 	"path/filepath"
 	"strings"
@@ -124,7 +125,7 @@ type Report struct {
 	Version         string           `yaml:"version,omitempty"`
 	Customer        string           `yaml:"customer,omitempty"`
 	Date            string           `yaml:"date,omitempty"`
-	Author          Author           `yaml:"author,omitempty"`
+	Author          Author          `yaml:"author,omitempty"`
 	RuleSet         RuleSet          `yaml:"ruleset,omitempty"`
 }
 
@@ -168,28 +169,26 @@ type ProfileSet struct {
 }
 
 // Load opens the model file and loads it into the Report model
-// Please, node that the Risks property is empty.
-func Load(fileName string) Report {
+func Load(fileName string) (Report, error) {
 	report := Report{}
 
 	/* #nosec G304 */
 	jsonFile, err := os.Open(fileName)
+	if err != nil {
+		return Report{}, fmt.Errorf("cannot load model file: %w", err)
+	}
 	/* #nosec G307 */
 	defer jsonFile.Close()
 
-	if err != nil {
-		log.Fatalf("cannot load model file: %v", err)
-	}
-
 	data, err := io.ReadAll(jsonFile)
 	if err != nil {
-		log.Fatalf("Load: ReadAll error: %v", err)
+		return Report{}, fmt.Errorf("Load: ReadAll error: %w", err)
 	}
 
 	// unmarshal for report
 	err = yaml.Unmarshal([]byte(data), &report)
 	if err != nil {
-		log.Fatalf("Load: unmarksall error: %v", err)
+		return Report{}, fmt.Errorf("Load: unmarshal error: %w", err)
 	}
 
 	// replace variables in Puml
@@ -199,7 +198,13 @@ func Load(fileName string) Report {
 
 		dataAssets := ""
 		for j := 0; j < len(report.TechnicalAssets[i].DataAssetsStored); j++ {
-			dataAssets += findDataAsset(&report, report.TechnicalAssets[i].DataAssetsStored[j]).Name
+			asset := findDataAsset(&report, report.TechnicalAssets[i].DataAssetsStored[j])
+			if asset != nil {
+				dataAssets += asset.Name
+			} else {
+				return Report{}, fmt.Errorf("DataAsset not found: %s", report.TechnicalAssets[i].DataAssetsStored[j])
+			}
+
 			if j < len(report.TechnicalAssets[i].DataAssetsStored)-1 {
 				dataAssets += ", "
 			}
@@ -214,7 +219,7 @@ func Load(fileName string) Report {
 		report.TrustBoundaries[i].Puml = strings.Replace(report.TrustBoundaries[i].Puml, "$name", report.TrustBoundaries[i].Name, -1)
 	}
 
-	return report
+	return report, nil
 }
 
 // findDataAsset locates a data asset by ID
@@ -228,38 +233,37 @@ func findDataAsset(report *Report, id string) *DataAsset {
 }
 
 // LoadProfileSet opens a profile file and loads it into the ProfileSet model
-// Please, node that the Risks property is empty.
-func LoadProfileSet(fileName string) ProfileSet {
+func LoadProfileSet(fileName string) (ProfileSet, error) {
 	profileSet := ProfileSet{}
 
 	/* #nosec G304 */
 	jsonFile, err := os.Open(getProfileDir() + fileName)
+	if err != nil {
+		return ProfileSet{}, fmt.Errorf("cannot load profile file: %w", err)
+	}
 	/* #nosec G307 */
 	defer jsonFile.Close()
 
-	if err != nil {
-		log.Fatalf("cannot load profile file: %v", err)
-	}
-
 	data, err := io.ReadAll(jsonFile)
 	if err != nil {
-		log.Fatalf("Load: ReadAll error: %v", err)
+		return ProfileSet{}, fmt.Errorf("Load: ReadAll error: %w", err)
 	}
 
 	// unmarshal for report
 	err = yaml.Unmarshal([]byte(data), &profileSet)
 	if err != nil {
-		log.Fatalf("Load: unmarksall error: %v", err)
+		return ProfileSet{}, fmt.Errorf("Load: unmarshal error: %w", err)
 	}
 
-	return profileSet
+	return profileSet, nil
 }
 
 // getProfileDir returns the directory of the profile files
 func getProfileDir() string {
 	ex, err := os.Executable()
 	if err != nil {
-		panic(err)
+		// Fallback to current directory if executable path cannot be determined
+		return "./profiles/"
 	}
 	exPath := filepath.Dir(ex)
 	defaultProfileDir := []string{"./profiles/", "/etc/profiles/", exPath + "/profiles/", "../profiles/", "../../profiles/"}

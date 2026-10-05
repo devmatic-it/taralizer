@@ -67,6 +67,7 @@ func (svc *ReportEngine) GenerateReportFilePDF(filename string, tplFileReport st
 		return fmt.Errorf("navigate: %w", err)
 	}
 
+	// Capture PDF (mermaid.js renders the DFD before this if internet is available)
 	pdfData, err := chromedp.Run(ctx, chromedp.PrintToPDF(
 		chromedp.PDFMargins(0.4, 0.4, 0.6, 0.6),
 		chromedp.PDFPrintBackground(),

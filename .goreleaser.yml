@@ -62,7 +62,7 @@ archives:
 #     dependencies:
 #       - graphviz
 #       - plantuml
-#       - wkhtmltopdf
+
 
 #     contents:
 #       # Basic file that applies to all packagers
@@ -159,13 +159,8 @@ brews:
 
 
 #     # Packages your package depends on.
-     dependencies:
-       - name: graphviz
-         type: mandatory
-#       - name: plantuml
-#         type: mandatory
-       - name: wkhtmltopdf
-         type: mandatory
+     # No external dependencies required (diagrams are embedded via mermaid.js)
+     # dependencies:
 
 #     # So you can `brew test` your formula.
 #     # Default is empty.

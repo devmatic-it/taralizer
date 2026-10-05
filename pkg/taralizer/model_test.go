@@ -21,13 +21,19 @@ import (
 )
 
 func TestLoad(t *testing.T) {
-	report := Load("../../examples/gcp/bank_of_anthos.yaml")
+	report, err := Load("../../examples/gcp/bank_of_anthos.yaml")
+	if err != nil {
+		t.Fatalf("Failed to load profile: %v", err)
+	}
 	assert.Greater(t, len(report.DataAssets), 0)
 	assert.Greater(t, len(report.TechnicalAssets), 0)
 	assert.Greater(t, len(report.TrustBoundaries), 0)
 }
 
 func TestLoadProfileSet(t *testing.T) {
-	profileSet := LoadProfileSet("default.yaml")
+	profileSet, err := LoadProfileSet("default.yaml")
+	if err != nil {
+		t.Fatalf("Failed to load profile set: %v", err)
+	}
 	assert.Greater(t, len(profileSet.Technologies), 0)
 }

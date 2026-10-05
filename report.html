@@ -54,11 +54,6 @@ td, th {
   color: white;
 }
 
-
-img {
-width:100%;
-}
-
 tr:nth-child(even){background-color: #f2f2f2;}
 
 th {
@@ -81,8 +76,96 @@ th {
 <h2>System Description</h2>
 <p>
 The Data Flow Diagram below provides an overview of the analyzed architecture.
-<img src="diagram.png" alt="Data Flow Diagram"/>
 </p>
+<pre class="mermaid">
+flowchart TD
+    unauthorized-external-agent["TA1"]
+    authorized-employee["TA2"]
+    unauthorized-insider["TA3"]
+    browser["User"]
+    developer_client["DevOps"]
+    waf["WAF"]
+    ingress["istio-ingress-gateway"]
+    frontend["frontend"]
+    user_service["User Service"]
+    contacts["Contacts"]
+    user_service["User Service"]
+    accounts_db["accounts-db"]
+    ledger_writer["ledger writer"]
+    balance_reader["balance reader"]
+    trans_history["trans history"]
+    ledger_db["ledger-db"]
+    kms["KMS"]
+    hsm["HSM"]
+    logging["Cloud Logging"]
+    monitoring["Cloud Monitoring"]
+    subgraph Internet ["Internet"]
+        unauthorized-external-agent
+        subgraph Google_Cloud_Platform ["Google Cloud Platform"]
+            unauthorized-external-agent
+            subgraph project_boa_gke ["project boa-gke"]
+                subgraph VPC ["VPC"]
+                    subgraph public_subnet ["public subnet"]
+                        waf
+                    end
+                    subgraph privat_subnet ["privat subnet"]
+                        subgraph GKE ["GKE"]
+                            subgraph istion_system ["istion-system"]
+                                ingress
+                            end
+                            subgraph frontend ["frontend"]
+                            end
+                            subgraph accounts ["accounts"]
+                                user_service
+                                contacts
+                            end
+                            subgraph transactions ["transactions"]
+                                ledger_writer
+                                balance_reader
+                                trans_history
+                            end
+                        end
+                    end
+                end
+            end
+            subgraph project_boa_sql ["project boa-sql"]
+                accounts_db
+                ledger_db
+            end
+            subgraph project_boa_sec ["project boa-sec"]
+                kms
+            end
+            subgraph project_boa_ops ["project boa-ops"]
+                logging
+                monitoring
+            end
+        end
+        browser
+    end
+    subgraph Company_Network ["Company Network"]
+        authorized-employee
+        unauthorized-insider
+        developer_client
+        hsm
+    end
+    browser --> waf
+    developer_client --> waf
+    waf --> ingress
+    ingress --> frontend
+    frontend --> user_service
+    frontend --> contacts
+    frontend --> trans_history
+    frontend --> balance_reader
+    frontend --> ledger_writer
+    user_service --> accounts_db
+    contacts --> accounts_db
+    user_service --> accounts_db
+    ledger_writer --> ledger_db
+    balance_reader --> ledger_db
+    trans_history --> ledger_db
+    hsm --> kms
+
+</pre>
 
 <h3>Trust Boundaries</h3>
 <table aria-describedby="Trust Boundaries">
@@ -106,7 +189,7 @@ The Data Flow Diagram below provides an overview of the analyzed architecture.
   
     <tr>
       <td> project boa-gke</td>  
-      <td> subscription</td>  
+      <td> project</td>  
       <td> Google Project </td>
     </tr>
   
@@ -242,6 +325,12 @@ The Data Flow Diagram below provides an overview of the analyzed architecture.
     </tr>
   
     <tr>
+      <td> accounts-db</td>  
+      <td> database-sql</td>  
+      <td> SQL database </td>
+    </tr>
+  
+    <tr>
       <td> ledger writer</td>  
       <td> kubernetes-pod</td>  
       <td> Accepts and validates incoming transactions before writing them to the ledger. </td>
@@ -257,12 +346,6 @@ The Data Flow Diagram below provides an overview of the analyzed architecture.
       <td> trans history</td>  
       <td> kubernetes-pod</td>  
       <td> Provides an efficient readable cache of past transactions, as read from ledger-db. </td>
-    </tr>
-  
-    <tr>
-      <td> accounts-db</td>  
-      <td> database-sql</td>  
-      <td> SQL database </td>
     </tr>
   
     <tr>
@@ -348,15 +431,79 @@ The following data assets are used:
   
     <tr>
       <td>A5</td>  
-      <td> product catalog</td>
-      <td> 1</td>
-      <td> 1</td>
-      <td> 1</td>
+      <td> active/ongoing bank transactions</td>
+      <td> 3</td>
+      <td> 2</td>
+      <td> 2</td>
     </tr>
   
     <tr>
       <td>A6</td>  
+      <td> bank transaction history</td>
+      <td> 3</td>
+      <td> 2</td>
+      <td> 2</td>
+    </tr>
+  
+    <tr>
+      <td>A7</td>  
+      <td> account balance of client</td>
+      <td> 3</td>
+      <td> 2</td>
+      <td> 2</td>
+    </tr>
+  
+    <tr>
+      <td>A8</td>  
       <td> root certificates</td>
+      <td> 3</td>
+      <td> 2</td>
+      <td> 2</td>
+    </tr>
+  
+    <tr>
+      <td>A9</td>  
+      <td> Session ID</td>
+      <td> 2</td>
+      <td> 2</td>
+      <td> 2</td>
+    </tr>
+  
+    <tr>
+      <td>A10</td>  
+      <td> personal-related end user information like e-mail to identity user</td>
+      <td> </td>
+      <td> </td>
+      <td> </td>
+    </tr>
+  
+    <tr>
+      <td>A11</td>  
+      <td> passwort of a user</td>
+      <td> 3</td>
+      <td> 2</td>
+      <td> 2</td>
+    </tr>
+  
+    <tr>
+      <td>A12</td>  
+      <td> contacts of the customer from past transactions</td>
+      <td> 2</td>
+      <td> 2</td>
+      <td> 2</td>
+    </tr>
+  
+    <tr>
+      <td>A13</td>  
+      <td> credentials to access ledger db</td>
+      <td> 3</td>
+      <td> 2</td>
+      <td> 2</td>
+    </tr>
+  
+    <tr>
+      <td>A14</td>  
+      <td> credentials to access ledger db</td>
       <td> 3</td>
       <td> 2</td>
       <td> 2</td>
@@ -383,7 +530,7 @@ The following threat agents are used:
     </tr>
   
     <tr>
-    <td>TA3</td>  <td> Employee of the company that is not authorized to access the system </td>
+    <td>TA3</td>  <td> Employee/Contractor of the company that is not authorized to access the system </td>
     </tr>
 
 </table>
@@ -451,147 +598,13 @@ The following risks have been identified:
 </tr>
 
 <tr>
-    <td>cross-site-request-forgery@frontend</td>  
-    <td class="likelihood3">HIGH(3)</td>  
-    <td class="impact2">MEDIUM(2)</td>  
-    <td class="serverity6">HIGH(6)</td>  
-    <td>
-        <a href="https://cwe.mitre.org/data/definitions/352">CWE-352</a>
-        Cross-Site Request Forgery (CSRF): asset 'frontend' has risk of Cross Site Request Forgery(CSRF)
-        <p>When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.</p>        
-    </td>
-    <td>TBD</td>
-    <td>Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level
-</td>
-    <td class="likelihood-1"></td>  
-    <td class="impact-1"></td>  
-    <td class="serverity-1"></td>  
-    <td>OPEN</td>
-</tr>
-
-<tr>
-    <td>cross-site-request-forgery@user_service</td>  
-    <td class="likelihood3">HIGH(3)</td>  
-    <td class="impact2">MEDIUM(2)</td>  
-    <td class="serverity6">HIGH(6)</td>  
-    <td>
-        <a href="https://cwe.mitre.org/data/definitions/352">CWE-352</a>
-        Cross-Site Request Forgery (CSRF): asset 'user_service' has risk of Cross Site Request Forgery(CSRF)
-        <p>When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.</p>        
-    </td>
-    <td>TBD</td>
-    <td>Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level
-</td>
-    <td class="likelihood-1"></td>  
-    <td class="impact-1"></td>  
-    <td class="serverity-1"></td>  
-    <td>OPEN</td>
-</tr>
-
-<tr>
-    <td>cross-site-request-forgery@contacts</td>  
-    <td class="likelihood3">HIGH(3)</td>  
-    <td class="impact2">MEDIUM(2)</td>  
-    <td class="serverity6">HIGH(6)</td>  
-    <td>
-        <a href="https://cwe.mitre.org/data/definitions/352">CWE-352</a>
-        Cross-Site Request Forgery (CSRF): asset 'contacts' has risk of Cross Site Request Forgery(CSRF)
-        <p>When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.</p>        
-    </td>
-    <td>TBD</td>
-    <td>Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level
-</td>
-    <td class="likelihood-1"></td>  
-    <td class="impact-1"></td>  
-    <td class="serverity-1"></td>  
-    <td>OPEN</td>
-</tr>
-
-<tr>
-    <td>cross-site-request-forgery@trans_history</td>  
-    <td class="likelihood3">HIGH(3)</td>  
-    <td class="impact2">MEDIUM(2)</td>  
-    <td class="serverity6">HIGH(6)</td>  
-    <td>
-        <a href="https://cwe.mitre.org/data/definitions/352">CWE-352</a>
-        Cross-Site Request Forgery (CSRF): asset 'trans_history' has risk of Cross Site Request Forgery(CSRF)
-        <p>When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.</p>        
-    </td>
-    <td>TBD</td>
-    <td>Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level
-</td>
-    <td class="likelihood-1"></td>  
-    <td class="impact-1"></td>  
-    <td class="serverity-1"></td>  
-    <td>OPEN</td>
-</tr>
-
-<tr>
-    <td>cross-site-request-forgery@balance_reader</td>  
-    <td class="likelihood3">HIGH(3)</td>  
-    <td class="impact2">MEDIUM(2)</td>  
-    <td class="serverity6">HIGH(6)</td>  
-    <td>
-        <a href="https://cwe.mitre.org/data/definitions/352">CWE-352</a>
-        Cross-Site Request Forgery (CSRF): asset 'balance_reader' has risk of Cross Site Request Forgery(CSRF)
-        <p>When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.</p>        
-    </td>
-    <td>TBD</td>
-    <td>Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level
-</td>
-    <td class="likelihood-1"></td>  
-    <td class="impact-1"></td>  
-    <td class="serverity-1"></td>  
-    <td>OPEN</td>
-</tr>
-
-<tr>
-    <td>cross-site-request-forgery@ledger_writer</td>  
-    <td class="likelihood3">HIGH(3)</td>  
-    <td class="impact2">MEDIUM(2)</td>  
-    <td class="serverity6">HIGH(6)</td>  
-    <td>
-        <a href="https://cwe.mitre.org/data/definitions/352">CWE-352</a>
-        Cross-Site Request Forgery (CSRF): asset 'ledger_writer' has risk of Cross Site Request Forgery(CSRF)
-        <p>When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.</p>        
-    </td>
-    <td>TBD</td>
-    <td>Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level
-</td>
-    <td class="likelihood-1"></td>  
-    <td class="impact-1"></td>  
-    <td class="serverity-1"></td>  
-    <td>OPEN</td>
-</tr>
-
-<tr>
-    <td>container-baseimage-backdooring@frontend</td>  
+    <td>container-baseimage-backdooring@balance_reader</td>  
     <td class="likelihood1">LOW(1)</td>  
     <td class="impact2">MEDIUM(2)</td>  
     <td class="serverity2">LOW(2)</td>  
     <td>
         <a href="https://cwe.mitre.org/data/definitions/912">CWE-912</a>
-        Container Base Image Backdooring: asset 'frontend' has risk of container image backdooring through base images
-        <p>When a technical asset is built using container technologies, Base Image Backdooring risks might arise where base images and other layers used contain vulnerable components or backdoors
-</p>        
-    </td>
-    <td>MITIGATE</td>
-    <td>Google distroless image is used to mitigate risks.  <p>The product owner accepted the residual risks.</p>
-</td>
-    <td class="likelihood1">LOW(1)</td>  
-    <td class="impact2">MEDIUM(2)</td>  
-    <td class="serverity2">LOW(2)</td>  
-    <td>CLOSED</td>
-</tr>
-
-<tr>
-    <td>container-baseimage-backdooring@user_service</td>  
-    <td class="likelihood1">LOW(1)</td>  
-    <td class="impact2">MEDIUM(2)</td>  
-    <td class="serverity2">LOW(2)</td>  
-    <td>
-        <a href="https://cwe.mitre.org/data/definitions/912">CWE-912</a>
-        Container Base Image Backdooring: asset 'user_service' has risk of container image backdooring through base images
+        Container Base Image Backdooring: asset 'balance_reader' has risk of container image backdooring through base images
         <p>When a technical asset is built using container technologies, Base Image Backdooring risks might arise where base images and other layers used contain vulnerable components or backdoors
 </p>        
     </td>
@@ -625,13 +638,13 @@ The following risks have been identified:
 </tr>
 
 <tr>
-    <td>container-baseimage-backdooring@ledger_writer</td>  
+    <td>container-baseimage-backdooring@frontend</td>  
     <td class="likelihood1">LOW(1)</td>  
     <td class="impact2">MEDIUM(2)</td>  
     <td class="serverity2">LOW(2)</td>  
     <td>
         <a href="https://cwe.mitre.org/data/definitions/912">CWE-912</a>
-        Container Base Image Backdooring: asset 'ledger_writer' has risk of container image backdooring through base images
+        Container Base Image Backdooring: asset 'frontend' has risk of container image backdooring through base images
         <p>When a technical asset is built using container technologies, Base Image Backdooring risks might arise where base images and other layers used contain vulnerable components or backdoors
 </p>        
     </td>
@@ -645,13 +658,13 @@ The following risks have been identified:
 </tr>
 
 <tr>
-    <td>container-baseimage-backdooring@balance_reader</td>  
+    <td>container-baseimage-backdooring@ledger_writer</td>  
     <td class="likelihood1">LOW(1)</td>  
     <td class="impact2">MEDIUM(2)</td>  
     <td class="serverity2">LOW(2)</td>  
     <td>
         <a href="https://cwe.mitre.org/data/definitions/912">CWE-912</a>
-        Container Base Image Backdooring: asset 'balance_reader' has risk of container image backdooring through base images
+        Container Base Image Backdooring: asset 'ledger_writer' has risk of container image backdooring through base images
         <p>When a technical asset is built using container technologies, Base Image Backdooring risks might arise where base images and other layers used contain vulnerable components or backdoors
 </p>        
     </td>
@@ -684,8 +697,148 @@ The following risks have been identified:
     <td>CLOSED</td>
 </tr>
 
+<tr>
+    <td>container-baseimage-backdooring@user_service</td>  
+    <td class="likelihood1">LOW(1)</td>  
+    <td class="impact2">MEDIUM(2)</td>  
+    <td class="serverity2">LOW(2)</td>  
+    <td>
+        <a href="https://cwe.mitre.org/data/definitions/912">CWE-912</a>
+        Container Base Image Backdooring: asset 'user_service' has risk of container image backdooring through base images
+        <p>When a technical asset is built using container technologies, Base Image Backdooring risks might arise where base images and other layers used contain vulnerable components or backdoors
+</p>        
+    </td>
+    <td>MITIGATE</td>
+    <td>Google distroless image is used to mitigate risks.  <p>The product owner accepted the residual risks.</p>
+</td>
+    <td class="likelihood1">LOW(1)</td>  
+    <td class="impact2">MEDIUM(2)</td>  
+    <td class="serverity2">LOW(2)</td>  
+    <td>CLOSED</td>
+</tr>
+
+<tr>
+    <td>cross-site-request-forgery@balance_reader</td>  
+    <td class="likelihood3">HIGH(3)</td>  
+    <td class="impact2">MEDIUM(2)</td>  
+    <td class="serverity6">HIGH(6)</td>  
+    <td>
+        <a href="https://cwe.mitre.org/data/definitions/352">CWE-352</a>
+        Cross-Site Request Forgery (CSRF): asset 'balance_reader' has risk of Cross Site Request Forgery(CSRF)
+        <p>When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.</p>        
+    </td>
+    <td>TBD</td>
+    <td>Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level
+</td>
+    <td class="likelihood-1"></td>  
+    <td class="impact-1"></td>  
+    <td class="serverity-1"></td>  
+    <td>OPEN</td>
+</tr>
+
+<tr>
+    <td>cross-site-request-forgery@contacts</td>  
+    <td class="likelihood3">HIGH(3)</td>  
+    <td class="impact2">MEDIUM(2)</td>  
+    <td class="serverity6">HIGH(6)</td>  
+    <td>
+        <a href="https://cwe.mitre.org/data/definitions/352">CWE-352</a>
+        Cross-Site Request Forgery (CSRF): asset 'contacts' has risk of Cross Site Request Forgery(CSRF)
+        <p>When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.</p>        
+    </td>
+    <td>TBD</td>
+    <td>Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level
+</td>
+    <td class="likelihood-1"></td>  
+    <td class="impact-1"></td>  
+    <td class="serverity-1"></td>  
+    <td>OPEN</td>
+</tr>
+
+<tr>
+    <td>cross-site-request-forgery@frontend</td>  
+    <td class="likelihood3">HIGH(3)</td>  
+    <td class="impact2">MEDIUM(2)</td>  
+    <td class="serverity6">HIGH(6)</td>  
+    <td>
+        <a href="https://cwe.mitre.org/data/definitions/352">CWE-352</a>
+        Cross-Site Request Forgery (CSRF): asset 'frontend' has risk of Cross Site Request Forgery(CSRF)
+        <p>When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.</p>        
+    </td>
+    <td>TBD</td>
+    <td>Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level
+</td>
+    <td class="likelihood-1"></td>  
+    <td class="impact-1"></td>  
+    <td class="serverity-1"></td>  
+    <td>OPEN</td>
+</tr>
+
+<tr>
+    <td>cross-site-request-forgery@ledger_writer</td>  
+    <td class="likelihood3">HIGH(3)</td>  
+    <td class="impact2">MEDIUM(2)</td>  
+    <td class="serverity6">HIGH(6)</td>  
+    <td>
+        <a href="https://cwe.mitre.org/data/definitions/352">CWE-352</a>
+        Cross-Site Request Forgery (CSRF): asset 'ledger_writer' has risk of Cross Site Request Forgery(CSRF)
+        <p>When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.</p>        
+    </td>
+    <td>TBD</td>
+    <td>Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level
+</td>
+    <td class="likelihood-1"></td>  
+    <td class="impact-1"></td>  
+    <td class="serverity-1"></td>  
+    <td>OPEN</td>
+</tr>
+
+<tr>
+    <td>cross-site-request-forgery@trans_history</td>  
+    <td class="likelihood3">HIGH(3)</td>  
+    <td class="impact2">MEDIUM(2)</td>  
+    <td class="serverity6">HIGH(6)</td>  
+    <td>
+        <a href="https://cwe.mitre.org/data/definitions/352">CWE-352</a>
+        Cross-Site Request Forgery (CSRF): asset 'trans_history' has risk of Cross Site Request Forgery(CSRF)
+        <p>When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.</p>        
+    </td>
+    <td>TBD</td>
+    <td>Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level
+</td>
+    <td class="likelihood-1"></td>  
+    <td class="impact-1"></td>  
+    <td class="serverity-1"></td>  
+    <td>OPEN</td>
+</tr>
+
+<tr>
+    <td>cross-site-request-forgery@user_service</td>  
+    <td class="likelihood3">HIGH(3)</td>  
+    <td class="impact2">MEDIUM(2)</td>  
+    <td class="serverity6">HIGH(6)</td>  
+    <td>
+        <a href="https://cwe.mitre.org/data/definitions/352">CWE-352</a>
+        Cross-Site Request Forgery (CSRF): asset 'user_service' has risk of Cross Site Request Forgery(CSRF)
+        <p>When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.</p>        
+    </td>
+    <td>TBD</td>
+    <td>Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level
+</td>
+    <td class="likelihood-1"></td>  
+    <td class="impact-1"></td>  
+    <td class="serverity-1"></td>  
+    <td>OPEN</td>
+</tr>
+
 </table>
 </p>
+
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>
+  mermaid.initialize({ securityLevel: 'loose' });
+  mermaid.run();
+</script>
 
 </body>
 </html>

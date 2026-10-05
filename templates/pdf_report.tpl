@@ -17,10 +17,6 @@ td, th {
   padding: 2px;
 }
 
-img {
-width:90%;
-}
-
 tr:nth-child(even){background-color: #f2f2f2;}
 
 th {
@@ -43,8 +39,10 @@ th {
 <h2>System Description</h2>
 <p>
 The Data Flow Diagram below provides an overview of the analyzed architecture.
-<img src="diagram.png"/>
 </p>
+<pre class="mermaid">
+{{mermaidDFD}}
+</pre>
 
 <h3>Trust Boundaries</h3>
 <table>
@@ -237,4 +235,9 @@ The following risks have been identified:
   Distribution of this report (in full or in part like diagrams or risk findings) requires that this disclaimer as well as the chapter about the TARALIZER toolkit and method used is kept intact as part of the distributed report or referenced from the distributed parts.
 
 </body>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>
+  mermaid.initialize({ securityLevel: 'loose' });
+  mermaid.run();
+</script>
 </html>

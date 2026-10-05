@@ -54,11 +54,6 @@ td, th {
   color: white;
 }
 
-
-img {
-width:100%;
-}
-
 tr:nth-child(even){background-color: #f2f2f2;}
 
 th {
@@ -81,8 +76,10 @@ th {
 <h2>System Description</h2>
 <p>
 The Data Flow Diagram below provides an overview of the analyzed architecture.
-<img src="diagram.png" alt="Data Flow Diagram"/>
 </p>
+<pre class="mermaid">
+{{mermaidDFD}}
+</pre>
 
 <h3>Trust Boundaries</h3>
 <table aria-describedby="Trust Boundaries">
@@ -242,6 +239,12 @@ The following risks have been identified:
 {{end}}
 </table>
 </p>
+
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>
+  mermaid.initialize({ securityLevel: 'loose' });
+  mermaid.run();
+</script>
 
 </body>
 </html>

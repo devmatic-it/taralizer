@@ -16,8 +16,8 @@ jobs:
         id: get_version
         run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
 
-      - name: Install dependencies graphviz, plantuml and wkhtmltopdf
-        run: sudo apt-get install -y graphviz plantuml wkhtmltopdf
+      - name: Install Chromium for chromedp
+        run: sudo apt-get update && sudo apt-get install -y chromium-browser
 
       - name: Validates GO releaser config
         uses: docker://goreleaser/goreleaser:latest
