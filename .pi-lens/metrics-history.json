@@ -1,0 +1,166 @@
+{
+  "version": 1,
+  "files": {
+    "pkg/taralizer/reporting_funcs.go": {
+      "latest": {
+        "commit": "3165741",
+        "timestamp": "2026-10-06T19:45:21.915Z",
+        "mi": 56.3,
+        "cognitive": 149,
+        "nesting": 4,
+        "lines": 215,
+        "maxCyclomatic": 18,
+        "entropy": 5.79
+      },
+      "history": [
+        {
+          "commit": "3165741",
+          "timestamp": "2026-10-06T19:45:21.915Z",
+          "mi": 56.3,
+          "cognitive": 149,
+          "nesting": 4,
+          "lines": 215,
+          "maxCyclomatic": 18,
+          "entropy": 5.79
+        }
+      ],
+      "trend": "stable"
+    },
+    "pkg/taralizer/model.go": {
+      "latest": {
+        "commit": "3165741",
+        "timestamp": "2026-10-06T19:46:58.645Z",
+        "mi": 56.2,
+        "cognitive": 39,
+        "nesting": 4,
+        "lines": 213,
+        "maxCyclomatic": 8,
+        "entropy": 6.4
+      },
+      "history": [
+        {
+          "commit": "3165741",
+          "timestamp": "2026-10-06T19:46:58.645Z",
+          "mi": 56.2,
+          "cognitive": 39,
+          "nesting": 4,
+          "lines": 213,
+          "maxCyclomatic": 8,
+          "entropy": 6.4
+        }
+      ],
+      "trend": "stable"
+    },
+    "pkg/taralizer/reporting.go": {
+      "latest": {
+        "commit": "3165741",
+        "timestamp": "2026-10-06T19:58:47.701Z",
+        "mi": 63.8,
+        "cognitive": 39,
+        "nesting": 3,
+        "lines": 127,
+        "maxCyclomatic": 6,
+        "entropy": 5.7
+      },
+      "history": [
+        {
+          "commit": "3165741",
+          "timestamp": "2026-10-06T19:58:47.701Z",
+          "mi": 63.8,
+          "cognitive": 39,
+          "nesting": 3,
+          "lines": 127,
+          "maxCyclomatic": 6,
+          "entropy": 5.7
+        }
+      ],
+      "trend": "stable"
+    },
+    "pkg/taralizer/taralizer.go": {
+      "latest": {
+        "commit": "3165741",
+        "timestamp": "2026-10-08T20:21:55.116Z",
+        "mi": 47,
+        "cognitive": 256,
+        "nesting": 6,
+        "lines": 446,
+        "maxCyclomatic": 31,
+        "entropy": 6.34
+      },
+      "history": [
+        {
+          "commit": "3165741",
+          "timestamp": "2026-10-06T20:14:39.226Z",
+          "mi": 47.5,
+          "cognitive": 223,
+          "nesting": 5,
+          "lines": 434,
+          "maxCyclomatic": 25,
+          "entropy": 6.34
+        },
+        {
+          "commit": "3165741",
+          "timestamp": "2026-10-08T20:21:55.116Z",
+          "mi": 47,
+          "cognitive": 256,
+          "nesting": 6,
+          "lines": 446,
+          "maxCyclomatic": 31,
+          "entropy": 6.34
+        }
+      ],
+      "trend": "regressing"
+    },
+    "pkg/taralizer/reporting_test.go": {
+      "latest": {
+        "commit": "3165741",
+        "timestamp": "2026-10-06T20:24:48.511Z",
+        "mi": 58.1,
+        "cognitive": 55,
+        "nesting": 3,
+        "lines": 155,
+        "maxCyclomatic": 13,
+        "entropy": 6.05
+      },
+      "history": [
+        {
+          "commit": "3165741",
+          "timestamp": "2026-10-06T20:24:48.511Z",
+          "mi": 58.1,
+          "cognitive": 55,
+          "nesting": 3,
+          "lines": 155,
+          "maxCyclomatic": 13,
+          "entropy": 6.05
+        }
+      ],
+      "trend": "stable"
+    },
+    "pkg/taralizer/taralizer_test.go": {
+      "latest": {
+        "commit": "3165741",
+        "timestamp": "2026-10-08T20:30:43.012Z",
+        "mi": 84.2,
+        "cognitive": 0,
+        "nesting": 1,
+        "lines": 15,
+        "maxCyclomatic": 1,
+        "entropy": 4.09
+      },
+      "history": [
+        {
+          "commit": "3165741",
+          "timestamp": "2026-10-08T20:30:43.012Z",
+          "mi": 84.2,
+          "cognitive": 0,
+          "nesting": 1,
+          "lines": 15,
+          "maxCyclomatic": 1,
+          "entropy": 4.09
+        }
+      ],
+      "trend": "stable"
+    }
+  },
+  "capturedAt": "2026-10-08T20:30:48.013Z"
+}

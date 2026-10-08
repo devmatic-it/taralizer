@@ -1,0 +1,24 @@
+{
+  "files": {
+    "pkg/taralizer/taralizer_test.go": {
+      "modifiedRanges": [
+        {
+          "start": 1,
+          "end": 37
+        }
+      ],
+      "importsChanged": true,
+      "lastEdit": "2026-10-08T20:32:48.762Z"
+    }
+  },
+  "turnCycles": 0,
+  "maxCycles": 3,
+  "lastUpdated": "2026-10-08T20:32:48.762Z",
+  "sessionId": "01a11d14-e057-76c7-962d-3559589e2edc",
+  "owner": {
+    "kind": "pi",
+    "id": "01a11d14-e057-76c7-962d-3559589e2edc",
+    "pid": 6929,
+    "lastSeen": "2026-10-08T20:32:48.762Z"
+  }
+}

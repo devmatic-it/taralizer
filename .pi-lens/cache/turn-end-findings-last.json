@@ -1,0 +1,6 @@
+{
+  "signature": "templates/console.tpl::ℹ️ Advisory — no action required this turn:\nCode-quality warnings introduced/touched this turn: 1 across 1 file(s).\nTop rules: pi-lens×1\nUse lens_diagnostics with mode=delta to inspect these warnings.\nNo action required unless you are already refactoring these areas.\nRaw report (only if you need the JSON): .pi-lens/cache/code-quality-warnings.json",
+  "sessionId": "01a11d14-e057-76c7-962d-3559589e2edc",
+  "projectSeqStart": 67,
+  "projectSeqEnd": 68
+}

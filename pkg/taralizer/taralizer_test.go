@@ -5,7 +5,7 @@
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//	http://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -29,5 +29,8 @@ func TestTaralizerEvaluate(t *testing.T) {
 func TestTaralizerRules(t *testing.T) {
 	i := NewTaralizer("asvs")
 	rules := i.RuleSet("asvs")
-	assert.NotEmpty(t, rules.Rules)
+	// Rules are now embedded in Rego files via # METADATA blocks.
+	// The ruleset.yaml is retained as a documentation reference.
+	assert.Empty(t, rules.Rules)
+	assert.Equal(t, "asvs", rules.Name)
 }

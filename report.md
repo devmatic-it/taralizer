@@ -153,20 +153,20 @@ flowchart TD
 
 | Name | Description | C | I | A |
 |------|-------------|---|---|---|
-| A1 | Angular and other client-side code delivered by the application. | 1 | 1 | 1 |
-| A2 | OIDC identity token | 2 | 1 | 1 |
-| A3 | OAuth2 access token | 2 | 1 | 1 |
-| A4 | OAuth2 refresh token | 2 | 1 | 1 |
-| A5 | active/ongoing bank transactions | 3 | 2 | 2 |
-| A6 | bank transaction history | 3 | 2 | 2 |
-| A7 | account balance of client | 3 | 2 | 2 |
-| A8 | root certificates | 3 | 2 | 2 |
-| A9 | Session ID | 2 | 2 | 2 |
-| A10 | personal-related end user information like e-mail to identity user |  |  |  |
-| A11 | passwort of a user | 3 | 2 | 2 |
-| A12 | contacts of the customer from past transactions | 2 | 2 | 2 |
-| A13 | credentials to access ledger db | 3 | 2 | 2 |
-| A14 | credentials to access ledger db | 3 | 2 | 2 |
+| A1 | Angular and other client-side code delivered by the application. | Public | Public | Public |
+| A2 | OIDC identity token | Internal | Public | Public |
+| A3 | OAuth2 access token | Internal | Public | Public |
+| A4 | OAuth2 refresh token | Internal | Public | Public |
+| A5 | active/ongoing bank transactions | Restricted | Internal | Internal |
+| A6 | bank transaction history | Restricted | Internal | Internal |
+| A7 | account balance of client | Restricted | Internal | Internal |
+| A8 | root certificates | Restricted | Internal | Internal |
+| A9 | Session ID | Internal | Internal | Internal |
+| A10 | personal-related end user information like e-mail to identity user | Unknown | Unknown | Unknown |
+| A11 | passwort of a user | Restricted | Internal | Internal |
+| A12 | contacts of the customer from past transactions | Internal | Internal | Internal |
+| A13 | credentials to access ledger db | Restricted | Internal | Internal |
+| A14 | credentials to access ledger db | Restricted | Internal | Internal |
 
 
 ### Threat Agents
@@ -196,36 +196,60 @@ We follow the [OWASP Risk Rating Methodology](https://owasp.org/www-community/OW
 
 | ID | Likelihood | Impact | Severity | Risk |
 |----|------------|--------|----------|------|
-| container-baseimage-backdooring@balance_reader | LOW(1) | MEDIUM(2) | LOW(2) | [CWE-912](https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html) **Container Base Image Backdooring**: asset 'balance_reader' has risk of container image backdooring through base images<br><br>When a technical asset is built using container technologies, Base Image Backdooring risks might arise where base images and other layers used contain vulnerable components or backdoors
+| container-baseimage-backdooring@balance_reader | LOW(1) | MEDIUM(2) | LOW(2) | [CWE-0](https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html) **Container Base Image Backdooring**: asset 'balance_reader' has risk of container image backdooring through base images<br><br>When a technical asset is built using container technologies, Base Image Backdooring risks might arise where base images and other layers used contain vulnerable components or backdoors
 <br>**Mitigation:** Google distroless image is used to mitigate risks.  <p>The product owner accepted the residual risks.</p>
  |
-| container-baseimage-backdooring@contacts | LOW(1) | MEDIUM(2) | LOW(2) | [CWE-912](https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html) **Container Base Image Backdooring**: asset 'contacts' has risk of container image backdooring through base images<br><br>When a technical asset is built using container technologies, Base Image Backdooring risks might arise where base images and other layers used contain vulnerable components or backdoors
+| container-baseimage-backdooring@contacts | LOW(1) | MEDIUM(2) | LOW(2) | [CWE-0](https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html) **Container Base Image Backdooring**: asset 'contacts' has risk of container image backdooring through base images<br><br>When a technical asset is built using container technologies, Base Image Backdooring risks might arise where base images and other layers used contain vulnerable components or backdoors
 <br>**Mitigation:** Google distroless image is used to mitigate risks.  <p>The product owner accepted the residual risks.</p>
  |
-| container-baseimage-backdooring@frontend | LOW(1) | MEDIUM(2) | LOW(2) | [CWE-912](https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html) **Container Base Image Backdooring**: asset 'frontend' has risk of container image backdooring through base images<br><br>When a technical asset is built using container technologies, Base Image Backdooring risks might arise where base images and other layers used contain vulnerable components or backdoors
+| container-baseimage-backdooring@frontend | LOW(1) | MEDIUM(2) | LOW(2) | [CWE-0](https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html) **Container Base Image Backdooring**: asset 'frontend' has risk of container image backdooring through base images<br><br>When a technical asset is built using container technologies, Base Image Backdooring risks might arise where base images and other layers used contain vulnerable components or backdoors
 <br>**Mitigation:** Google distroless image is used to mitigate risks.  <p>The product owner accepted the residual risks.</p>
  |
-| container-baseimage-backdooring@ledger_writer | LOW(1) | MEDIUM(2) | LOW(2) | [CWE-912](https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html) **Container Base Image Backdooring**: asset 'ledger_writer' has risk of container image backdooring through base images<br><br>When a technical asset is built using container technologies, Base Image Backdooring risks might arise where base images and other layers used contain vulnerable components or backdoors
+| container-baseimage-backdooring@ledger_writer | LOW(1) | MEDIUM(2) | LOW(2) | [CWE-0](https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html) **Container Base Image Backdooring**: asset 'ledger_writer' has risk of container image backdooring through base images<br><br>When a technical asset is built using container technologies, Base Image Backdooring risks might arise where base images and other layers used contain vulnerable components or backdoors
 <br>**Mitigation:** Google distroless image is used to mitigate risks.  <p>The product owner accepted the residual risks.</p>
  |
-| container-baseimage-backdooring@trans_history | LOW(1) | MEDIUM(2) | LOW(2) | [CWE-912](https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html) **Container Base Image Backdooring**: asset 'trans_history' has risk of container image backdooring through base images<br><br>When a technical asset is built using container technologies, Base Image Backdooring risks might arise where base images and other layers used contain vulnerable components or backdoors
+| container-baseimage-backdooring@trans_history | LOW(1) | MEDIUM(2) | LOW(2) | [CWE-0](https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html) **Container Base Image Backdooring**: asset 'trans_history' has risk of container image backdooring through base images<br><br>When a technical asset is built using container technologies, Base Image Backdooring risks might arise where base images and other layers used contain vulnerable components or backdoors
 <br>**Mitigation:** Google distroless image is used to mitigate risks.  <p>The product owner accepted the residual risks.</p>
  |
-| container-baseimage-backdooring@user_service | LOW(1) | MEDIUM(2) | LOW(2) | [CWE-912](https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html) **Container Base Image Backdooring**: asset 'user_service' has risk of container image backdooring through base images<br><br>When a technical asset is built using container technologies, Base Image Backdooring risks might arise where base images and other layers used contain vulnerable components or backdoors
+| container-baseimage-backdooring@user_service | LOW(1) | MEDIUM(2) | LOW(2) | [CWE-0](https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html) **Container Base Image Backdooring**: asset 'user_service' has risk of container image backdooring through base images<br><br>When a technical asset is built using container technologies, Base Image Backdooring risks might arise where base images and other layers used contain vulnerable components or backdoors
 <br>**Mitigation:** Google distroless image is used to mitigate risks.  <p>The product owner accepted the residual risks.</p>
  |
-| cross-site-request-forgery@balance_reader | HIGH(3) | MEDIUM(2) | HIGH(6) | [CWE-352](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html) **Cross-Site Request Forgery (CSRF)**: asset 'balance_reader' has risk of Cross Site Request Forgery(CSRF)<br><br>When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.<br>**Mitigation:** Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level
+| cross-site-request-forgery@balance_reader | HIGH(3) | MEDIUM(2) | HIGH(6) | [CWE-0](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html) **Cross-Site Request Forgery (CSRF)**: asset 'balance_reader' has risk of Cross Site Request Forgery(CSRF)<br><br>When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.<br>**Mitigation:** Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level
  |
-| cross-site-request-forgery@contacts | HIGH(3) | MEDIUM(2) | HIGH(6) | [CWE-352](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html) **Cross-Site Request Forgery (CSRF)**: asset 'contacts' has risk of Cross Site Request Forgery(CSRF)<br><br>When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.<br>**Mitigation:** Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level
+| cross-site-request-forgery@contacts | HIGH(3) | MEDIUM(2) | HIGH(6) | [CWE-0](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html) **Cross-Site Request Forgery (CSRF)**: asset 'contacts' has risk of Cross Site Request Forgery(CSRF)<br><br>When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.<br>**Mitigation:** Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level
  |
-| cross-site-request-forgery@frontend | HIGH(3) | MEDIUM(2) | HIGH(6) | [CWE-352](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html) **Cross-Site Request Forgery (CSRF)**: asset 'frontend' has risk of Cross Site Request Forgery(CSRF)<br><br>When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.<br>**Mitigation:** Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level
+| cross-site-request-forgery@frontend | HIGH(3) | MEDIUM(2) | HIGH(6) | [CWE-0](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html) **Cross-Site Request Forgery (CSRF)**: asset 'frontend' has risk of Cross Site Request Forgery(CSRF)<br><br>When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.<br>**Mitigation:** Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level
  |
-| cross-site-request-forgery@ledger_writer | HIGH(3) | MEDIUM(2) | HIGH(6) | [CWE-352](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html) **Cross-Site Request Forgery (CSRF)**: asset 'ledger_writer' has risk of Cross Site Request Forgery(CSRF)<br><br>When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.<br>**Mitigation:** Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level
+| cross-site-request-forgery@ledger_writer | HIGH(3) | MEDIUM(2) | HIGH(6) | [CWE-0](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html) **Cross-Site Request Forgery (CSRF)**: asset 'ledger_writer' has risk of Cross Site Request Forgery(CSRF)<br><br>When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.<br>**Mitigation:** Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level
  |
-| cross-site-request-forgery@trans_history | HIGH(3) | MEDIUM(2) | HIGH(6) | [CWE-352](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html) **Cross-Site Request Forgery (CSRF)**: asset 'trans_history' has risk of Cross Site Request Forgery(CSRF)<br><br>When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.<br>**Mitigation:** Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level
+| cross-site-request-forgery@trans_history | HIGH(3) | MEDIUM(2) | HIGH(6) | [CWE-0](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html) **Cross-Site Request Forgery (CSRF)**: asset 'trans_history' has risk of Cross Site Request Forgery(CSRF)<br><br>When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.<br>**Mitigation:** Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level
  |
-| cross-site-request-forgery@user_service | HIGH(3) | MEDIUM(2) | HIGH(6) | [CWE-352](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html) **Cross-Site Request Forgery (CSRF)**: asset 'user_service' has risk of Cross Site Request Forgery(CSRF)<br><br>When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.<br>**Mitigation:** Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level
+| cross-site-request-forgery@user_service | HIGH(3) | MEDIUM(2) | HIGH(6) | [CWE-0](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html) **Cross-Site Request Forgery (CSRF)**: asset 'user_service' has risk of Cross Site Request Forgery(CSRF)<br><br>When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.<br>**Mitigation:** Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level
  |
+| software-integrity@balance_reader | MEDIUM(2) | VERY HIGH(4) | HIGH(8) | [CWE-0](https://cheatsheetseries.owasp.org/cheatsheets/Software_Integrity_Cheat_Sheet.html) **Software Integrity**: asset 'balance_reader' lacks software integrity verification (signing, SBOM, etc.)<br><br>Technical assets should verify software integrity (signing, SBOM, etc.).
+<br>**Mitigation:** Verify software integrity through signing and SBOM. |
+| software-integrity@contacts | MEDIUM(2) | VERY HIGH(4) | HIGH(8) | [CWE-0](https://cheatsheetseries.owasp.org/cheatsheets/Software_Integrity_Cheat_Sheet.html) **Software Integrity**: asset 'contacts' lacks software integrity verification (signing, SBOM, etc.)<br><br>Technical assets should verify software integrity (signing, SBOM, etc.).
+<br>**Mitigation:** Verify software integrity through signing and SBOM. |
+| software-integrity@frontend | MEDIUM(2) | VERY HIGH(4) | HIGH(8) | [CWE-0](https://cheatsheetseries.owasp.org/cheatsheets/Software_Integrity_Cheat_Sheet.html) **Software Integrity**: asset 'frontend' lacks software integrity verification (signing, SBOM, etc.)<br><br>Technical assets should verify software integrity (signing, SBOM, etc.).
+<br>**Mitigation:** Verify software integrity through signing and SBOM. |
+| software-integrity@ledger_writer | MEDIUM(2) | VERY HIGH(4) | HIGH(8) | [CWE-0](https://cheatsheetseries.owasp.org/cheatsheets/Software_Integrity_Cheat_Sheet.html) **Software Integrity**: asset 'ledger_writer' lacks software integrity verification (signing, SBOM, etc.)<br><br>Technical assets should verify software integrity (signing, SBOM, etc.).
+<br>**Mitigation:** Verify software integrity through signing and SBOM. |
+| software-integrity@trans_history | MEDIUM(2) | VERY HIGH(4) | HIGH(8) | [CWE-0](https://cheatsheetseries.owasp.org/cheatsheets/Software_Integrity_Cheat_Sheet.html) **Software Integrity**: asset 'trans_history' lacks software integrity verification (signing, SBOM, etc.)<br><br>Technical assets should verify software integrity (signing, SBOM, etc.).
+<br>**Mitigation:** Verify software integrity through signing and SBOM. |
+| software-integrity@user_service | MEDIUM(2) | VERY HIGH(4) | HIGH(8) | [CWE-0](https://cheatsheetseries.owasp.org/cheatsheets/Software_Integrity_Cheat_Sheet.html) **Software Integrity**: asset 'user_service' lacks software integrity verification (signing, SBOM, etc.)<br><br>Technical assets should verify software integrity (signing, SBOM, etc.).
+<br>**Mitigation:** Verify software integrity through signing and SBOM. |
+| vulnerable-dependencies@balance_reader | MEDIUM(2) | HIGH(3) | HIGH(6) | [CWE-0](https://cheatsheetseries.owasp.org/cheatsheets/Dependency_Usage_Cheat_Sheet.html) **Vulnerable Dependencies**: asset 'balance_reader' uses vulnerable dependencies without scanning<br><br>Technical assets should scan dependencies for known vulnerabilities.
+<br>**Mitigation:** Regularly scan dependencies for known vulnerabilities. |
+| vulnerable-dependencies@contacts | MEDIUM(2) | HIGH(3) | HIGH(6) | [CWE-0](https://cheatsheetseries.owasp.org/cheatsheets/Dependency_Usage_Cheat_Sheet.html) **Vulnerable Dependencies**: asset 'contacts' uses vulnerable dependencies without scanning<br><br>Technical assets should scan dependencies for known vulnerabilities.
+<br>**Mitigation:** Regularly scan dependencies for known vulnerabilities. |
+| vulnerable-dependencies@frontend | MEDIUM(2) | HIGH(3) | HIGH(6) | [CWE-0](https://cheatsheetseries.owasp.org/cheatsheets/Dependency_Usage_Cheat_Sheet.html) **Vulnerable Dependencies**: asset 'frontend' uses vulnerable dependencies without scanning<br><br>Technical assets should scan dependencies for known vulnerabilities.
+<br>**Mitigation:** Regularly scan dependencies for known vulnerabilities. |
+| vulnerable-dependencies@ledger_writer | MEDIUM(2) | HIGH(3) | HIGH(6) | [CWE-0](https://cheatsheetseries.owasp.org/cheatsheets/Dependency_Usage_Cheat_Sheet.html) **Vulnerable Dependencies**: asset 'ledger_writer' uses vulnerable dependencies without scanning<br><br>Technical assets should scan dependencies for known vulnerabilities.
+<br>**Mitigation:** Regularly scan dependencies for known vulnerabilities. |
+| vulnerable-dependencies@trans_history | MEDIUM(2) | HIGH(3) | HIGH(6) | [CWE-0](https://cheatsheetseries.owasp.org/cheatsheets/Dependency_Usage_Cheat_Sheet.html) **Vulnerable Dependencies**: asset 'trans_history' uses vulnerable dependencies without scanning<br><br>Technical assets should scan dependencies for known vulnerabilities.
+<br>**Mitigation:** Regularly scan dependencies for known vulnerabilities. |
+| vulnerable-dependencies@user_service | MEDIUM(2) | HIGH(3) | HIGH(6) | [CWE-0](https://cheatsheetseries.owasp.org/cheatsheets/Dependency_Usage_Cheat_Sheet.html) **Vulnerable Dependencies**: asset 'user_service' uses vulnerable dependencies without scanning<br><br>Technical assets should scan dependencies for known vulnerabilities.
+<br>**Mitigation:** Regularly scan dependencies for known vulnerabilities. |
 
 
 ---
@@ -273,23 +297,34 @@ The OWASP Application Security Verification Standard is specified [here](https:/
 #### Rule missing-authentication
 
 - **Title:** Missing Authentication
-- **Description:** Technical assets should autheticate incoming requests. 
-- **CWE:** [306](https://cwe.mitre.org/data/definitions/306)
+- **Description:** Technical assets should authenticate incoming requests.
+- **CWE:** [0](https://cwe.mitre.org/data/definitions/0)
 - **Mitigation:** apply an authentication method to the technical asset.
 - **URL:** [https://cheatsheetseries.owasp.org/cheatsheets/Transport_Layer_Protection_Cheat_Sheet.html](https://cheatsheetseries.owasp.org/cheatsheets/Transport_Layer_Protection_Cheat_Sheet.html)
-- **Base Likelihood:** HIGH(3)
-- **Base Impact:** MEDIUM(2)
+- **Base Likelihood:** NONE(0)
+- **Base Impact:** NONE(0)
+
+
+#### Rule missing-authorization
+
+- **Title:** Missing Authorization
+- **Description:** Technical assets should perform authorization checks on incoming requests.
+- **CWE:** [0](https://cwe.mitre.org/data/definitions/0)
+- **Mitigation:** apply an authorization check to the technical asset.
+- **URL:** [https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html](https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html)
+- **Base Likelihood:** NONE(0)
+- **Base Impact:** NONE(0)
 
 
 #### Rule insecure-proto
 
 - **Title:** Unencrypted Communication
-- **Description:** Data at transition should be encrypted. 
-- **CWE:** [319](https://cwe.mitre.org/data/definitions/319)
+- **Description:** Data at transition should be encrypted.
+- **CWE:** [0](https://cwe.mitre.org/data/definitions/0)
 - **Mitigation:** apply an authentication method to the technical asset.
 - **URL:** [https://cheatsheetseries.owasp.org/cheatsheets/Transport_Layer_Protection_Cheat_Sheet.html](https://cheatsheetseries.owasp.org/cheatsheets/Transport_Layer_Protection_Cheat_Sheet.html)
-- **Base Likelihood:** HIGH(3)
-- **Base Impact:** MEDIUM(2)
+- **Base Likelihood:** NONE(0)
+- **Base Impact:** NONE(0)
 
 
 #### Rule missing-vault
@@ -297,11 +332,11 @@ The OWASP Application Security Verification Standard is specified [here](https:/
 - **Title:** Missing Vault (Secret Storage)
 - **Description:** In order to avoid the risk of secret leakage via config files (when attacked through vulnerabilities being able to read files like Path-Traversal and others), it is best practice to use a separate hardened process with proper authentication authorization, and audit logging to access config secrets (like credentials, private keys, client certificates, etc.). This component is usually some kind of Vault.
 
-- **CWE:** [522](https://cwe.mitre.org/data/definitions/522)
+- **CWE:** [0](https://cwe.mitre.org/data/definitions/0)
 - **Mitigation:** Consider using a Vault (Secret Storage) to securely store and access config secrets (like credentials, private keys, client certificates, etc.)
 - **URL:** [https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html](https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html)
-- **Base Likelihood:** LOW(1)
-- **Base Impact:** LOW(1)
+- **Base Likelihood:** NONE(0)
+- **Base Impact:** NONE(0)
 
 
 #### Rule missing-waf
@@ -309,11 +344,11 @@ The OWASP Application Security Verification Standard is specified [here](https:/
 - **Title:** Missing Web Application Firewall (WAF)
 - **Description:** To have a first line of filtering defense, security architectures with web-services or web-applications should include a WAF in front of them. Even though a WAF is not a replacement for security (all components must be secure even without a WAF) it adds another layer of defense to the overall system by delaying some attacks and having easier attack alerting through it
 
-- **CWE:** [1008](https://cwe.mitre.org/data/definitions/1008)
+- **CWE:** [0](https://cwe.mitre.org/data/definitions/0)
 - **Mitigation:** Consider placing a fully-managed Web Application Firewall (WAF) in front of the web-services and/or web-applications
 - **URL:** [https://cheatsheetseries.owasp.org/cheatsheets/Virtual_Patching_Cheat_Sheet.html](https://cheatsheetseries.owasp.org/cheatsheets/Virtual_Patching_Cheat_Sheet.html)
-- **Base Likelihood:** LOW(1)
-- **Base Impact:** LOW(1)
+- **Base Likelihood:** NONE(0)
+- **Base Impact:** NONE(0)
 
 
 #### Rule cross-site-scripting
@@ -321,12 +356,12 @@ The OWASP Application Security Verification Standard is specified [here](https:/
 - **Title:** Cross-Site Scripting (XSS)
 - **Description:** For each web application Cross-Site Scripting (XSS) risks might arise. In terms of the overall risk level take other applications running on the same domain into account as well.
 
-- **CWE:** [79](https://cwe.mitre.org/data/definitions/79)
-- **Mitigation:** Try to encode all values sent back to the browser and also handle DOM-manipulations in a safe way to avoid DOM-based XSS. When a third-party product is used instead of custom developed software,  check if the product applies the proper mitigation and ensure a reasonable patch-level.
+- **CWE:** [0](https://cwe.mitre.org/data/definitions/0)
+- **Mitigation:** Try to encode all values sent back to the browser and also handle DOM-manipulations in a safe way to avoid DOM-based XSS. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.
 
-- **URL:** [https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)
-- **Base Likelihood:** MEDIUM(2)
-- **Base Impact:** MEDIUM(2)
+- **URL:** [https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_scripting_Prevention_Cheat_Sheet.html](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_scripting_Prevention_Cheat_Sheet.html)
+- **Base Likelihood:** NONE(0)
+- **Base Impact:** NONE(0)
 
 
 #### Rule container-baseimage-backdooring
@@ -334,24 +369,192 @@ The OWASP Application Security Verification Standard is specified [here](https:/
 - **Title:** Container Base Image Backdooring
 - **Description:** When a technical asset is built using container technologies, Base Image Backdooring risks might arise where base images and other layers used contain vulnerable components or backdoors
 
-- **CWE:** [912](https://cwe.mitre.org/data/definitions/912)
+- **CWE:** [0](https://cwe.mitre.org/data/definitions/0)
 - **Mitigation:** Apply hardening of all container infrastructures (see for example the CIS-Benchmarks for Docker and Kubernetes and the Docker Bench for Security Use only trusted base images of the original vendors, verify digital signatures and apply image creation best practices. Also consider using Google's Distroless base images or otherwise very small base images. Regularly execute container image scans with tools checking the layers for vulnerable components.
 
 - **URL:** [https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html](https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html)
-- **Base Likelihood:** MEDIUM(2)
-- **Base Impact:** MEDIUM(2)
+- **Base Likelihood:** NONE(0)
+- **Base Impact:** NONE(0)
 
 
 #### Rule cross-site-request-forgery
 
 - **Title:** Cross-Site Request Forgery (CSRF)
 - **Description:** When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.
-- **CWE:** [352](https://cwe.mitre.org/data/definitions/352)
+- **CWE:** [0](https://cwe.mitre.org/data/definitions/0)
 - **Mitigation:** Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level
 
 - **URL:** [https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html)
-- **Base Likelihood:** HIGH(3)
-- **Base Impact:** LOW(1)
+- **Base Likelihood:** NONE(0)
+- **Base Impact:** NONE(0)
+
+
+#### Rule missing-audit-logging
+
+- **Title:** Missing Audit Logging
+- **Description:** Technical assets should log authentication and authorization events for security monitoring.
+
+- **CWE:** [0](https://cwe.mitre.org/data/definitions/0)
+- **Mitigation:** Implement audit logging for authentication and authorization events.
+- **URL:** [https://cheatsheetseries.owasp.org/cheatsheets/Audit_Logging_Cheat_Sheet.html](https://cheatsheetseries.owasp.org/cheatsheets/Audit_Logging_Cheat_Sheet.html)
+- **Base Likelihood:** NONE(0)
+- **Base Impact:** NONE(0)
+
+
+#### Rule missing-input-validation
+
+- **Title:** Missing Input Validation
+- **Description:** Web applications should validate all user-supplied input to prevent injection attacks.
+
+- **CWE:** [0](https://cwe.mitre.org/data/definitions/0)
+- **Mitigation:** Apply input validation to all user-supplied data.
+- **URL:** [https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html](https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html)
+- **Base Likelihood:** NONE(0)
+- **Base Impact:** NONE(0)
+
+
+#### Rule missing-access-control
+
+- **Title:** Missing Access Control
+- **Description:** Web applications should enforce proper access control checks on all resources.
+
+- **CWE:** [0](https://cwe.mitre.org/data/definitions/0)
+- **Mitigation:** Implement proper access control checks on all resources.
+- **URL:** [https://cheatsheetseries.owasp.org/cheatsheets/Access_Control_Cheat_Sheet.html](https://cheatsheetseries.owasp.org/cheatsheets/Access_Control_Cheat_Sheet.html)
+- **Base Likelihood:** NONE(0)
+- **Base Impact:** NONE(0)
+
+
+#### Rule missing-cryptographic-controls
+
+- **Title:** Missing Cryptographic Controls
+- **Description:** Technical assets should use cryptographic controls for sensitive data.
+
+- **CWE:** [0](https://cwe.mitre.org/data/definitions/0)
+- **Mitigation:** Apply cryptographic controls for sensitive data.
+- **URL:** [https://cheatsheetseries.owasp.org/cheatsheets/Encryption_Cheat_Sheet.html](https://cheatsheetseries.owasp.org/cheatsheets/Encryption_Cheat_Sheet.html)
+- **Base Likelihood:** NONE(0)
+- **Base Impact:** NONE(0)
+
+
+#### Rule missing-injection-protection
+
+- **Title:** Missing Injection Protection
+- **Description:** Web applications should protect against injection attacks (SQL, command, NoSQL, LDAP).
+
+- **CWE:** [0](https://cwe.mitre.org/data/definitions/0)
+- **Mitigation:** Apply input validation and parameterized queries.
+- **URL:** [https://cheatsheetseries.owasp.org/cheatsheets/Injection_Prevention_Cheat_Sheet.html](https://cheatsheetseries.owasp.org/cheatsheets/Injection_Prevention_Cheat_Sheet.html)
+- **Base Likelihood:** NONE(0)
+- **Base Impact:** NONE(0)
+
+
+#### Rule security-misconfiguration
+
+- **Title:** Security Misconfiguration
+- **Description:** Technical assets should have proper security configuration (security headers, weak defaults).
+
+- **CWE:** [0](https://cwe.mitre.org/data/definitions/0)
+- **Mitigation:** Apply proper security configuration.
+- **URL:** [https://cheatsheetseries.owasp.org/cheatsheets/Server_Security_Cheat_Sheet.html](https://cheatsheetseries.owasp.org/cheatsheets/Server_Security_Cheat_Sheet.html)
+- **Base Likelihood:** NONE(0)
+- **Base Impact:** NONE(0)
+
+
+#### Rule vulnerable-dependencies
+
+- **Title:** Vulnerable Dependencies
+- **Description:** Technical assets should scan dependencies for known vulnerabilities.
+
+- **CWE:** [0](https://cwe.mitre.org/data/definitions/0)
+- **Mitigation:** Regularly scan dependencies for known vulnerabilities.
+- **URL:** [https://cheatsheetseries.owasp.org/cheatsheets/Dependency_Usage_Cheat_Sheet.html](https://cheatsheetseries.owasp.org/cheatsheets/Dependency_Usage_Cheat_Sheet.html)
+- **Base Likelihood:** NONE(0)
+- **Base Impact:** NONE(0)
+
+
+#### Rule authentication-failure
+
+- **Title:** Authentication Failure
+- **Description:** Technical assets should implement proper authentication for all endpoints.
+
+- **CWE:** [0](https://cwe.mitre.org/data/definitions/0)
+- **Mitigation:** Implement proper authentication for all endpoints.
+- **URL:** [https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html](https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html)
+- **Base Likelihood:** NONE(0)
+- **Base Impact:** NONE(0)
+
+
+#### Rule software-integrity
+
+- **Title:** Software Integrity
+- **Description:** Technical assets should verify software integrity (signing, SBOM, etc.).
+
+- **CWE:** [0](https://cwe.mitre.org/data/definitions/0)
+- **Mitigation:** Verify software integrity through signing and SBOM.
+- **URL:** [https://cheatsheetseries.owasp.org/cheatsheets/Software_Integrity_Cheat_Sheet.html](https://cheatsheetseries.owasp.org/cheatsheets/Software_Integrity_Cheat_Sheet.html)
+- **Base Likelihood:** NONE(0)
+- **Base Impact:** NONE(0)
+
+
+#### Rule insufficient-logging
+
+- **Title:** Insufficient Logging and Monitoring
+- **Description:** Technical assets should monitor and alert for security events.
+
+- **CWE:** [0](https://cwe.mitre.org/data/definitions/0)
+- **Mitigation:** Implement monitoring and alerting for security events.
+- **URL:** [https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html](https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html)
+- **Base Likelihood:** NONE(0)
+- **Base Impact:** NONE(0)
+
+
+#### Rule ssrf-vulnerability
+
+- **Title:** SSRF Vulnerability
+- **Description:** Technical assets should protect against Server-Side Request Forgery attacks.
+
+- **CWE:** [0](https://cwe.mitre.org/data/definitions/0)
+- **Mitigation:** Protect against SSRF for URL fetching.
+- **URL:** [https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html](https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html)
+- **Base Likelihood:** NONE(0)
+- **Base Impact:** NONE(0)
+
+
+#### Rule http-security-headers
+
+- **Title:** HTTP Security Headers
+- **Description:** Web applications should enforce security headers (HSTS, CSP, X-Frame-Options, etc.).
+
+- **CWE:** [0](https://cwe.mitre.org/data/definitions/0)
+- **Mitigation:** Enforce security headers.
+- **URL:** [https://cheatsheetseries.owasp.org/cheatsheets/HTML5_Security_Cheat_Sheet.html](https://cheatsheetseries.owasp.org/cheatsheets/HTML5_Security_Cheat_Sheet.html)
+- **Base Likelihood:** NONE(0)
+- **Base Impact:** NONE(0)
+
+
+#### Rule missing-external-system-review
+
+- **Title:** Missing External System Review
+- **Description:** Technical assets should review security of external systems they communicate with.
+
+- **CWE:** [0](https://cwe.mitre.org/data/definitions/0)
+- **Mitigation:** Review security of external systems.
+- **URL:** [https://cheatsheetseries.owasp.org/cheatsheets/Third_Party_Component_Security_Cheat_Sheet.html](https://cheatsheetseries.owasp.org/cheatsheets/Third_Party_Component_Security_Cheat_Sheet.html)
+- **Base Likelihood:** NONE(0)
+- **Base Impact:** NONE(0)
+
+
+#### Rule session-management
+
+- **Title:** Session Management
+- **Description:** Technical assets should implement secure session management (session fixation prevention, secure cookie flags, etc.).
+
+- **CWE:** [0](https://cwe.mitre.org/data/definitions/0)
+- **Mitigation:** Implement secure session management.
+- **URL:** [https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html](https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html)
+- **Base Likelihood:** NONE(0)
+- **Base Impact:** NONE(0)
 
 
 

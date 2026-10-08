@@ -24,6 +24,7 @@ import (
 	"text/template"
 
 	"github.com/chromedp/chromedp"
+	"github.com/charmbracelet/glamour"
 )
 
 // ReportEngine generates HTML and PDF reports from a Taralizer model.
@@ -120,6 +121,46 @@ func (svc *ReportEngine) GenerateReportFileMarkdown(filename string, tplFile str
 	defer fo.Close()
 
 	return svc.GenerateReport(fo, tplFile, report)
+}
+
+// GenerateConsoleReport renders the console template to stdout.
+func (svc *ReportEngine) GenerateConsoleReport(report Report) error {
+	tplDir, err := svc.GetTemplateDir()
+	if err != nil {
+		return fmt.Errorf("find templates: %w", err)
+	}
+	return svc.GenerateReport(os.Stdout, tplDir+"console.tpl", report)
+}
+
+// GenerateConsoleStyledReport renders the console template with glamour styling to stdout.
+func (svc *ReportEngine) GenerateConsoleStyledReport(report Report) error {
+	tplDir, err := svc.GetTemplateDir()
+	if err != nil {
+		return fmt.Errorf("find templates: %w", err)
+	}
+
+	// Render the console template and style it with glamour
+	var buf bytes.Buffer
+	if err := svc.GenerateReport(&buf, tplDir+"console.tpl", report); err != nil {
+		return fmt.Errorf("render template: %w", err)
+	}
+
+	renderer, err := glamour.NewTermRenderer(
+		glamour.WithStandardStyle("dark"),
+		glamour.WithWordWrap(120),
+	)
+	if err != nil {
+		return fmt.Errorf("create glamour renderer: %w", err)
+	}
+	defer renderer.Close()
+
+	output, err := renderer.Render(buf.String())
+	if err != nil {
+		return fmt.Errorf("render markdown: %w", err)
+	}
+
+	fmt.Print(output)
+	return nil
 }
 
 // GenerateReport renders tplFile into wr.

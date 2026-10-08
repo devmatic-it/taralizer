@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "actionFusion": true,
+  "observationPack": true,
+  "evidencePreservingReducer": true,
+  "evidencePreservingReducerProvider": "lmstudio",
+  "evidencePreservingReducerModel": "qwen/qwen3.6-35b-a3b",
+  "onlineContextCompact": true,
+  "cacheWriteReadRatio": 12.5
+}

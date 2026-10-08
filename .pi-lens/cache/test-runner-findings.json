@@ -1,0 +1,94 @@
+{
+  "content": "[from a prior turn — the edit that triggered this run had already been superseded by the time results came back]\n\n[Tests] ✗ 1/1 failed, 0 passed — go\n  ✗ TestGenerateConsoleReport\n    TestGenerateConsoleReport\n  → Fix failing tests before proceeding",
+  "stale": true,
+  "results": [
+    {
+      "file": "/Users/bator/Documents/projects/taralizer/pkg/taralizer/taralizer_test.go",
+      "sourceFile": "",
+      "runner": "go",
+      "passed": 0,
+      "failed": 1,
+      "skipped": 0,
+      "failures": [
+        {
+          "name": "TestGenerateConsoleReport",
+          "message": "TestGenerateConsoleReport"
+        }
+      ]
+    }
+  ],
+  "verdicts": [
+    {
+      "file": "/Users/bator/Documents/projects/taralizer/pkg/taralizer/taralizer_test.go",
+      "sourceFile": "/Users/bator/Documents/projects/taralizer/pkg/taralizer/taralizer_test.go",
+      "fileSeq": {
+        "state": "known",
+        "value": 1
+      }
+    }
+  ],
+  "testRunGeneration": 6,
+  "launchedFrom": {
+    "revision": {
+      "sessionId": "01a11d14-e057-76c7-962d-3559589e2edc",
+      "projectSeq": 67,
+      "turnIndex": 76,
+      "generation": 6,
+      "capturedAt": 1791491452761
+    },
+    "files": [
+      {
+        "path": "/Users/bator/Documents/projects/taralizer/pkg/taralizer/taralizer_test.go",
+        "role": "source",
+        "mtimeMs": 1791491450780.8828,
+        "size": 1189,
+        "sha256": "7119972d26e80d553ce3ed7af2720b0690abfc93006dc36e80bcfad9e29e1069"
+      }
+    ]
+  },
+  "publishedAgainst": {
+    "revision": {
+      "sessionId": "01a11d14-e057-76c7-962d-3559589e2edc",
+      "projectSeq": 67,
+      "turnIndex": 77,
+      "generation": 6,
+      "capturedAt": 1791491454543
+    },
+    "files": [
+      {
+        "path": "/Users/bator/Documents/projects/taralizer/pkg/taralizer/taralizer_test.go",
+        "role": "source",
+        "mtimeMs": 1791491450780.8828,
+        "size": 1189,
+        "sha256": "7119972d26e80d553ce3ed7af2720b0690abfc93006dc36e80bcfad9e29e1069"
+      }
+    ]
+  },
+  "provenance": {
+    "revision": {
+      "sessionId": "01a11d14-e057-76c7-962d-3559589e2edc",
+      "projectSeq": 67,
+      "turnIndex": 77,
+      "generation": 6,
+      "capturedAt": 1791491454543
+    },
+    "files": [
+      {
+        "path": "/Users/bator/Documents/projects/taralizer/pkg/taralizer/taralizer_test.go",
+        "role": "source",
+        "mtimeMs": 1791491450780.8828,
+        "size": 1189,
+        "sha256": "7119972d26e80d553ce3ed7af2720b0690abfc93006dc36e80bcfad9e29e1069"
+      }
+    ]
+  },
+  "superseded": true,
+  "runnerErrorOnly": false,
+  "deferredTargets": [],
+  "retiredTargets": [],
+  "deliveryEligible": {
+    "sessionId": "01a11d14-e057-76c7-962d-3559589e2edc",
+    "generation": 6,
+    "eligibleAt": 1791491568773
+  }
+}

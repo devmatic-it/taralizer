@@ -1,20 +1,17 @@
-TARALIZER
+# Risk Assessment Report
 
-(1) Threat Agents
-The following threat agents are used:
-{{range .ThreatAgents}}  {{.Id}} : {{.Description}}
+{{if .Title}}## {{.Title}}{{end}}
+{{if .Customer}}**Customer:** {{.Customer}}{{end}}
+{{if .Date}}**Date:** {{.Date}}{{end}}
+{{if .Author.Name}}**Author:** {{.Author.Name}}{{end}}
+
+---
+
+## Identified Risks
+
+| ID | Likelihood | Impact | Severity | Risk |
+|----|------------|--------|----------|------|
+{{range $risk := .Risks}}| {{$risk.Id}} | {{likelihood $risk.Likelihood}} | {{impact $risk.Impact}} | {{severity $risk.Severity}} | {{if $risk.Url}}[CWE-{{$risk.Cwe}}]({{$risk.Url}}) {{end}}**{{$risk.Title}}**: {{$risk.Message}} |---|
 {{end}}
 
-(2) Data Assets
-The following data assets are used:
-{{range .DataAssets}}  {{.Id}} : {{.Description}}
-{{end}}
 
-(3) Technical Assets
-The following technical assets have been defined:
-{{range .TechnicalAssets}}  {{.Id}} : {{.Description}}
-{{end}}
-
-(4) Risks
-The following risks have been identified:
-{{range .Risks}}  {{.Severity} {{.Id}} : {{.Message}}{{end}}

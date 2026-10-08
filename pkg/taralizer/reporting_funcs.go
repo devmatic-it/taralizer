@@ -5,7 +5,7 @@
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//	http://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -29,18 +29,20 @@ func (svc *ReportEngine) createFuncMap(report Report) template.FuncMap {
 	return template.FuncMap{
 		"findTrustedBoundary": func(id string) *TrustBoundary { return findTrustBoundary(rp, id) },
 		"findTechnicalAsset":  func(id string) *TechnicalAsset { return findTechnicalAsset(rp, id) },
-		"findThreatAgent":     func(id string) *ThreatAgent   { return findThreatAgent(rp, id) },
-		"isRootTrustBoundary": func(id string) bool           { return isRootTrustBoundary(rp, id) },
-		"likelihood":          func(s int64) string           { return likelihoodimpact(s) },
-		"impact":              func(s int64) string           { return likelihoodimpact(s) },
-		"severity":            func(s int64) string           { return severity(s) },
-		"dataAssetNames":      func(ids []string) string      { return getDataAssetNames(report, ids) },
-		"replaceAll":          func(old, new, s string) string      { return strings.ReplaceAll(s, old, new) },
-		"sanitizeMermaidID":   func(name string) string           { return sanitizeMermaidID(name) },
+		"findThreatAgent":     func(id string) *ThreatAgent { return findThreatAgent(rp, id) },
+		"isRootTrustBoundary": func(id string) bool { return isRootTrustBoundary(rp, id) },
+		"likelihood":          func(s int64) string { return likelihoodimpact(s) },
+		"impact":              func(s int64) string { return likelihoodimpact(s) },
+		"severity":            func(s int64) string { return severity(s) },
+		"dataAssetNames":      func(ids []string) string { return getDataAssetNames(report, ids) },
+		"replaceAll":          func(old, new, s string) string { return strings.ReplaceAll(s, old, new) },
+		"sanitizeMermaidID":   func(name string) string { return sanitizeMermaidID(name) },
 		"mermaidDFD":          func() string { return mermaidDFD(report) },
 		"markdownDFD":         func() string { return mermaidDFD(report) },
 		"repeat":              func(s string, count int) string { return strings.Repeat(s, count) },
-		"add":                 func(a, b int) int              { return a + b },
+		"add":                 func(a, b int) int { return a + b },
+		"dataAssetLabel":      func(s string) string { return dataAssetLabel(s) },
+		"lower":               func(s int64) string { return strings.ToLower(levelLabel(s)) },
 	}
 }
 
@@ -54,25 +56,35 @@ func severity(severity int64) string {
 		return fmt.Sprintf(REPORT_FMT_STRING, "MEDIUM", severity)
 	case severity >= 1:
 		return fmt.Sprintf(REPORT_FMT_STRING, "LOW", severity)
-	case severity >= 0:
+	case severity == 0:
 		return fmt.Sprintf(REPORT_FMT_STRING, "NONE", severity)
+	case severity == -1:
+		return fmt.Sprintf(REPORT_FMT_STRING, "TBD", severity)
 	default:
 		return ""
 	}
 }
 
 func likelihoodimpact(severity int64) string {
+	return fmt.Sprintf(REPORT_FMT_STRING, levelLabel(severity), severity)
+}
+
+// levelLabel returns the plain text label for a numeric level (used by
+// likelihood and impact badges in the templates).
+func levelLabel(level int64) string {
 	switch {
-	case severity == 0:
-		return fmt.Sprintf(REPORT_FMT_STRING, "NONE", severity)
-	case severity == 1:
-		return fmt.Sprintf(REPORT_FMT_STRING, "LOW", severity)
-	case severity == 2:
-		return fmt.Sprintf(REPORT_FMT_STRING, "MEDIUM", severity)
-	case severity == 3:
-		return fmt.Sprintf(REPORT_FMT_STRING, "HIGH", severity)
-	case severity >= 4:
-		return fmt.Sprintf(REPORT_FMT_STRING, "VERY HIGH", severity)
+	case level == 0:
+		return "NONE"
+	case level == 1:
+		return "LOW"
+	case level == 2:
+		return "MEDIUM"
+	case level == 3:
+		return "HIGH"
+	case level >= 4:
+		return "VERY HIGH"
+	case level == -1:
+		return "TBD"
 	default:
 		return ""
 	}
@@ -246,4 +258,22 @@ func buildLinkLabel(conn CommunicationLink) string {
 		return conn.Protocol
 	}
 	return conn.Protocol + " / " + conn.Description
+}
+
+// dataAssetLabel converts string data asset classification to human-readable labels.
+func dataAssetLabel(value string) string {
+	switch value {
+	case "1":
+		return "Public"
+	case "2":
+		return "Internal"
+	case "3":
+		return "Restricted"
+	case "4":
+		return "Confidential"
+	case "5":
+		return "Strictly-Confidential"
+	default:
+		return "Unknown"
+	}
 }

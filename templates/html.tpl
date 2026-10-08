@@ -1,245 +1,366 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+ <meta charset="UTF-8">
  <title>Threat and Risk Analysis for {{.Title}}</title>
 <style>
-body{
-  font-family: Arial, Helvetica, sans-serif;
-  border-collapse: collapse;
-  width: 800px;
-}
+  /* ── Reset & Base ──────────────────────────────── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-table {
-  border-collapse: collapse;
-}
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                 "Helvetica Neue", Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #2d3748;
+    background: #ffffff;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 40px 24px;
+  }
 
-td, th {
-  border: 1px solid #ddd;
-  padding: 2px;
-  vertical-align: top;
-}
+  /* ── Header / Branding ─────────────────────────── */
+  .report-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 20px;
+    margin-bottom: 32px;
+    border-bottom: 3px solid #1a365d;
+  }
+  .report-header .brand {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1a365d;
+    letter-spacing: 0.5px;
+  }
+  .report-header .meta {
+    font-size: 12px;
+    color: #718096;
+    text-align: right;
+  }
 
-.impact3,.likelihood3{
-  background-color: red;
-  color: white;
-}
+  /* ── Headings ──────────────────────────────────── */
+  h1 {
+    font-size: 26px;
+    font-weight: 700;
+    color: #1a365d;
+    margin: 40px 0 16px;
+  }
+  h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #2d3748;
+    margin: 28px 0 12px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #4a5568;
+    margin: 20px 0 10px;
+  }
 
-.impact2, .likelihood2{
-  background-color: orange;
-}
+  /* ── Paragraphs ────────────────────────────────── */
+  p { margin-bottom: 12px; }
 
-.impact1, .likelihood1{
-  background-color: lightgreen;
-}
+  /* ── Tables ────────────────────────────────────── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0 24px;
+    font-size: 13px;
+  }
+  thead th {
+    background: #1a365d;
+    color: #ffffff;
+    padding: 10px 12px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    white-space: nowrap;
+  }
+  thead th:first-child { border-radius: 6px 0 0 0; }
+  thead th:last-child  { border-radius: 0 6px 0 0; }
+  tbody td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #e2e8f0;
+    vertical-align: top;
+  }
+  tbody tr:hover { background: #f7fafc; }
+  tbody tr:nth-child(even) { background: #fafbfc; }
+  tbody tr:nth-child(even):hover { background: #f0f4f8; }
 
-.serverity1{
-  background-color: lightgreen;
-}
+  /* ── Severity badges ───────────────────────────── */
+  .badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+  .sev-low      { background: #c6f6d5; color: #276749; }
+  .sev-medium   { background: #fefcbf; color: #975a16; }
+  .sev-high     { background: #fed7d7; color: #c53030; }
+  .sev-critical { background: #b91c1c; color: #ffffff; }
+  .sev-tbd      { background: #e2e8f0; color: #718096; }
 
-.serverity2{
-  background-color: yellow;
-}
+  /* ── Risk Matrix ───────────────────────────────── */
+  .risk-matrix {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0 24px;
+    font-size: 13px;
+  }
+  .risk-matrix th,
+  .risk-matrix td {
+    padding: 14px 10px;
+    text-align: center;
+    border: 1px solid #e2e8f0;
+  }
+  .risk-matrix thead th {
+    background: #2d3748;
+    color: #ffffff;
+    border-color: #a0aec0;
+  }
+  .risk-matrix .axis-label {
+    background: #f7fafc;
+    font-weight: 600;
+    color: #4a5568;
+    text-align: right;
+    padding-right: 16px;
+  }
+  .risk-matrix .matrix-cell {
+    font-weight: 600;
+    font-size: 12px;
+  }
 
-.serverity3, .serverity4{
-  background-color: orange;
-}
+  /* ── Mermaid ───────────────────────────────────── */
+  pre.mermaid {
+    background: #f7fafc;
+    padding: 16px;
+    border-radius: 6px;
+    margin: 16px 0 24px;
+    overflow-x: auto;
+  }
 
-.serverity6{
-  background-color: red;
-  color: white;
-}
+  /* ── Footer / Disclaimer ───────────────────────── */
+  .disclaimer {
+    margin-top: 48px;
+    padding: 20px;
+    background: #f7fafc;
+    border-left: 4px solid #a0aec0;
+    font-size: 12px;
+    color: #718096;
+    line-height: 1.7;
+  }
+  .disclaimer h3 {
+    font-size: 14px;
+    color: #2d3748;
+    margin: 0 0 8px;
+  }
 
-.serverity9{
-  background-color: darkred;
-  color: white;
-}
+  /* ── Links ─────────────────────────────────────── */
+  a { color: #2b6cb0; text-decoration: none; }
+  a:hover { text-decoration: underline; }
 
-tr:nth-child(even){background-color: #f2f2f2;}
-
-th {
-  padding-top: 4px;
-  padding-bottom: 4px;
-  text-align: left;
-  background-color: #4CAF50;
-  color: white;
-}
-
-.title{
-  font-size:32px;
-}
+  /* ── Methodology / Rules ───────────────────────── */
+  .rule-table td { vertical-align: top; }
+  .rule-table th {
+    background: #e2e8f0;
+    color: #2d3748;
+    width: 160px;
+  }
 </style>
 </head>
 
 <body>
-<span class="title">TARALIZER</span>
+
+<!-- ── Header ─────────────────────────────────────── -->
+<div class="report-header">
+  <span class="brand">TARALIZER — Threat &amp; Risk Analysis</span>
+  <span class="meta">
+    {{.Title}}<br>
+    Generated: {{.Date}}
+  </span>
+</div>
+
+<!-- ── Scope & Assumptions ────────────────────────── -->
+<h1>Scope and Assumptions</h1>
 
 <h2>System Description</h2>
-<p>
-The Data Flow Diagram below provides an overview of the analyzed architecture.
-</p>
-<pre class="mermaid">
-{{mermaidDFD}}
-</pre>
+<p>The Data Flow Diagram below provides an overview of the analyzed architecture.</p>
+<pre class="mermaid">{{mermaidDFD}}</pre>
 
 <h3>Trust Boundaries</h3>
-<table aria-describedby="Trust Boundaries">
-<tr>
-  <th scope="col">Name</th>
-  <th scope="col">Technology</th>
-  <th scope="col">Description</th>
-</tr>
-{{range .TrustBoundaries}}  
-    <tr>
-      <td> {{.Name}}</td>  
-      <td> {{.Technology}}</td>  
-      <td> {{.Description}} </td>
-    </tr>
+<table>
+<tr><th>Name</th><th>Technology</th><th>Description</th></tr>
+{{range .TrustBoundaries}}
+<tr><td>{{.Name}}</td><td>{{.Technology}}</td><td>{{.Description}}</td></tr>
 {{end}}
 </table>
-</p>
 
 <h3>Technical Assets</h3>
-<table aria-describedby="Technical Assets">
-<tr>
-  <th scope="col">Name</th>
-  <th scope="col">Technology</th>
-  <th scope="col">Description</th>
-</tr>
-{{range .TechnicalAssets}}  
-    <tr>
-      <td> {{.Name}}</td>  
-      <td> {{.Technology}}</td>  
-      <td> {{.Description}} </td>
-    </tr>
+<table>
+<tr><th>Name</th><th>Technology</th><th>Description</th></tr>
+{{range .TechnicalAssets}}
+<tr><td>{{.Name}}</td><td>{{.Technology}}</td><td>{{.Description}}</td></tr>
 {{end}}
 </table>
-</p>
 
-
-
+<!-- ── Problem Description ────────────────────────── -->
 <h2>Problem Description</h2>
-<h3>Data Assets</h3>
-<p>
-The following data assets are used:
 
-<table aria-describedby="Data Assets">
-<tr> 
-  <th scope="col">Name</th> 
-  <th scope="col">Description</th>
-  <th scope="col">C</th>
-  <th scope="col">I</th>
-  <th scope="col">A</th>
+<h3>Data Assets</h3>
+<table>
+<tr><th>Name</th><th>Description</th><th>C</th><th>I</th><th>A</th></tr>
+{{range .DataAssets}}
+<tr>
+  <td>{{.Name}}</td>
+  <td>{{.Description}}</td>
+  <td>{{dataAssetLabel .Confidentiality}}</td>
+  <td>{{dataAssetLabel .Integrity}}</td>
+  <td>{{dataAssetLabel .Availability}}</td>
 </tr>
-{{range .DataAssets}}  
-    <tr>
-      <td>{{.Name}}</td>  
-      <td> {{.Description}}</td>
-      <td> {{.Confidentiality}}</td>
-      <td> {{.Integrity}}</td>
-      <td> {{.Availability}}</td>
-    </tr>
 {{end}}
 </table>
-</p>
 
 <h3>Threat Agents</h3>
-<p>
-The following threat agents are used:
-<table aria-describedby="Threat Agents">
-<tr>
-  <th scope="col">Name</th>  
-  <th scope="col">Description</th>
-</tr>
-{{range .ThreatAgents}}  
-    <tr>
-    <td>{{.Name}}</td>  <td> {{.Description}} </td>
-    </tr>
+<table>
+<tr><th>Name</th><th>Description</th></tr>
+{{range .ThreatAgents}}
+<tr><td>{{.Name}}</td><td>{{.Description}}</td></tr>
 {{end}}
 </table>
-</p>
 
+<!-- ── Risk Assessment ────────────────────────────── -->
+<h1>Risk Assessment</h1>
 
-<h2>Risk Assessment</h2>
+<h2>Risk Matrix</h2>
+<p>We follow the <a href="https://owasp.org/www-community/OWASP_Risk_Rating_Methodology">OWASP Risk Rating Methodology</a>.</p>
 
-<h3>Risk Matrix</h3>
-We follow the <a href="https://owasp.org/www-community/OWASP_Risk_Rating_Methodology">OWASP Risk Rating Methodology</a>.
-<table aria-describedby="Risk Matrix">
-<tbody><tr>
-<th scope="col" colspan="5" style="text-align: center;">Overall Risk Severity = Impact x Likelihood</th>
+<table class="risk-matrix">
+<tr>
+  <th colspan="4" style="text-align:center;">Overall Risk Severity = Impact × Likelihood</th>
 </tr>
 <tr>
-<td rowspan="4" style="text-align: center;width:15%;">Impact</t>
-<td class="impact3" style="text-align:center;">HIGH</td> <!--impact legend-->
-<td style="text-align:center;background-color:orange;">Medium</td>
-<td style="text-align:center;background-color:red;">High</td>
-<td style="text-align:center;background-color:darkred;">Critical</td>
+  <td rowspan="3" class="axis-label">Impact ↓ <br> Likelihood →</td>
+  <td class="matrix-cell" style="background:#c6f6d5;">Low</td>
+  <td class="matrix-cell" style="background:#fefcbf;">Medium</td>
+  <td class="matrix-cell" style="background:#fed7d7;">High</td>
 </tr>
 <tr>
-<td class="impact2" style="text-align:center;">MEDIUM</td> <!--impact legend-->
-<td style="text-align:yellow;background-color:yellow;">Low</td>
-<td style="text-align:center;background-color:orange;">Medium</td>
-<td style="text-align:center;background-color:red;">High</td>
+  <td class="matrix-cell" style="background:#c6f6d5;">Low</td>
+  <td class="matrix-cell" style="background:#fefcbf;">Medium</td>
+  <td class="matrix-cell" style="background:#fed7d7;">High</td>
 </tr>
 <tr>
-<td class="impact1" style="text-align:center;">LOW</td> <!--impact legend-->
-<td style="text-align:center;background-color:lightgreen;">Low</td>
-<td style="text-align:center;background-color:yellow;">Low</td>
-<td style="text-align:center;background-color:orange;">Medium</td>
+  <td class="matrix-cell" style="background:#c6f6d5;">Low</td>
+  <td class="matrix-cell" style="background:#fefcbf;">Medium</td>
+  <td class="matrix-cell" style="background:#b91c1c;color:#fff;">Critical</td>
 </tr>
 <tr>
-
-<!-- likelihood legend -->
-<td style="text-align:center;background-color:#f2f2f2;">&nbsp;</td>
-<td class="likelihood1" style="text-align:center;">LOW</td>
-<td class="likelihood2" style="text-align:center;">MEDIUM</td>
-<td class="likelihood3" style="text-align:center;">HIGH</td>
+  <td class="axis-label">Likelihood (columns)</td>
+  <td style="text-align:center;font-weight:600;">LOW</td>
+  <td style="text-align:center;font-weight:600;">MEDIUM</td>
+  <td style="text-align:center;font-weight:600;">HIGH</td>
 </tr>
-<tr>
-<td style="text-align:center;">&nbsp;</td>
-<td colspan="5" style="text-align:center;">Likelihood</td>
-</tr>
-</tbody>
 </table>
 
 <h3>Identified Risks</h3>
-<p>
-The following risks have been identified:
-<table aria-describedby="Identified Risks">
+<table>
 <tr>
-    <th scope="col">ID</th>
-    <th scope="col">Likelihood</th>
-    <th scope="col">Impact</th>
-    <th scope="col">Severity</th>
-    <th scope="col">Risk</th>
-    <th scope="col">Action</th>
-    <th scope="col">Mitigation</th>
-    <th scope="col">Res. Impact</th>
-    <th scope="col">Res. Likelihood</th>
-    <th scope="col">Res. Severity</th>
-    <th scope="col">Res. Status</th>
+  <th>ID</th>
+  <th>Likelihood</th>
+  <th>Impact</th>
+  <th>Severity</th>
+  <th>Risk</th>
+  <th>Action</th>
+  <th>Mitigation</th>
+  <th>Res. Impact</th>
+  <th>Res. Likelihood</th>
+  <th>Res. Severity</th>
+  <th>Res. Status</th>
 </tr>
 {{range $index, $risk :=.Risks}}
 <tr>
-    <td>{{$risk.Id}}</td>  
-    <td class="likelihood{{$risk.Likelihood}}">{{likelihood $risk.Likelihood}}</td>  
-    <td class="impact{{$risk.Impact}}">{{impact $risk.Impact}}</td>  
-    <td class="serverity{{$risk.Severity}}">{{severity $risk.Severity}}</td>  
-    <td>
-        <a href="https://cwe.mitre.org/data/definitions/{{$risk.Cwe}}">CWE-{{$risk.Cwe}}</a>
-        {{$risk.Title}}: {{$risk.Message}}
-        <p>{{$risk.Description}}</p>        
-    </td>
-    <td>{{$risk.Action}}</td>
-    <td>{{$risk.Mitigation}}</td>
-    <td class="likelihood{{$risk.ResidualLikelihood}}">{{likelihood $risk.ResidualLikelihood}}</td>  
-    <td class="impact{{$risk.ResidualImpact}}">{{impact $risk.ResidualImpact}}</td>  
-    <td class="serverity{{$risk.ResidualSeverity}}">{{severity $risk.ResidualSeverity}}</td>  
-    <td>{{$risk.Status}}</td>
+  <td>{{$risk.Id}}</td>
+  <td><span class="badge badge-{{lower $risk.Likelihood}}">{{likelihood $risk.Likelihood}}</span></td>
+  <td><span class="badge badge-{{lower $risk.Impact}}">{{impact $risk.Impact}}</span></td>
+  <td><span class="badge sev-{{lower $risk.Severity}}">{{severity $risk.Severity}}</span></td>
+  <td>
+    <a href="https://cwe.mitre.org/data/definitions/{{$risk.Cwe}}">CWE-{{$risk.Cwe}}</a>
+    {{$risk.Title}}: {{$risk.Message}}
+    <p style="margin-top:4px;color:#4a5568;">{{$risk.Description}}</p>
+  </td>
+  <td>{{$risk.Action}}</td>
+  <td>{{$risk.Mitigation}}</td>
+  <td><span class="badge badge-{{lower $risk.ResidualImpact}}">{{impact $risk.ResidualImpact}}</span></td>
+  <td><span class="badge badge-{{lower $risk.ResidualLikelihood}}">{{likelihood $risk.ResidualLikelihood}}</span></td>
+  <td><span class="badge sev-{{lower $risk.ResidualSeverity}}">{{severity $risk.ResidualSeverity}}</span></td>
+  <td>{{$risk.Status}}</td>
 </tr>
 {{end}}
 </table>
+
+<!-- ── Methodology ────────────────────────────────── -->
+<h1>Methodology</h1>
+<h2>STRIDE</h2>
+<h2>Likelihood Scale</h2>
+<h2>Impact Scale</h2>
+
+<!-- ── About Taralizer ────────────────────────────── -->
+<h1>About Taralizer</h1>
+<h2>Risk rules checked by Taralizer</h2>
+
+<h3>{{.RuleSet.Title}} — {{.RuleSet.Version}}</h3>
+<p>The {{.RuleSet.Title}} is specified <a href="{{.RuleSet.Url}}">HERE</a>.</p>
+<p>The following list provides supported rules:</p>
+
+{{range .RuleSet.Rules}}
+<h4>Rule {{.Id}}</h4>
+<table class="rule-table">
+  <tr><th>Title</th><td>{{.Title}}</td></tr>
+  <tr><th>Description</th><td>{{.Description}}</td></tr>
+  <tr><th>CWE</th><td><a href="https://cwe.mitre.org/data/definitions/{{.Cwe}}">{{.Cwe}}</a></td></tr>
+  <tr><th>Mitigation</th><td>{{.Mitigation}}</td></tr>
+  <tr><th>URL</th><td>{{.Url}}</td></tr>
+  <tr><th>Base Likelihood</th><td>{{likelihood .Likelihood}}</td></tr>
+  <tr><th>Base Impact</th><td>{{impact .Impact}}</td></tr>
+</table>
+{{end}}
+
+<!-- ── Disclaimer ─────────────────────────────────── -->
+<div class="disclaimer">
+  <h3>Disclaimer</h3>
+  {{.Author.Name}} conducted this threat analysis using the open-source TARALIZER toolkit on the applications and systems that were modeled as of this report's date.
+  Information security threats are continually changing, with new vulnerabilities discovered on a daily basis, and no application can ever be 100% secure no matter how much threat modeling is conducted. It is recommended to execute threat modeling and also penetration testing on a regular basis (for example yearly) to ensure a high ongoing level of security and constantly check for new attack vectors.
+  This report cannot and does not protect against personal or business loss as the result of use of the applications or systems described.
+  {{.Author.Name}} and the TARALIZER toolkit offers no warranties, representations or legal certifications concerning the applications or systems it tests.
+  All software includes defects: nothing in this document is intended to represent or warrant that threat modeling was complete and without error, nor does this document represent or warrant that the architecture analyzed is suitable to task, free of other defects than reported, fully compliant with any industry standards, or fully compatible with any operating system, hardware, or other application.
+  Threat modeling tries to analyze the modeled architecture without having access to a real working system and thus cannot and does not test the implementation for defects and vulnerabilities.
+  These kinds of checks would only be possible with a separate code review and penetration test against a working system and not via a threat model.
+  By using the resulting information you agree that John Doe and the Threagile toolkit shall be held harmless in any event.
+  This report is confidential and intended for internal, confidential use by the client.
+  The recipient is obligated to ensure the highly confidential contents are kept secret.
+  The recipient assumes responsibility for further distribution of this document.
+  In this particular project, a timebox approach was used to define the analysis effort.
+  This means that the author allotted a prearranged amount of time to identify and document threats.
+  Because of this, there is no guarantee that all possible threats and risks are discovered.
+  Furthermore, the analysis applies to a snapshot of the current state of the modeled architecture (based on the architecture information provided by the customer) at the examination time.
+</div>
+
+<h3>Report Distribution</h3>
+<p style="font-size:12px;color:#718096;">
+  Distribution of this report (in full or in part like diagrams or risk findings) requires that this disclaimer as well as the chapter about the TARALIZER toolkit and method used is kept intact as part of the distributed report or referenced from the distributed parts.
 </p>
 
+<!-- ── Mermaid ────────────────────────────────────── -->
 <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
 <script>
   mermaid.initialize({ securityLevel: 'loose' });

@@ -1,84 +1,201 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+ <meta charset="UTF-8">
  <title>Threat and Risk Analysis for Bank of Anthos</title>
 <style>
-body{
-  font-family: Arial, Helvetica, sans-serif;
-  border-collapse: collapse;
-  width: 800px;
-}
+  /* ── Reset & Base ──────────────────────────────── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-table {
-  border-collapse: collapse;
-}
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                 "Helvetica Neue", Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #2d3748;
+    background: #ffffff;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 40px 24px;
+  }
 
-td, th {
-  border: 1px solid #ddd;
-  padding: 2px;
-  vertical-align: top;
-}
+  /* ── Header / Branding ─────────────────────────── */
+  .report-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 20px;
+    margin-bottom: 32px;
+    border-bottom: 3px solid #1a365d;
+  }
+  .report-header .brand {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1a365d;
+    letter-spacing: 0.5px;
+  }
+  .report-header .meta {
+    font-size: 12px;
+    color: #718096;
+    text-align: right;
+  }
 
-.impact3,.likelihood3{
-  background-color: red;
-  color: white;
-}
+  /* ── Headings ──────────────────────────────────── */
+  h1 {
+    font-size: 26px;
+    font-weight: 700;
+    color: #1a365d;
+    margin: 40px 0 16px;
+  }
+  h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #2d3748;
+    margin: 28px 0 12px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #4a5568;
+    margin: 20px 0 10px;
+  }
 
-.impact2, .likelihood2{
-  background-color: orange;
-}
+  /* ── Paragraphs ────────────────────────────────── */
+  p { margin-bottom: 12px; }
 
-.impact1, .likelihood1{
-  background-color: lightgreen;
-}
+  /* ── Tables ────────────────────────────────────── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0 24px;
+    font-size: 13px;
+  }
+  thead th {
+    background: #1a365d;
+    color: #ffffff;
+    padding: 10px 12px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    white-space: nowrap;
+  }
+  thead th:first-child { border-radius: 6px 0 0 0; }
+  thead th:last-child  { border-radius: 0 6px 0 0; }
+  tbody td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #e2e8f0;
+    vertical-align: top;
+  }
+  tbody tr:hover { background: #f7fafc; }
+  tbody tr:nth-child(even) { background: #fafbfc; }
+  tbody tr:nth-child(even):hover { background: #f0f4f8; }
 
-.serverity1{
-  background-color: lightgreen;
-}
+  /* ── Severity badges ───────────────────────────── */
+  .badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+  .sev-low      { background: #c6f6d5; color: #276749; }
+  .sev-medium   { background: #fefcbf; color: #975a16; }
+  .sev-high     { background: #fed7d7; color: #c53030; }
+  .sev-critical { background: #b91c1c; color: #ffffff; }
+  .sev-tbd      { background: #e2e8f0; color: #718096; }
 
-.serverity2{
-  background-color: yellow;
-}
+  /* ── Risk Matrix ───────────────────────────────── */
+  .risk-matrix {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0 24px;
+    font-size: 13px;
+  }
+  .risk-matrix th,
+  .risk-matrix td {
+    padding: 14px 10px;
+    text-align: center;
+    border: 1px solid #e2e8f0;
+  }
+  .risk-matrix thead th {
+    background: #2d3748;
+    color: #ffffff;
+    border-color: #a0aec0;
+  }
+  .risk-matrix .axis-label {
+    background: #f7fafc;
+    font-weight: 600;
+    color: #4a5568;
+    text-align: right;
+    padding-right: 16px;
+  }
+  .risk-matrix .matrix-cell {
+    font-weight: 600;
+    font-size: 12px;
+  }
 
-.serverity3, .serverity4{
-  background-color: orange;
-}
+  /* ── Mermaid ───────────────────────────────────── */
+  pre.mermaid {
+    background: #f7fafc;
+    padding: 16px;
+    border-radius: 6px;
+    margin: 16px 0 24px;
+    overflow-x: auto;
+  }
 
-.serverity6{
-  background-color: red;
-  color: white;
-}
+  /* ── Footer / Disclaimer ───────────────────────── */
+  .disclaimer {
+    margin-top: 48px;
+    padding: 20px;
+    background: #f7fafc;
+    border-left: 4px solid #a0aec0;
+    font-size: 12px;
+    color: #718096;
+    line-height: 1.7;
+  }
+  .disclaimer h3 {
+    font-size: 14px;
+    color: #2d3748;
+    margin: 0 0 8px;
+  }
 
-.serverity9{
-  background-color: darkred;
-  color: white;
-}
+  /* ── Links ─────────────────────────────────────── */
+  a { color: #2b6cb0; text-decoration: none; }
+  a:hover { text-decoration: underline; }
 
-tr:nth-child(even){background-color: #f2f2f2;}
-
-th {
-  padding-top: 4px;
-  padding-bottom: 4px;
-  text-align: left;
-  background-color: #4CAF50;
-  color: white;
-}
-
-.title{
-  font-size:32px;
-}
+  /* ── Methodology / Rules ───────────────────────── */
+  .rule-table td { vertical-align: top; }
+  .rule-table th {
+    background: #e2e8f0;
+    color: #2d3748;
+    width: 160px;
+  }
 </style>
 </head>
 
 <body>
-<span class="title">TARALIZER</span>
+
+<!-- ── Header ─────────────────────────────────────── -->
+<div class="report-header">
+  <span class="brand">TARALIZER — Threat &amp; Risk Analysis</span>
+  <span class="meta">
+    Bank of Anthos<br>
+    Generated: 2020-07-02
+  </span>
+</div>
+
+<!-- ── Scope & Assumptions ────────────────────────── -->
+<h1>Scope and Assumptions</h1>
 
 <h2>System Description</h2>
-<p>
-The Data Flow Diagram below provides an overview of the analyzed architecture.
-</p>
-<pre class="mermaid">
-flowchart TD
+<p>The Data Flow Diagram below provides an overview of the analyzed architecture.</p>
+<pre class="mermaid">flowchart TD
     unauthorized-external-agent["TA1"]
     authorized-employee["TA2"]
     unauthorized-insider["TA3"]
@@ -164,676 +281,1036 @@ flowchart TD
     balance_reader -->|sql_encrypted / Link to database| ledger_db
     trans_history -->|sql_encrypted / Link to database| ledger_db
     hsm -->|kek / key transfer| kms
-
 </pre>
 
 <h3>Trust Boundaries</h3>
-<table aria-describedby="Trust Boundaries">
-<tr>
-  <th scope="col">Name</th>
-  <th scope="col">Technology</th>
-  <th scope="col">Description</th>
-</tr>
-  
-    <tr>
-      <td> Internet</td>  
-      <td> internet</td>  
-      <td> Internet </td>
-    </tr>
-  
-    <tr>
-      <td> Google Cloud Platform</td>  
-      <td> internet</td>  
-      <td> Google Cloud </td>
-    </tr>
-  
-    <tr>
-      <td> project boa-gke</td>  
-      <td> project</td>  
-      <td> Google Project </td>
-    </tr>
-  
-    <tr>
-      <td> VPC</td>  
-      <td> vpc</td>  
-      <td> Virtual Private Cloud </td>
-    </tr>
-  
-    <tr>
-      <td> public subnet</td>  
-      <td> subnet</td>  
-      <td> internet facing zone </td>
-    </tr>
-  
-    <tr>
-      <td> privat subnet</td>  
-      <td> subnet</td>  
-      <td> Application Network </td>
-    </tr>
-  
-    <tr>
-      <td> GKE</td>  
-      <td> kubernetes-cluster</td>  
-      <td> kubernetes cluster </td>
-    </tr>
-  
-    <tr>
-      <td> frontend</td>  
-      <td> kubernetes-network-policies</td>  
-      <td> kubernetes frontend namespace </td>
-    </tr>
-  
-    <tr>
-      <td> accounts</td>  
-      <td> kubernetes-network-policies</td>  
-      <td> kubernetes default namespace </td>
-    </tr>
-  
-    <tr>
-      <td> transactions</td>  
-      <td> kubernetes-network-policies</td>  
-      <td> kubernetes default namespace </td>
-    </tr>
-  
-    <tr>
-      <td> istion-system</td>  
-      <td> kubernetes-network-policies</td>  
-      <td> kubernetes istio-system </td>
-    </tr>
-  
-    <tr>
-      <td> project boa-sql</td>  
-      <td> cloud-services</td>  
-      <td> Azure Shared Services </td>
-    </tr>
-  
-    <tr>
-      <td> project boa-sec</td>  
-      <td> project</td>  
-      <td> Contains Secret Manager and KMS instances for secrets that are specific to the Bank of Anthos application. </td>
-    </tr>
-  
-    <tr>
-      <td> project boa-ops</td>  
-      <td> project</td>  
-      <td> Used for storing environment logs as well as monitoring the environment instance of the Bank of Anthos application. </td>
-    </tr>
-  
-    <tr>
-      <td> Company Network</td>  
-      <td> on-premise</td>  
-      <td> trusted on-premise company network </td>
-    </tr>
+<table>
+<tr><th>Name</th><th>Technology</th><th>Description</th></tr>
+
+<tr><td>Internet</td><td>internet</td><td>Internet</td></tr>
+
+<tr><td>Google Cloud Platform</td><td>internet</td><td>Google Cloud</td></tr>
+
+<tr><td>project boa-gke</td><td>project</td><td>Google Project</td></tr>
+
+<tr><td>VPC</td><td>vpc</td><td>Virtual Private Cloud</td></tr>
+
+<tr><td>public subnet</td><td>subnet</td><td>internet facing zone</td></tr>
+
+<tr><td>privat subnet</td><td>subnet</td><td>Application Network</td></tr>
+
+<tr><td>GKE</td><td>kubernetes-cluster</td><td>kubernetes cluster</td></tr>
+
+<tr><td>frontend</td><td>kubernetes-network-policies</td><td>kubernetes frontend namespace</td></tr>
+
+<tr><td>accounts</td><td>kubernetes-network-policies</td><td>kubernetes default namespace</td></tr>
+
+<tr><td>transactions</td><td>kubernetes-network-policies</td><td>kubernetes default namespace</td></tr>
+
+<tr><td>istion-system</td><td>kubernetes-network-policies</td><td>kubernetes istio-system</td></tr>
+
+<tr><td>project boa-sql</td><td>cloud-services</td><td>Azure Shared Services</td></tr>
+
+<tr><td>project boa-sec</td><td>project</td><td>Contains Secret Manager and KMS instances for secrets that are specific to the Bank of Anthos application.</td></tr>
+
+<tr><td>project boa-ops</td><td>project</td><td>Used for storing environment logs as well as monitoring the environment instance of the Bank of Anthos application.</td></tr>
+
+<tr><td>Company Network</td><td>on-premise</td><td>trusted on-premise company network</td></tr>
 
 </table>
-</p>
 
 <h3>Technical Assets</h3>
-<table aria-describedby="Technical Assets">
-<tr>
-  <th scope="col">Name</th>
-  <th scope="col">Technology</th>
-  <th scope="col">Description</th>
-</tr>
-  
-    <tr>
-      <td> User</td>  
-      <td> browser</td>  
-      <td> The browser used by the end customer </td>
-    </tr>
-  
-    <tr>
-      <td> DevOps</td>  
-      <td> devops-client</td>  
-      <td> laptop used by developers and operators to manage the system </td>
-    </tr>
-  
-    <tr>
-      <td> WAF</td>  
-      <td> waf</td>  
-      <td> Google Cloud Armor Web Application Firewall </td>
-    </tr>
-  
-    <tr>
-      <td> istio-ingress-gateway</td>  
-      <td> kubernetes-ingress</td>  
-      <td> ISTIO ingress gateway </td>
-    </tr>
-  
-    <tr>
-      <td> frontend</td>  
-      <td> kubernetes-pod</td>  
-      <td> Exposes an HTTP server to serve the website. Contains a login page, a signup page, and a home page. </td>
-    </tr>
-  
-    <tr>
-      <td> User Service</td>  
-      <td> kubernetes-pod</td>  
-      <td>  </td>
-    </tr>
-  
-    <tr>
-      <td> Contacts</td>  
-      <td> kubernetes-pod</td>  
-      <td> Stores a list of additional accounts that are associated with a user. These accounts are listed in the application's Send Payment and Deposit forms. </td>
-    </tr>
-  
-    <tr>
-      <td> User Service</td>  
-      <td> kubernetes-pod</td>  
-      <td> Manages user accounts and authentication. The service signs JWTs that are used for authentication by other services. </td>
-    </tr>
-  
-    <tr>
-      <td> accounts-db</td>  
-      <td> database-sql</td>  
-      <td> SQL database </td>
-    </tr>
-  
-    <tr>
-      <td> ledger writer</td>  
-      <td> kubernetes-pod</td>  
-      <td> Accepts and validates incoming transactions before writing them to the ledger. </td>
-    </tr>
-  
-    <tr>
-      <td> balance reader</td>  
-      <td> kubernetes-pod</td>  
-      <td> Provides an efficient readable cache of user balances, as read from ledger-db. </td>
-    </tr>
-  
-    <tr>
-      <td> trans history</td>  
-      <td> kubernetes-pod</td>  
-      <td> Provides an efficient readable cache of past transactions, as read from ledger-db. </td>
-    </tr>
-  
-    <tr>
-      <td> ledger-db</td>  
-      <td> database-nosql</td>  
-      <td> CloudSQL for hyperledger </td>
-    </tr>
-  
-    <tr>
-      <td> KMS</td>  
-      <td> hsm</td>  
-      <td> Google Key Management Service </td>
-    </tr>
-  
-    <tr>
-      <td> HSM</td>  
-      <td> hsm</td>  
-      <td> on-premise Harware Security Module (HSM) </td>
-    </tr>
-  
-    <tr>
-      <td> Cloud Logging</td>  
-      <td> logging</td>  
-      <td> Cloud Monitoring </td>
-    </tr>
-  
-    <tr>
-      <td> Cloud Monitoring</td>  
-      <td> monitoring</td>  
-      <td> KMS </td>
-    </tr>
+<table>
+<tr><th>Name</th><th>Technology</th><th>Description</th></tr>
+
+<tr><td>User</td><td>browser</td><td>The browser used by the end customer</td></tr>
+
+<tr><td>DevOps</td><td>devops-client</td><td>laptop used by developers and operators to manage the system</td></tr>
+
+<tr><td>WAF</td><td>waf</td><td>Google Cloud Armor Web Application Firewall</td></tr>
+
+<tr><td>istio-ingress-gateway</td><td>kubernetes-ingress</td><td>ISTIO ingress gateway</td></tr>
+
+<tr><td>frontend</td><td>kubernetes-pod</td><td>Exposes an HTTP server to serve the website. Contains a login page, a signup page, and a home page.</td></tr>
+
+<tr><td>User Service</td><td>kubernetes-pod</td><td></td></tr>
+
+<tr><td>Contacts</td><td>kubernetes-pod</td><td>Stores a list of additional accounts that are associated with a user. These accounts are listed in the application's Send Payment and Deposit forms.</td></tr>
+
+<tr><td>User Service</td><td>kubernetes-pod</td><td>Manages user accounts and authentication. The service signs JWTs that are used for authentication by other services.</td></tr>
+
+<tr><td>accounts-db</td><td>database-sql</td><td>SQL database</td></tr>
+
+<tr><td>ledger writer</td><td>kubernetes-pod</td><td>Accepts and validates incoming transactions before writing them to the ledger.</td></tr>
+
+<tr><td>balance reader</td><td>kubernetes-pod</td><td>Provides an efficient readable cache of user balances, as read from ledger-db.</td></tr>
+
+<tr><td>trans history</td><td>kubernetes-pod</td><td>Provides an efficient readable cache of past transactions, as read from ledger-db.</td></tr>
+
+<tr><td>ledger-db</td><td>database-nosql</td><td>CloudSQL for hyperledger</td></tr>
+
+<tr><td>KMS</td><td>hsm</td><td>Google Key Management Service</td></tr>
+
+<tr><td>HSM</td><td>hsm</td><td>on-premise Harware Security Module (HSM)</td></tr>
+
+<tr><td>Cloud Logging</td><td>logging</td><td>Cloud Monitoring</td></tr>
+
+<tr><td>Cloud Monitoring</td><td>monitoring</td><td>KMS</td></tr>
 
 </table>
-</p>
 
-
-
+<!-- ── Problem Description ────────────────────────── -->
 <h2>Problem Description</h2>
-<h3>Data Assets</h3>
-<p>
-The following data assets are used:
 
-<table aria-describedby="Data Assets">
-<tr> 
-  <th scope="col">Name</th> 
-  <th scope="col">Description</th>
-  <th scope="col">C</th>
-  <th scope="col">I</th>
-  <th scope="col">A</th>
+<h3>Data Assets</h3>
+<table>
+<tr><th>Name</th><th>Description</th><th>C</th><th>I</th><th>A</th></tr>
+
+<tr>
+  <td>A1</td>
+  <td>Angular and other client-side code delivered by the application.</td>
+  <td>Public</td>
+  <td>Public</td>
+  <td>Public</td>
 </tr>
-  
-    <tr>
-      <td>A1</td>  
-      <td> Angular and other client-side code delivered by the application.</td>
-      <td> 1</td>
-      <td> 1</td>
-      <td> 1</td>
-    </tr>
-  
-    <tr>
-      <td>A2</td>  
-      <td> OIDC identity token</td>
-      <td> 2</td>
-      <td> 1</td>
-      <td> 1</td>
-    </tr>
-  
-    <tr>
-      <td>A3</td>  
-      <td> OAuth2 access token</td>
-      <td> 2</td>
-      <td> 1</td>
-      <td> 1</td>
-    </tr>
-  
-    <tr>
-      <td>A4</td>  
-      <td> OAuth2 refresh token</td>
-      <td> 2</td>
-      <td> 1</td>
-      <td> 1</td>
-    </tr>
-  
-    <tr>
-      <td>A5</td>  
-      <td> active/ongoing bank transactions</td>
-      <td> 3</td>
-      <td> 2</td>
-      <td> 2</td>
-    </tr>
-  
-    <tr>
-      <td>A6</td>  
-      <td> bank transaction history</td>
-      <td> 3</td>
-      <td> 2</td>
-      <td> 2</td>
-    </tr>
-  
-    <tr>
-      <td>A7</td>  
-      <td> account balance of client</td>
-      <td> 3</td>
-      <td> 2</td>
-      <td> 2</td>
-    </tr>
-  
-    <tr>
-      <td>A8</td>  
-      <td> root certificates</td>
-      <td> 3</td>
-      <td> 2</td>
-      <td> 2</td>
-    </tr>
-  
-    <tr>
-      <td>A9</td>  
-      <td> Session ID</td>
-      <td> 2</td>
-      <td> 2</td>
-      <td> 2</td>
-    </tr>
-  
-    <tr>
-      <td>A10</td>  
-      <td> personal-related end user information like e-mail to identity user</td>
-      <td> </td>
-      <td> </td>
-      <td> </td>
-    </tr>
-  
-    <tr>
-      <td>A11</td>  
-      <td> passwort of a user</td>
-      <td> 3</td>
-      <td> 2</td>
-      <td> 2</td>
-    </tr>
-  
-    <tr>
-      <td>A12</td>  
-      <td> contacts of the customer from past transactions</td>
-      <td> 2</td>
-      <td> 2</td>
-      <td> 2</td>
-    </tr>
-  
-    <tr>
-      <td>A13</td>  
-      <td> credentials to access ledger db</td>
-      <td> 3</td>
-      <td> 2</td>
-      <td> 2</td>
-    </tr>
-  
-    <tr>
-      <td>A14</td>  
-      <td> credentials to access ledger db</td>
-      <td> 3</td>
-      <td> 2</td>
-      <td> 2</td>
-    </tr>
+
+<tr>
+  <td>A2</td>
+  <td>OIDC identity token</td>
+  <td>Internal</td>
+  <td>Public</td>
+  <td>Public</td>
+</tr>
+
+<tr>
+  <td>A3</td>
+  <td>OAuth2 access token</td>
+  <td>Internal</td>
+  <td>Public</td>
+  <td>Public</td>
+</tr>
+
+<tr>
+  <td>A4</td>
+  <td>OAuth2 refresh token</td>
+  <td>Internal</td>
+  <td>Public</td>
+  <td>Public</td>
+</tr>
+
+<tr>
+  <td>A5</td>
+  <td>active/ongoing bank transactions</td>
+  <td>Restricted</td>
+  <td>Internal</td>
+  <td>Internal</td>
+</tr>
+
+<tr>
+  <td>A6</td>
+  <td>bank transaction history</td>
+  <td>Restricted</td>
+  <td>Internal</td>
+  <td>Internal</td>
+</tr>
+
+<tr>
+  <td>A7</td>
+  <td>account balance of client</td>
+  <td>Restricted</td>
+  <td>Internal</td>
+  <td>Internal</td>
+</tr>
+
+<tr>
+  <td>A8</td>
+  <td>root certificates</td>
+  <td>Restricted</td>
+  <td>Internal</td>
+  <td>Internal</td>
+</tr>
+
+<tr>
+  <td>A9</td>
+  <td>Session ID</td>
+  <td>Internal</td>
+  <td>Internal</td>
+  <td>Internal</td>
+</tr>
+
+<tr>
+  <td>A10</td>
+  <td>personal-related end user information like e-mail to identity user</td>
+  <td>Unknown</td>
+  <td>Unknown</td>
+  <td>Unknown</td>
+</tr>
+
+<tr>
+  <td>A11</td>
+  <td>passwort of a user</td>
+  <td>Restricted</td>
+  <td>Internal</td>
+  <td>Internal</td>
+</tr>
+
+<tr>
+  <td>A12</td>
+  <td>contacts of the customer from past transactions</td>
+  <td>Internal</td>
+  <td>Internal</td>
+  <td>Internal</td>
+</tr>
+
+<tr>
+  <td>A13</td>
+  <td>credentials to access ledger db</td>
+  <td>Restricted</td>
+  <td>Internal</td>
+  <td>Internal</td>
+</tr>
+
+<tr>
+  <td>A14</td>
+  <td>credentials to access ledger db</td>
+  <td>Restricted</td>
+  <td>Internal</td>
+  <td>Internal</td>
+</tr>
 
 </table>
-</p>
 
 <h3>Threat Agents</h3>
-<p>
-The following threat agents are used:
-<table aria-describedby="Threat Agents">
-<tr>
-  <th scope="col">Name</th>  
-  <th scope="col">Description</th>
-</tr>
-  
-    <tr>
-    <td>TA1</td>  <td> external threat agent </td>
-    </tr>
-  
-    <tr>
-    <td>TA2</td>  <td> authorized employee </td>
-    </tr>
-  
-    <tr>
-    <td>TA3</td>  <td> Employee/Contractor of the company that is not authorized to access the system </td>
-    </tr>
+<table>
+<tr><th>Name</th><th>Description</th></tr>
+
+<tr><td>TA1</td><td>external threat agent</td></tr>
+
+<tr><td>TA2</td><td>authorized employee</td></tr>
+
+<tr><td>TA3</td><td>Employee/Contractor of the company that is not authorized to access the system</td></tr>
 
 </table>
-</p>
 
+<!-- ── Risk Assessment ────────────────────────────── -->
+<h1>Risk Assessment</h1>
 
-<h2>Risk Assessment</h2>
+<h2>Risk Matrix</h2>
+<p>We follow the <a href="https://owasp.org/www-community/OWASP_Risk_Rating_Methodology">OWASP Risk Rating Methodology</a>.</p>
 
-<h3>Risk Matrix</h3>
-We follow the <a href="https://owasp.org/www-community/OWASP_Risk_Rating_Methodology">OWASP Risk Rating Methodology</a>.
-<table aria-describedby="Risk Matrix">
-<tbody><tr>
-<th scope="col" colspan="5" style="text-align: center;">Overall Risk Severity = Impact x Likelihood</th>
+<table class="risk-matrix">
+<tr>
+  <th colspan="4" style="text-align:center;">Overall Risk Severity = Impact × Likelihood</th>
 </tr>
 <tr>
-<td rowspan="4" style="text-align: center;width:15%;">Impact</t>
-<td class="impact3" style="text-align:center;">HIGH</td> <!--impact legend-->
-<td style="text-align:center;background-color:orange;">Medium</td>
-<td style="text-align:center;background-color:red;">High</td>
-<td style="text-align:center;background-color:darkred;">Critical</td>
+  <td rowspan="3" class="axis-label">Impact ↓ <br> Likelihood →</td>
+  <td class="matrix-cell" style="background:#c6f6d5;">Low</td>
+  <td class="matrix-cell" style="background:#fefcbf;">Medium</td>
+  <td class="matrix-cell" style="background:#fed7d7;">High</td>
 </tr>
 <tr>
-<td class="impact2" style="text-align:center;">MEDIUM</td> <!--impact legend-->
-<td style="text-align:yellow;background-color:yellow;">Low</td>
-<td style="text-align:center;background-color:orange;">Medium</td>
-<td style="text-align:center;background-color:red;">High</td>
+  <td class="matrix-cell" style="background:#c6f6d5;">Low</td>
+  <td class="matrix-cell" style="background:#fefcbf;">Medium</td>
+  <td class="matrix-cell" style="background:#fed7d7;">High</td>
 </tr>
 <tr>
-<td class="impact1" style="text-align:center;">LOW</td> <!--impact legend-->
-<td style="text-align:center;background-color:lightgreen;">Low</td>
-<td style="text-align:center;background-color:yellow;">Low</td>
-<td style="text-align:center;background-color:orange;">Medium</td>
+  <td class="matrix-cell" style="background:#c6f6d5;">Low</td>
+  <td class="matrix-cell" style="background:#fefcbf;">Medium</td>
+  <td class="matrix-cell" style="background:#b91c1c;color:#fff;">Critical</td>
 </tr>
 <tr>
-
-<!-- likelihood legend -->
-<td style="text-align:center;background-color:#f2f2f2;">&nbsp;</td>
-<td class="likelihood1" style="text-align:center;">LOW</td>
-<td class="likelihood2" style="text-align:center;">MEDIUM</td>
-<td class="likelihood3" style="text-align:center;">HIGH</td>
+  <td class="axis-label">Likelihood (columns)</td>
+  <td style="text-align:center;font-weight:600;">LOW</td>
+  <td style="text-align:center;font-weight:600;">MEDIUM</td>
+  <td style="text-align:center;font-weight:600;">HIGH</td>
 </tr>
-<tr>
-<td style="text-align:center;">&nbsp;</td>
-<td colspan="5" style="text-align:center;">Likelihood</td>
-</tr>
-</tbody>
 </table>
 
 <h3>Identified Risks</h3>
-<p>
-The following risks have been identified:
-<table aria-describedby="Identified Risks">
+<table>
 <tr>
-    <th scope="col">ID</th>
-    <th scope="col">Likelihood</th>
-    <th scope="col">Impact</th>
-    <th scope="col">Severity</th>
-    <th scope="col">Risk</th>
-    <th scope="col">Action</th>
-    <th scope="col">Mitigation</th>
-    <th scope="col">Res. Impact</th>
-    <th scope="col">Res. Likelihood</th>
-    <th scope="col">Res. Severity</th>
-    <th scope="col">Res. Status</th>
+  <th>ID</th>
+  <th>Likelihood</th>
+  <th>Impact</th>
+  <th>Severity</th>
+  <th>Risk</th>
+  <th>Action</th>
+  <th>Mitigation</th>
+  <th>Res. Impact</th>
+  <th>Res. Likelihood</th>
+  <th>Res. Severity</th>
+  <th>Res. Status</th>
 </tr>
 
 <tr>
-    <td>container-baseimage-backdooring@balance_reader</td>  
-    <td class="likelihood1">LOW(1)</td>  
-    <td class="impact2">MEDIUM(2)</td>  
-    <td class="serverity2">LOW(2)</td>  
-    <td>
-        <a href="https://cwe.mitre.org/data/definitions/912">CWE-912</a>
-        Container Base Image Backdooring: asset 'balance_reader' has risk of container image backdooring through base images
-        <p>When a technical asset is built using container technologies, Base Image Backdooring risks might arise where base images and other layers used contain vulnerable components or backdoors
-</p>        
-    </td>
-    <td>MITIGATE</td>
-    <td>Google distroless image is used to mitigate risks.  <p>The product owner accepted the residual risks.</p>
+  <td>container-baseimage-backdooring@balance_reader</td>
+  <td><span class="badge badge-low">LOW(1)</span></td>
+  <td><span class="badge badge-medium">MEDIUM(2)</span></td>
+  <td><span class="badge sev-medium">LOW(2)</span></td>
+  <td>
+    <a href="https://cwe.mitre.org/data/definitions/0">CWE-0</a>
+    Container Base Image Backdooring: asset 'balance_reader' has risk of container image backdooring through base images
+    <p style="margin-top:4px;color:#4a5568;">When a technical asset is built using container technologies, Base Image Backdooring risks might arise where base images and other layers used contain vulnerable components or backdoors
+</p>
+  </td>
+  <td>MITIGATE</td>
+  <td>Google distroless image is used to mitigate risks.  <p>The product owner accepted the residual risks.</p>
 </td>
-    <td class="likelihood1">LOW(1)</td>  
-    <td class="impact2">MEDIUM(2)</td>  
-    <td class="serverity2">LOW(2)</td>  
-    <td>CLOSED</td>
+  <td><span class="badge badge-medium">MEDIUM(2)</span></td>
+  <td><span class="badge badge-low">LOW(1)</span></td>
+  <td><span class="badge sev-medium">LOW(2)</span></td>
+  <td>CLOSED</td>
 </tr>
 
 <tr>
-    <td>container-baseimage-backdooring@contacts</td>  
-    <td class="likelihood1">LOW(1)</td>  
-    <td class="impact2">MEDIUM(2)</td>  
-    <td class="serverity2">LOW(2)</td>  
-    <td>
-        <a href="https://cwe.mitre.org/data/definitions/912">CWE-912</a>
-        Container Base Image Backdooring: asset 'contacts' has risk of container image backdooring through base images
-        <p>When a technical asset is built using container technologies, Base Image Backdooring risks might arise where base images and other layers used contain vulnerable components or backdoors
-</p>        
-    </td>
-    <td>MITIGATE</td>
-    <td>Google distroless image is used to mitigate risks.  <p>The product owner accepted the residual risks.</p>
+  <td>container-baseimage-backdooring@contacts</td>
+  <td><span class="badge badge-low">LOW(1)</span></td>
+  <td><span class="badge badge-medium">MEDIUM(2)</span></td>
+  <td><span class="badge sev-medium">LOW(2)</span></td>
+  <td>
+    <a href="https://cwe.mitre.org/data/definitions/0">CWE-0</a>
+    Container Base Image Backdooring: asset 'contacts' has risk of container image backdooring through base images
+    <p style="margin-top:4px;color:#4a5568;">When a technical asset is built using container technologies, Base Image Backdooring risks might arise where base images and other layers used contain vulnerable components or backdoors
+</p>
+  </td>
+  <td>MITIGATE</td>
+  <td>Google distroless image is used to mitigate risks.  <p>The product owner accepted the residual risks.</p>
 </td>
-    <td class="likelihood1">LOW(1)</td>  
-    <td class="impact2">MEDIUM(2)</td>  
-    <td class="serverity2">LOW(2)</td>  
-    <td>CLOSED</td>
+  <td><span class="badge badge-medium">MEDIUM(2)</span></td>
+  <td><span class="badge badge-low">LOW(1)</span></td>
+  <td><span class="badge sev-medium">LOW(2)</span></td>
+  <td>CLOSED</td>
 </tr>
 
 <tr>
-    <td>container-baseimage-backdooring@frontend</td>  
-    <td class="likelihood1">LOW(1)</td>  
-    <td class="impact2">MEDIUM(2)</td>  
-    <td class="serverity2">LOW(2)</td>  
-    <td>
-        <a href="https://cwe.mitre.org/data/definitions/912">CWE-912</a>
-        Container Base Image Backdooring: asset 'frontend' has risk of container image backdooring through base images
-        <p>When a technical asset is built using container technologies, Base Image Backdooring risks might arise where base images and other layers used contain vulnerable components or backdoors
-</p>        
-    </td>
-    <td>MITIGATE</td>
-    <td>Google distroless image is used to mitigate risks.  <p>The product owner accepted the residual risks.</p>
+  <td>container-baseimage-backdooring@frontend</td>
+  <td><span class="badge badge-low">LOW(1)</span></td>
+  <td><span class="badge badge-medium">MEDIUM(2)</span></td>
+  <td><span class="badge sev-medium">LOW(2)</span></td>
+  <td>
+    <a href="https://cwe.mitre.org/data/definitions/0">CWE-0</a>
+    Container Base Image Backdooring: asset 'frontend' has risk of container image backdooring through base images
+    <p style="margin-top:4px;color:#4a5568;">When a technical asset is built using container technologies, Base Image Backdooring risks might arise where base images and other layers used contain vulnerable components or backdoors
+</p>
+  </td>
+  <td>MITIGATE</td>
+  <td>Google distroless image is used to mitigate risks.  <p>The product owner accepted the residual risks.</p>
 </td>
-    <td class="likelihood1">LOW(1)</td>  
-    <td class="impact2">MEDIUM(2)</td>  
-    <td class="serverity2">LOW(2)</td>  
-    <td>CLOSED</td>
+  <td><span class="badge badge-medium">MEDIUM(2)</span></td>
+  <td><span class="badge badge-low">LOW(1)</span></td>
+  <td><span class="badge sev-medium">LOW(2)</span></td>
+  <td>CLOSED</td>
 </tr>
 
 <tr>
-    <td>container-baseimage-backdooring@ledger_writer</td>  
-    <td class="likelihood1">LOW(1)</td>  
-    <td class="impact2">MEDIUM(2)</td>  
-    <td class="serverity2">LOW(2)</td>  
-    <td>
-        <a href="https://cwe.mitre.org/data/definitions/912">CWE-912</a>
-        Container Base Image Backdooring: asset 'ledger_writer' has risk of container image backdooring through base images
-        <p>When a technical asset is built using container technologies, Base Image Backdooring risks might arise where base images and other layers used contain vulnerable components or backdoors
-</p>        
-    </td>
-    <td>MITIGATE</td>
-    <td>Google distroless image is used to mitigate risks.  <p>The product owner accepted the residual risks.</p>
+  <td>container-baseimage-backdooring@ledger_writer</td>
+  <td><span class="badge badge-low">LOW(1)</span></td>
+  <td><span class="badge badge-medium">MEDIUM(2)</span></td>
+  <td><span class="badge sev-medium">LOW(2)</span></td>
+  <td>
+    <a href="https://cwe.mitre.org/data/definitions/0">CWE-0</a>
+    Container Base Image Backdooring: asset 'ledger_writer' has risk of container image backdooring through base images
+    <p style="margin-top:4px;color:#4a5568;">When a technical asset is built using container technologies, Base Image Backdooring risks might arise where base images and other layers used contain vulnerable components or backdoors
+</p>
+  </td>
+  <td>MITIGATE</td>
+  <td>Google distroless image is used to mitigate risks.  <p>The product owner accepted the residual risks.</p>
 </td>
-    <td class="likelihood1">LOW(1)</td>  
-    <td class="impact2">MEDIUM(2)</td>  
-    <td class="serverity2">LOW(2)</td>  
-    <td>CLOSED</td>
+  <td><span class="badge badge-medium">MEDIUM(2)</span></td>
+  <td><span class="badge badge-low">LOW(1)</span></td>
+  <td><span class="badge sev-medium">LOW(2)</span></td>
+  <td>CLOSED</td>
 </tr>
 
 <tr>
-    <td>container-baseimage-backdooring@trans_history</td>  
-    <td class="likelihood1">LOW(1)</td>  
-    <td class="impact2">MEDIUM(2)</td>  
-    <td class="serverity2">LOW(2)</td>  
-    <td>
-        <a href="https://cwe.mitre.org/data/definitions/912">CWE-912</a>
-        Container Base Image Backdooring: asset 'trans_history' has risk of container image backdooring through base images
-        <p>When a technical asset is built using container technologies, Base Image Backdooring risks might arise where base images and other layers used contain vulnerable components or backdoors
-</p>        
-    </td>
-    <td>MITIGATE</td>
-    <td>Google distroless image is used to mitigate risks.  <p>The product owner accepted the residual risks.</p>
+  <td>container-baseimage-backdooring@trans_history</td>
+  <td><span class="badge badge-low">LOW(1)</span></td>
+  <td><span class="badge badge-medium">MEDIUM(2)</span></td>
+  <td><span class="badge sev-medium">LOW(2)</span></td>
+  <td>
+    <a href="https://cwe.mitre.org/data/definitions/0">CWE-0</a>
+    Container Base Image Backdooring: asset 'trans_history' has risk of container image backdooring through base images
+    <p style="margin-top:4px;color:#4a5568;">When a technical asset is built using container technologies, Base Image Backdooring risks might arise where base images and other layers used contain vulnerable components or backdoors
+</p>
+  </td>
+  <td>MITIGATE</td>
+  <td>Google distroless image is used to mitigate risks.  <p>The product owner accepted the residual risks.</p>
 </td>
-    <td class="likelihood1">LOW(1)</td>  
-    <td class="impact2">MEDIUM(2)</td>  
-    <td class="serverity2">LOW(2)</td>  
-    <td>CLOSED</td>
+  <td><span class="badge badge-medium">MEDIUM(2)</span></td>
+  <td><span class="badge badge-low">LOW(1)</span></td>
+  <td><span class="badge sev-medium">LOW(2)</span></td>
+  <td>CLOSED</td>
 </tr>
 
 <tr>
-    <td>container-baseimage-backdooring@user_service</td>  
-    <td class="likelihood1">LOW(1)</td>  
-    <td class="impact2">MEDIUM(2)</td>  
-    <td class="serverity2">LOW(2)</td>  
-    <td>
-        <a href="https://cwe.mitre.org/data/definitions/912">CWE-912</a>
-        Container Base Image Backdooring: asset 'user_service' has risk of container image backdooring through base images
-        <p>When a technical asset is built using container technologies, Base Image Backdooring risks might arise where base images and other layers used contain vulnerable components or backdoors
-</p>        
-    </td>
-    <td>MITIGATE</td>
-    <td>Google distroless image is used to mitigate risks.  <p>The product owner accepted the residual risks.</p>
+  <td>container-baseimage-backdooring@user_service</td>
+  <td><span class="badge badge-low">LOW(1)</span></td>
+  <td><span class="badge badge-medium">MEDIUM(2)</span></td>
+  <td><span class="badge sev-medium">LOW(2)</span></td>
+  <td>
+    <a href="https://cwe.mitre.org/data/definitions/0">CWE-0</a>
+    Container Base Image Backdooring: asset 'user_service' has risk of container image backdooring through base images
+    <p style="margin-top:4px;color:#4a5568;">When a technical asset is built using container technologies, Base Image Backdooring risks might arise where base images and other layers used contain vulnerable components or backdoors
+</p>
+  </td>
+  <td>MITIGATE</td>
+  <td>Google distroless image is used to mitigate risks.  <p>The product owner accepted the residual risks.</p>
 </td>
-    <td class="likelihood1">LOW(1)</td>  
-    <td class="impact2">MEDIUM(2)</td>  
-    <td class="serverity2">LOW(2)</td>  
-    <td>CLOSED</td>
+  <td><span class="badge badge-medium">MEDIUM(2)</span></td>
+  <td><span class="badge badge-low">LOW(1)</span></td>
+  <td><span class="badge sev-medium">LOW(2)</span></td>
+  <td>CLOSED</td>
 </tr>
 
 <tr>
-    <td>cross-site-request-forgery@balance_reader</td>  
-    <td class="likelihood3">HIGH(3)</td>  
-    <td class="impact2">MEDIUM(2)</td>  
-    <td class="serverity6">HIGH(6)</td>  
-    <td>
-        <a href="https://cwe.mitre.org/data/definitions/352">CWE-352</a>
-        Cross-Site Request Forgery (CSRF): asset 'balance_reader' has risk of Cross Site Request Forgery(CSRF)
-        <p>When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.</p>        
-    </td>
-    <td>TBD</td>
-    <td>Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level
+  <td>cross-site-request-forgery@balance_reader</td>
+  <td><span class="badge badge-high">HIGH(3)</span></td>
+  <td><span class="badge badge-medium">MEDIUM(2)</span></td>
+  <td><span class="badge sev-very high">HIGH(6)</span></td>
+  <td>
+    <a href="https://cwe.mitre.org/data/definitions/0">CWE-0</a>
+    Cross-Site Request Forgery (CSRF): asset 'balance_reader' has risk of Cross Site Request Forgery(CSRF)
+    <p style="margin-top:4px;color:#4a5568;">When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.</p>
+  </td>
+  <td>TBD</td>
+  <td>Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level
 </td>
-    <td class="likelihood-1"></td>  
-    <td class="impact-1"></td>  
-    <td class="serverity-1"></td>  
-    <td>OPEN</td>
+  <td><span class="badge badge-tbd">TBD(-1)</span></td>
+  <td><span class="badge badge-tbd">TBD(-1)</span></td>
+  <td><span class="badge sev-tbd">TBD(-1)</span></td>
+  <td>OPEN</td>
 </tr>
 
 <tr>
-    <td>cross-site-request-forgery@contacts</td>  
-    <td class="likelihood3">HIGH(3)</td>  
-    <td class="impact2">MEDIUM(2)</td>  
-    <td class="serverity6">HIGH(6)</td>  
-    <td>
-        <a href="https://cwe.mitre.org/data/definitions/352">CWE-352</a>
-        Cross-Site Request Forgery (CSRF): asset 'contacts' has risk of Cross Site Request Forgery(CSRF)
-        <p>When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.</p>        
-    </td>
-    <td>TBD</td>
-    <td>Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level
+  <td>cross-site-request-forgery@contacts</td>
+  <td><span class="badge badge-high">HIGH(3)</span></td>
+  <td><span class="badge badge-medium">MEDIUM(2)</span></td>
+  <td><span class="badge sev-very high">HIGH(6)</span></td>
+  <td>
+    <a href="https://cwe.mitre.org/data/definitions/0">CWE-0</a>
+    Cross-Site Request Forgery (CSRF): asset 'contacts' has risk of Cross Site Request Forgery(CSRF)
+    <p style="margin-top:4px;color:#4a5568;">When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.</p>
+  </td>
+  <td>TBD</td>
+  <td>Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level
 </td>
-    <td class="likelihood-1"></td>  
-    <td class="impact-1"></td>  
-    <td class="serverity-1"></td>  
-    <td>OPEN</td>
+  <td><span class="badge badge-tbd">TBD(-1)</span></td>
+  <td><span class="badge badge-tbd">TBD(-1)</span></td>
+  <td><span class="badge sev-tbd">TBD(-1)</span></td>
+  <td>OPEN</td>
 </tr>
 
 <tr>
-    <td>cross-site-request-forgery@frontend</td>  
-    <td class="likelihood3">HIGH(3)</td>  
-    <td class="impact2">MEDIUM(2)</td>  
-    <td class="serverity6">HIGH(6)</td>  
-    <td>
-        <a href="https://cwe.mitre.org/data/definitions/352">CWE-352</a>
-        Cross-Site Request Forgery (CSRF): asset 'frontend' has risk of Cross Site Request Forgery(CSRF)
-        <p>When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.</p>        
-    </td>
-    <td>TBD</td>
-    <td>Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level
+  <td>cross-site-request-forgery@frontend</td>
+  <td><span class="badge badge-high">HIGH(3)</span></td>
+  <td><span class="badge badge-medium">MEDIUM(2)</span></td>
+  <td><span class="badge sev-very high">HIGH(6)</span></td>
+  <td>
+    <a href="https://cwe.mitre.org/data/definitions/0">CWE-0</a>
+    Cross-Site Request Forgery (CSRF): asset 'frontend' has risk of Cross Site Request Forgery(CSRF)
+    <p style="margin-top:4px;color:#4a5568;">When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.</p>
+  </td>
+  <td>TBD</td>
+  <td>Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level
 </td>
-    <td class="likelihood-1"></td>  
-    <td class="impact-1"></td>  
-    <td class="serverity-1"></td>  
-    <td>OPEN</td>
+  <td><span class="badge badge-tbd">TBD(-1)</span></td>
+  <td><span class="badge badge-tbd">TBD(-1)</span></td>
+  <td><span class="badge sev-tbd">TBD(-1)</span></td>
+  <td>OPEN</td>
 </tr>
 
 <tr>
-    <td>cross-site-request-forgery@ledger_writer</td>  
-    <td class="likelihood3">HIGH(3)</td>  
-    <td class="impact2">MEDIUM(2)</td>  
-    <td class="serverity6">HIGH(6)</td>  
-    <td>
-        <a href="https://cwe.mitre.org/data/definitions/352">CWE-352</a>
-        Cross-Site Request Forgery (CSRF): asset 'ledger_writer' has risk of Cross Site Request Forgery(CSRF)
-        <p>When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.</p>        
-    </td>
-    <td>TBD</td>
-    <td>Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level
+  <td>cross-site-request-forgery@ledger_writer</td>
+  <td><span class="badge badge-high">HIGH(3)</span></td>
+  <td><span class="badge badge-medium">MEDIUM(2)</span></td>
+  <td><span class="badge sev-very high">HIGH(6)</span></td>
+  <td>
+    <a href="https://cwe.mitre.org/data/definitions/0">CWE-0</a>
+    Cross-Site Request Forgery (CSRF): asset 'ledger_writer' has risk of Cross Site Request Forgery(CSRF)
+    <p style="margin-top:4px;color:#4a5568;">When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.</p>
+  </td>
+  <td>TBD</td>
+  <td>Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level
 </td>
-    <td class="likelihood-1"></td>  
-    <td class="impact-1"></td>  
-    <td class="serverity-1"></td>  
-    <td>OPEN</td>
+  <td><span class="badge badge-tbd">TBD(-1)</span></td>
+  <td><span class="badge badge-tbd">TBD(-1)</span></td>
+  <td><span class="badge sev-tbd">TBD(-1)</span></td>
+  <td>OPEN</td>
 </tr>
 
 <tr>
-    <td>cross-site-request-forgery@trans_history</td>  
-    <td class="likelihood3">HIGH(3)</td>  
-    <td class="impact2">MEDIUM(2)</td>  
-    <td class="serverity6">HIGH(6)</td>  
-    <td>
-        <a href="https://cwe.mitre.org/data/definitions/352">CWE-352</a>
-        Cross-Site Request Forgery (CSRF): asset 'trans_history' has risk of Cross Site Request Forgery(CSRF)
-        <p>When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.</p>        
-    </td>
-    <td>TBD</td>
-    <td>Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level
+  <td>cross-site-request-forgery@trans_history</td>
+  <td><span class="badge badge-high">HIGH(3)</span></td>
+  <td><span class="badge badge-medium">MEDIUM(2)</span></td>
+  <td><span class="badge sev-very high">HIGH(6)</span></td>
+  <td>
+    <a href="https://cwe.mitre.org/data/definitions/0">CWE-0</a>
+    Cross-Site Request Forgery (CSRF): asset 'trans_history' has risk of Cross Site Request Forgery(CSRF)
+    <p style="margin-top:4px;color:#4a5568;">When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.</p>
+  </td>
+  <td>TBD</td>
+  <td>Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level
 </td>
-    <td class="likelihood-1"></td>  
-    <td class="impact-1"></td>  
-    <td class="serverity-1"></td>  
-    <td>OPEN</td>
+  <td><span class="badge badge-tbd">TBD(-1)</span></td>
+  <td><span class="badge badge-tbd">TBD(-1)</span></td>
+  <td><span class="badge sev-tbd">TBD(-1)</span></td>
+  <td>OPEN</td>
 </tr>
 
 <tr>
-    <td>cross-site-request-forgery@user_service</td>  
-    <td class="likelihood3">HIGH(3)</td>  
-    <td class="impact2">MEDIUM(2)</td>  
-    <td class="serverity6">HIGH(6)</td>  
-    <td>
-        <a href="https://cwe.mitre.org/data/definitions/352">CWE-352</a>
-        Cross-Site Request Forgery (CSRF): asset 'user_service' has risk of Cross Site Request Forgery(CSRF)
-        <p>When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.</p>        
-    </td>
-    <td>TBD</td>
-    <td>Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level
+  <td>cross-site-request-forgery@user_service</td>
+  <td><span class="badge badge-high">HIGH(3)</span></td>
+  <td><span class="badge badge-medium">MEDIUM(2)</span></td>
+  <td><span class="badge sev-very high">HIGH(6)</span></td>
+  <td>
+    <a href="https://cwe.mitre.org/data/definitions/0">CWE-0</a>
+    Cross-Site Request Forgery (CSRF): asset 'user_service' has risk of Cross Site Request Forgery(CSRF)
+    <p style="margin-top:4px;color:#4a5568;">When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.</p>
+  </td>
+  <td>TBD</td>
+  <td>Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level
 </td>
-    <td class="likelihood-1"></td>  
-    <td class="impact-1"></td>  
-    <td class="serverity-1"></td>  
-    <td>OPEN</td>
+  <td><span class="badge badge-tbd">TBD(-1)</span></td>
+  <td><span class="badge badge-tbd">TBD(-1)</span></td>
+  <td><span class="badge sev-tbd">TBD(-1)</span></td>
+  <td>OPEN</td>
+</tr>
+
+<tr>
+  <td>software-integrity@balance_reader</td>
+  <td><span class="badge badge-medium">MEDIUM(2)</span></td>
+  <td><span class="badge badge-very high">VERY HIGH(4)</span></td>
+  <td><span class="badge sev-very high">HIGH(8)</span></td>
+  <td>
+    <a href="https://cwe.mitre.org/data/definitions/0">CWE-0</a>
+    Software Integrity: asset 'balance_reader' lacks software integrity verification (signing, SBOM, etc.)
+    <p style="margin-top:4px;color:#4a5568;">Technical assets should verify software integrity (signing, SBOM, etc.).
+</p>
+  </td>
+  <td>TBD</td>
+  <td>Verify software integrity through signing and SBOM.</td>
+  <td><span class="badge badge-tbd">TBD(-1)</span></td>
+  <td><span class="badge badge-tbd">TBD(-1)</span></td>
+  <td><span class="badge sev-tbd">TBD(-1)</span></td>
+  <td>OPEN</td>
+</tr>
+
+<tr>
+  <td>software-integrity@contacts</td>
+  <td><span class="badge badge-medium">MEDIUM(2)</span></td>
+  <td><span class="badge badge-very high">VERY HIGH(4)</span></td>
+  <td><span class="badge sev-very high">HIGH(8)</span></td>
+  <td>
+    <a href="https://cwe.mitre.org/data/definitions/0">CWE-0</a>
+    Software Integrity: asset 'contacts' lacks software integrity verification (signing, SBOM, etc.)
+    <p style="margin-top:4px;color:#4a5568;">Technical assets should verify software integrity (signing, SBOM, etc.).
+</p>
+  </td>
+  <td>TBD</td>
+  <td>Verify software integrity through signing and SBOM.</td>
+  <td><span class="badge badge-tbd">TBD(-1)</span></td>
+  <td><span class="badge badge-tbd">TBD(-1)</span></td>
+  <td><span class="badge sev-tbd">TBD(-1)</span></td>
+  <td>OPEN</td>
+</tr>
+
+<tr>
+  <td>software-integrity@frontend</td>
+  <td><span class="badge badge-medium">MEDIUM(2)</span></td>
+  <td><span class="badge badge-very high">VERY HIGH(4)</span></td>
+  <td><span class="badge sev-very high">HIGH(8)</span></td>
+  <td>
+    <a href="https://cwe.mitre.org/data/definitions/0">CWE-0</a>
+    Software Integrity: asset 'frontend' lacks software integrity verification (signing, SBOM, etc.)
+    <p style="margin-top:4px;color:#4a5568;">Technical assets should verify software integrity (signing, SBOM, etc.).
+</p>
+  </td>
+  <td>TBD</td>
+  <td>Verify software integrity through signing and SBOM.</td>
+  <td><span class="badge badge-tbd">TBD(-1)</span></td>
+  <td><span class="badge badge-tbd">TBD(-1)</span></td>
+  <td><span class="badge sev-tbd">TBD(-1)</span></td>
+  <td>OPEN</td>
+</tr>
+
+<tr>
+  <td>software-integrity@ledger_writer</td>
+  <td><span class="badge badge-medium">MEDIUM(2)</span></td>
+  <td><span class="badge badge-very high">VERY HIGH(4)</span></td>
+  <td><span class="badge sev-very high">HIGH(8)</span></td>
+  <td>
+    <a href="https://cwe.mitre.org/data/definitions/0">CWE-0</a>
+    Software Integrity: asset 'ledger_writer' lacks software integrity verification (signing, SBOM, etc.)
+    <p style="margin-top:4px;color:#4a5568;">Technical assets should verify software integrity (signing, SBOM, etc.).
+</p>
+  </td>
+  <td>TBD</td>
+  <td>Verify software integrity through signing and SBOM.</td>
+  <td><span class="badge badge-tbd">TBD(-1)</span></td>
+  <td><span class="badge badge-tbd">TBD(-1)</span></td>
+  <td><span class="badge sev-tbd">TBD(-1)</span></td>
+  <td>OPEN</td>
+</tr>
+
+<tr>
+  <td>software-integrity@trans_history</td>
+  <td><span class="badge badge-medium">MEDIUM(2)</span></td>
+  <td><span class="badge badge-very high">VERY HIGH(4)</span></td>
+  <td><span class="badge sev-very high">HIGH(8)</span></td>
+  <td>
+    <a href="https://cwe.mitre.org/data/definitions/0">CWE-0</a>
+    Software Integrity: asset 'trans_history' lacks software integrity verification (signing, SBOM, etc.)
+    <p style="margin-top:4px;color:#4a5568;">Technical assets should verify software integrity (signing, SBOM, etc.).
+</p>
+  </td>
+  <td>TBD</td>
+  <td>Verify software integrity through signing and SBOM.</td>
+  <td><span class="badge badge-tbd">TBD(-1)</span></td>
+  <td><span class="badge badge-tbd">TBD(-1)</span></td>
+  <td><span class="badge sev-tbd">TBD(-1)</span></td>
+  <td>OPEN</td>
+</tr>
+
+<tr>
+  <td>software-integrity@user_service</td>
+  <td><span class="badge badge-medium">MEDIUM(2)</span></td>
+  <td><span class="badge badge-very high">VERY HIGH(4)</span></td>
+  <td><span class="badge sev-very high">HIGH(8)</span></td>
+  <td>
+    <a href="https://cwe.mitre.org/data/definitions/0">CWE-0</a>
+    Software Integrity: asset 'user_service' lacks software integrity verification (signing, SBOM, etc.)
+    <p style="margin-top:4px;color:#4a5568;">Technical assets should verify software integrity (signing, SBOM, etc.).
+</p>
+  </td>
+  <td>TBD</td>
+  <td>Verify software integrity through signing and SBOM.</td>
+  <td><span class="badge badge-tbd">TBD(-1)</span></td>
+  <td><span class="badge badge-tbd">TBD(-1)</span></td>
+  <td><span class="badge sev-tbd">TBD(-1)</span></td>
+  <td>OPEN</td>
+</tr>
+
+<tr>
+  <td>vulnerable-dependencies@balance_reader</td>
+  <td><span class="badge badge-medium">MEDIUM(2)</span></td>
+  <td><span class="badge badge-high">HIGH(3)</span></td>
+  <td><span class="badge sev-very high">HIGH(6)</span></td>
+  <td>
+    <a href="https://cwe.mitre.org/data/definitions/0">CWE-0</a>
+    Vulnerable Dependencies: asset 'balance_reader' uses vulnerable dependencies without scanning
+    <p style="margin-top:4px;color:#4a5568;">Technical assets should scan dependencies for known vulnerabilities.
+</p>
+  </td>
+  <td>TBD</td>
+  <td>Regularly scan dependencies for known vulnerabilities.</td>
+  <td><span class="badge badge-tbd">TBD(-1)</span></td>
+  <td><span class="badge badge-tbd">TBD(-1)</span></td>
+  <td><span class="badge sev-tbd">TBD(-1)</span></td>
+  <td>OPEN</td>
+</tr>
+
+<tr>
+  <td>vulnerable-dependencies@contacts</td>
+  <td><span class="badge badge-medium">MEDIUM(2)</span></td>
+  <td><span class="badge badge-high">HIGH(3)</span></td>
+  <td><span class="badge sev-very high">HIGH(6)</span></td>
+  <td>
+    <a href="https://cwe.mitre.org/data/definitions/0">CWE-0</a>
+    Vulnerable Dependencies: asset 'contacts' uses vulnerable dependencies without scanning
+    <p style="margin-top:4px;color:#4a5568;">Technical assets should scan dependencies for known vulnerabilities.
+</p>
+  </td>
+  <td>TBD</td>
+  <td>Regularly scan dependencies for known vulnerabilities.</td>
+  <td><span class="badge badge-tbd">TBD(-1)</span></td>
+  <td><span class="badge badge-tbd">TBD(-1)</span></td>
+  <td><span class="badge sev-tbd">TBD(-1)</span></td>
+  <td>OPEN</td>
+</tr>
+
+<tr>
+  <td>vulnerable-dependencies@frontend</td>
+  <td><span class="badge badge-medium">MEDIUM(2)</span></td>
+  <td><span class="badge badge-high">HIGH(3)</span></td>
+  <td><span class="badge sev-very high">HIGH(6)</span></td>
+  <td>
+    <a href="https://cwe.mitre.org/data/definitions/0">CWE-0</a>
+    Vulnerable Dependencies: asset 'frontend' uses vulnerable dependencies without scanning
+    <p style="margin-top:4px;color:#4a5568;">Technical assets should scan dependencies for known vulnerabilities.
+</p>
+  </td>
+  <td>TBD</td>
+  <td>Regularly scan dependencies for known vulnerabilities.</td>
+  <td><span class="badge badge-tbd">TBD(-1)</span></td>
+  <td><span class="badge badge-tbd">TBD(-1)</span></td>
+  <td><span class="badge sev-tbd">TBD(-1)</span></td>
+  <td>OPEN</td>
+</tr>
+
+<tr>
+  <td>vulnerable-dependencies@ledger_writer</td>
+  <td><span class="badge badge-medium">MEDIUM(2)</span></td>
+  <td><span class="badge badge-high">HIGH(3)</span></td>
+  <td><span class="badge sev-very high">HIGH(6)</span></td>
+  <td>
+    <a href="https://cwe.mitre.org/data/definitions/0">CWE-0</a>
+    Vulnerable Dependencies: asset 'ledger_writer' uses vulnerable dependencies without scanning
+    <p style="margin-top:4px;color:#4a5568;">Technical assets should scan dependencies for known vulnerabilities.
+</p>
+  </td>
+  <td>TBD</td>
+  <td>Regularly scan dependencies for known vulnerabilities.</td>
+  <td><span class="badge badge-tbd">TBD(-1)</span></td>
+  <td><span class="badge badge-tbd">TBD(-1)</span></td>
+  <td><span class="badge sev-tbd">TBD(-1)</span></td>
+  <td>OPEN</td>
+</tr>
+
+<tr>
+  <td>vulnerable-dependencies@trans_history</td>
+  <td><span class="badge badge-medium">MEDIUM(2)</span></td>
+  <td><span class="badge badge-high">HIGH(3)</span></td>
+  <td><span class="badge sev-very high">HIGH(6)</span></td>
+  <td>
+    <a href="https://cwe.mitre.org/data/definitions/0">CWE-0</a>
+    Vulnerable Dependencies: asset 'trans_history' uses vulnerable dependencies without scanning
+    <p style="margin-top:4px;color:#4a5568;">Technical assets should scan dependencies for known vulnerabilities.
+</p>
+  </td>
+  <td>TBD</td>
+  <td>Regularly scan dependencies for known vulnerabilities.</td>
+  <td><span class="badge badge-tbd">TBD(-1)</span></td>
+  <td><span class="badge badge-tbd">TBD(-1)</span></td>
+  <td><span class="badge sev-tbd">TBD(-1)</span></td>
+  <td>OPEN</td>
+</tr>
+
+<tr>
+  <td>vulnerable-dependencies@user_service</td>
+  <td><span class="badge badge-medium">MEDIUM(2)</span></td>
+  <td><span class="badge badge-high">HIGH(3)</span></td>
+  <td><span class="badge sev-very high">HIGH(6)</span></td>
+  <td>
+    <a href="https://cwe.mitre.org/data/definitions/0">CWE-0</a>
+    Vulnerable Dependencies: asset 'user_service' uses vulnerable dependencies without scanning
+    <p style="margin-top:4px;color:#4a5568;">Technical assets should scan dependencies for known vulnerabilities.
+</p>
+  </td>
+  <td>TBD</td>
+  <td>Regularly scan dependencies for known vulnerabilities.</td>
+  <td><span class="badge badge-tbd">TBD(-1)</span></td>
+  <td><span class="badge badge-tbd">TBD(-1)</span></td>
+  <td><span class="badge sev-tbd">TBD(-1)</span></td>
+  <td>OPEN</td>
 </tr>
 
 </table>
+
+<!-- ── Methodology ────────────────────────────────── -->
+<h1>Methodology</h1>
+<h2>STRIDE</h2>
+<h2>Likelihood Scale</h2>
+<h2>Impact Scale</h2>
+
+<!-- ── About Taralizer ────────────────────────────── -->
+<h1>About Taralizer</h1>
+<h2>Risk rules checked by Taralizer</h2>
+
+<h3>OWASP Application Security Verification Standard — 4.0.2</h3>
+<p>The OWASP Application Security Verification Standard is specified <a href="https://github.com/OWASP/ASVS/raw/v4.0.2/4.0/OWASP%20Application%20Security%20Verification%20Standard%204.0.2-en.pdf">HERE</a>.</p>
+<p>The following list provides supported rules:</p>
+
+
+<h4>Rule missing-authentication</h4>
+<table class="rule-table">
+  <tr><th>Title</th><td>Missing Authentication</td></tr>
+  <tr><th>Description</th><td>Technical assets should authenticate incoming requests.</td></tr>
+  <tr><th>CWE</th><td><a href="https://cwe.mitre.org/data/definitions/0">0</a></td></tr>
+  <tr><th>Mitigation</th><td>apply an authentication method to the technical asset.</td></tr>
+  <tr><th>URL</th><td>https://cheatsheetseries.owasp.org/cheatsheets/Transport_Layer_Protection_Cheat_Sheet.html</td></tr>
+  <tr><th>Base Likelihood</th><td>NONE(0)</td></tr>
+  <tr><th>Base Impact</th><td>NONE(0)</td></tr>
+</table>
+
+<h4>Rule missing-authorization</h4>
+<table class="rule-table">
+  <tr><th>Title</th><td>Missing Authorization</td></tr>
+  <tr><th>Description</th><td>Technical assets should perform authorization checks on incoming requests.</td></tr>
+  <tr><th>CWE</th><td><a href="https://cwe.mitre.org/data/definitions/0">0</a></td></tr>
+  <tr><th>Mitigation</th><td>apply an authorization check to the technical asset.</td></tr>
+  <tr><th>URL</th><td>https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html</td></tr>
+  <tr><th>Base Likelihood</th><td>NONE(0)</td></tr>
+  <tr><th>Base Impact</th><td>NONE(0)</td></tr>
+</table>
+
+<h4>Rule insecure-proto</h4>
+<table class="rule-table">
+  <tr><th>Title</th><td>Unencrypted Communication</td></tr>
+  <tr><th>Description</th><td>Data at transition should be encrypted.</td></tr>
+  <tr><th>CWE</th><td><a href="https://cwe.mitre.org/data/definitions/0">0</a></td></tr>
+  <tr><th>Mitigation</th><td>apply an authentication method to the technical asset.</td></tr>
+  <tr><th>URL</th><td>https://cheatsheetseries.owasp.org/cheatsheets/Transport_Layer_Protection_Cheat_Sheet.html</td></tr>
+  <tr><th>Base Likelihood</th><td>NONE(0)</td></tr>
+  <tr><th>Base Impact</th><td>NONE(0)</td></tr>
+</table>
+
+<h4>Rule missing-vault</h4>
+<table class="rule-table">
+  <tr><th>Title</th><td>Missing Vault (Secret Storage)</td></tr>
+  <tr><th>Description</th><td>In order to avoid the risk of secret leakage via config files (when attacked through vulnerabilities being able to read files like Path-Traversal and others), it is best practice to use a separate hardened process with proper authentication authorization, and audit logging to access config secrets (like credentials, private keys, client certificates, etc.). This component is usually some kind of Vault.
+</td></tr>
+  <tr><th>CWE</th><td><a href="https://cwe.mitre.org/data/definitions/0">0</a></td></tr>
+  <tr><th>Mitigation</th><td>Consider using a Vault (Secret Storage) to securely store and access config secrets (like credentials, private keys, client certificates, etc.)</td></tr>
+  <tr><th>URL</th><td>https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html</td></tr>
+  <tr><th>Base Likelihood</th><td>NONE(0)</td></tr>
+  <tr><th>Base Impact</th><td>NONE(0)</td></tr>
+</table>
+
+<h4>Rule missing-waf</h4>
+<table class="rule-table">
+  <tr><th>Title</th><td>Missing Web Application Firewall (WAF)</td></tr>
+  <tr><th>Description</th><td>To have a first line of filtering defense, security architectures with web-services or web-applications should include a WAF in front of them. Even though a WAF is not a replacement for security (all components must be secure even without a WAF) it adds another layer of defense to the overall system by delaying some attacks and having easier attack alerting through it
+</td></tr>
+  <tr><th>CWE</th><td><a href="https://cwe.mitre.org/data/definitions/0">0</a></td></tr>
+  <tr><th>Mitigation</th><td>Consider placing a fully-managed Web Application Firewall (WAF) in front of the web-services and/or web-applications</td></tr>
+  <tr><th>URL</th><td>https://cheatsheetseries.owasp.org/cheatsheets/Virtual_Patching_Cheat_Sheet.html</td></tr>
+  <tr><th>Base Likelihood</th><td>NONE(0)</td></tr>
+  <tr><th>Base Impact</th><td>NONE(0)</td></tr>
+</table>
+
+<h4>Rule cross-site-scripting</h4>
+<table class="rule-table">
+  <tr><th>Title</th><td>Cross-Site Scripting (XSS)</td></tr>
+  <tr><th>Description</th><td>For each web application Cross-Site Scripting (XSS) risks might arise. In terms of the overall risk level take other applications running on the same domain into account as well.
+</td></tr>
+  <tr><th>CWE</th><td><a href="https://cwe.mitre.org/data/definitions/0">0</a></td></tr>
+  <tr><th>Mitigation</th><td>Try to encode all values sent back to the browser and also handle DOM-manipulations in a safe way to avoid DOM-based XSS. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.
+</td></tr>
+  <tr><th>URL</th><td>https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_scripting_Prevention_Cheat_Sheet.html</td></tr>
+  <tr><th>Base Likelihood</th><td>NONE(0)</td></tr>
+  <tr><th>Base Impact</th><td>NONE(0)</td></tr>
+</table>
+
+<h4>Rule container-baseimage-backdooring</h4>
+<table class="rule-table">
+  <tr><th>Title</th><td>Container Base Image Backdooring</td></tr>
+  <tr><th>Description</th><td>When a technical asset is built using container technologies, Base Image Backdooring risks might arise where base images and other layers used contain vulnerable components or backdoors
+</td></tr>
+  <tr><th>CWE</th><td><a href="https://cwe.mitre.org/data/definitions/0">0</a></td></tr>
+  <tr><th>Mitigation</th><td>Apply hardening of all container infrastructures (see for example the CIS-Benchmarks for Docker and Kubernetes and the Docker Bench for Security Use only trusted base images of the original vendors, verify digital signatures and apply image creation best practices. Also consider using Google's Distroless base images or otherwise very small base images. Regularly execute container image scans with tools checking the layers for vulnerable components.
+</td></tr>
+  <tr><th>URL</th><td>https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html</td></tr>
+  <tr><th>Base Likelihood</th><td>NONE(0)</td></tr>
+  <tr><th>Base Impact</th><td>NONE(0)</td></tr>
+</table>
+
+<h4>Rule cross-site-request-forgery</h4>
+<table class="rule-table">
+  <tr><th>Title</th><td>Cross-Site Request Forgery (CSRF)</td></tr>
+  <tr><th>Description</th><td>When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.</td></tr>
+  <tr><th>CWE</th><td><a href="https://cwe.mitre.org/data/definitions/0">0</a></td></tr>
+  <tr><th>Mitigation</th><td>Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level
+</td></tr>
+  <tr><th>URL</th><td>https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html</td></tr>
+  <tr><th>Base Likelihood</th><td>NONE(0)</td></tr>
+  <tr><th>Base Impact</th><td>NONE(0)</td></tr>
+</table>
+
+<h4>Rule missing-audit-logging</h4>
+<table class="rule-table">
+  <tr><th>Title</th><td>Missing Audit Logging</td></tr>
+  <tr><th>Description</th><td>Technical assets should log authentication and authorization events for security monitoring.
+</td></tr>
+  <tr><th>CWE</th><td><a href="https://cwe.mitre.org/data/definitions/0">0</a></td></tr>
+  <tr><th>Mitigation</th><td>Implement audit logging for authentication and authorization events.</td></tr>
+  <tr><th>URL</th><td>https://cheatsheetseries.owasp.org/cheatsheets/Audit_Logging_Cheat_Sheet.html</td></tr>
+  <tr><th>Base Likelihood</th><td>NONE(0)</td></tr>
+  <tr><th>Base Impact</th><td>NONE(0)</td></tr>
+</table>
+
+<h4>Rule missing-input-validation</h4>
+<table class="rule-table">
+  <tr><th>Title</th><td>Missing Input Validation</td></tr>
+  <tr><th>Description</th><td>Web applications should validate all user-supplied input to prevent injection attacks.
+</td></tr>
+  <tr><th>CWE</th><td><a href="https://cwe.mitre.org/data/definitions/0">0</a></td></tr>
+  <tr><th>Mitigation</th><td>Apply input validation to all user-supplied data.</td></tr>
+  <tr><th>URL</th><td>https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html</td></tr>
+  <tr><th>Base Likelihood</th><td>NONE(0)</td></tr>
+  <tr><th>Base Impact</th><td>NONE(0)</td></tr>
+</table>
+
+<h4>Rule missing-access-control</h4>
+<table class="rule-table">
+  <tr><th>Title</th><td>Missing Access Control</td></tr>
+  <tr><th>Description</th><td>Web applications should enforce proper access control checks on all resources.
+</td></tr>
+  <tr><th>CWE</th><td><a href="https://cwe.mitre.org/data/definitions/0">0</a></td></tr>
+  <tr><th>Mitigation</th><td>Implement proper access control checks on all resources.</td></tr>
+  <tr><th>URL</th><td>https://cheatsheetseries.owasp.org/cheatsheets/Access_Control_Cheat_Sheet.html</td></tr>
+  <tr><th>Base Likelihood</th><td>NONE(0)</td></tr>
+  <tr><th>Base Impact</th><td>NONE(0)</td></tr>
+</table>
+
+<h4>Rule missing-cryptographic-controls</h4>
+<table class="rule-table">
+  <tr><th>Title</th><td>Missing Cryptographic Controls</td></tr>
+  <tr><th>Description</th><td>Technical assets should use cryptographic controls for sensitive data.
+</td></tr>
+  <tr><th>CWE</th><td><a href="https://cwe.mitre.org/data/definitions/0">0</a></td></tr>
+  <tr><th>Mitigation</th><td>Apply cryptographic controls for sensitive data.</td></tr>
+  <tr><th>URL</th><td>https://cheatsheetseries.owasp.org/cheatsheets/Encryption_Cheat_Sheet.html</td></tr>
+  <tr><th>Base Likelihood</th><td>NONE(0)</td></tr>
+  <tr><th>Base Impact</th><td>NONE(0)</td></tr>
+</table>
+
+<h4>Rule missing-injection-protection</h4>
+<table class="rule-table">
+  <tr><th>Title</th><td>Missing Injection Protection</td></tr>
+  <tr><th>Description</th><td>Web applications should protect against injection attacks (SQL, command, NoSQL, LDAP).
+</td></tr>
+  <tr><th>CWE</th><td><a href="https://cwe.mitre.org/data/definitions/0">0</a></td></tr>
+  <tr><th>Mitigation</th><td>Apply input validation and parameterized queries.</td></tr>
+  <tr><th>URL</th><td>https://cheatsheetseries.owasp.org/cheatsheets/Injection_Prevention_Cheat_Sheet.html</td></tr>
+  <tr><th>Base Likelihood</th><td>NONE(0)</td></tr>
+  <tr><th>Base Impact</th><td>NONE(0)</td></tr>
+</table>
+
+<h4>Rule security-misconfiguration</h4>
+<table class="rule-table">
+  <tr><th>Title</th><td>Security Misconfiguration</td></tr>
+  <tr><th>Description</th><td>Technical assets should have proper security configuration (security headers, weak defaults).
+</td></tr>
+  <tr><th>CWE</th><td><a href="https://cwe.mitre.org/data/definitions/0">0</a></td></tr>
+  <tr><th>Mitigation</th><td>Apply proper security configuration.</td></tr>
+  <tr><th>URL</th><td>https://cheatsheetseries.owasp.org/cheatsheets/Server_Security_Cheat_Sheet.html</td></tr>
+  <tr><th>Base Likelihood</th><td>NONE(0)</td></tr>
+  <tr><th>Base Impact</th><td>NONE(0)</td></tr>
+</table>
+
+<h4>Rule vulnerable-dependencies</h4>
+<table class="rule-table">
+  <tr><th>Title</th><td>Vulnerable Dependencies</td></tr>
+  <tr><th>Description</th><td>Technical assets should scan dependencies for known vulnerabilities.
+</td></tr>
+  <tr><th>CWE</th><td><a href="https://cwe.mitre.org/data/definitions/0">0</a></td></tr>
+  <tr><th>Mitigation</th><td>Regularly scan dependencies for known vulnerabilities.</td></tr>
+  <tr><th>URL</th><td>https://cheatsheetseries.owasp.org/cheatsheets/Dependency_Usage_Cheat_Sheet.html</td></tr>
+  <tr><th>Base Likelihood</th><td>NONE(0)</td></tr>
+  <tr><th>Base Impact</th><td>NONE(0)</td></tr>
+</table>
+
+<h4>Rule authentication-failure</h4>
+<table class="rule-table">
+  <tr><th>Title</th><td>Authentication Failure</td></tr>
+  <tr><th>Description</th><td>Technical assets should implement proper authentication for all endpoints.
+</td></tr>
+  <tr><th>CWE</th><td><a href="https://cwe.mitre.org/data/definitions/0">0</a></td></tr>
+  <tr><th>Mitigation</th><td>Implement proper authentication for all endpoints.</td></tr>
+  <tr><th>URL</th><td>https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html</td></tr>
+  <tr><th>Base Likelihood</th><td>NONE(0)</td></tr>
+  <tr><th>Base Impact</th><td>NONE(0)</td></tr>
+</table>
+
+<h4>Rule software-integrity</h4>
+<table class="rule-table">
+  <tr><th>Title</th><td>Software Integrity</td></tr>
+  <tr><th>Description</th><td>Technical assets should verify software integrity (signing, SBOM, etc.).
+</td></tr>
+  <tr><th>CWE</th><td><a href="https://cwe.mitre.org/data/definitions/0">0</a></td></tr>
+  <tr><th>Mitigation</th><td>Verify software integrity through signing and SBOM.</td></tr>
+  <tr><th>URL</th><td>https://cheatsheetseries.owasp.org/cheatsheets/Software_Integrity_Cheat_Sheet.html</td></tr>
+  <tr><th>Base Likelihood</th><td>NONE(0)</td></tr>
+  <tr><th>Base Impact</th><td>NONE(0)</td></tr>
+</table>
+
+<h4>Rule insufficient-logging</h4>
+<table class="rule-table">
+  <tr><th>Title</th><td>Insufficient Logging and Monitoring</td></tr>
+  <tr><th>Description</th><td>Technical assets should monitor and alert for security events.
+</td></tr>
+  <tr><th>CWE</th><td><a href="https://cwe.mitre.org/data/definitions/0">0</a></td></tr>
+  <tr><th>Mitigation</th><td>Implement monitoring and alerting for security events.</td></tr>
+  <tr><th>URL</th><td>https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html</td></tr>
+  <tr><th>Base Likelihood</th><td>NONE(0)</td></tr>
+  <tr><th>Base Impact</th><td>NONE(0)</td></tr>
+</table>
+
+<h4>Rule ssrf-vulnerability</h4>
+<table class="rule-table">
+  <tr><th>Title</th><td>SSRF Vulnerability</td></tr>
+  <tr><th>Description</th><td>Technical assets should protect against Server-Side Request Forgery attacks.
+</td></tr>
+  <tr><th>CWE</th><td><a href="https://cwe.mitre.org/data/definitions/0">0</a></td></tr>
+  <tr><th>Mitigation</th><td>Protect against SSRF for URL fetching.</td></tr>
+  <tr><th>URL</th><td>https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html</td></tr>
+  <tr><th>Base Likelihood</th><td>NONE(0)</td></tr>
+  <tr><th>Base Impact</th><td>NONE(0)</td></tr>
+</table>
+
+<h4>Rule http-security-headers</h4>
+<table class="rule-table">
+  <tr><th>Title</th><td>HTTP Security Headers</td></tr>
+  <tr><th>Description</th><td>Web applications should enforce security headers (HSTS, CSP, X-Frame-Options, etc.).
+</td></tr>
+  <tr><th>CWE</th><td><a href="https://cwe.mitre.org/data/definitions/0">0</a></td></tr>
+  <tr><th>Mitigation</th><td>Enforce security headers.</td></tr>
+  <tr><th>URL</th><td>https://cheatsheetseries.owasp.org/cheatsheets/HTML5_Security_Cheat_Sheet.html</td></tr>
+  <tr><th>Base Likelihood</th><td>NONE(0)</td></tr>
+  <tr><th>Base Impact</th><td>NONE(0)</td></tr>
+</table>
+
+<h4>Rule missing-external-system-review</h4>
+<table class="rule-table">
+  <tr><th>Title</th><td>Missing External System Review</td></tr>
+  <tr><th>Description</th><td>Technical assets should review security of external systems they communicate with.
+</td></tr>
+  <tr><th>CWE</th><td><a href="https://cwe.mitre.org/data/definitions/0">0</a></td></tr>
+  <tr><th>Mitigation</th><td>Review security of external systems.</td></tr>
+  <tr><th>URL</th><td>https://cheatsheetseries.owasp.org/cheatsheets/Third_Party_Component_Security_Cheat_Sheet.html</td></tr>
+  <tr><th>Base Likelihood</th><td>NONE(0)</td></tr>
+  <tr><th>Base Impact</th><td>NONE(0)</td></tr>
+</table>
+
+<h4>Rule session-management</h4>
+<table class="rule-table">
+  <tr><th>Title</th><td>Session Management</td></tr>
+  <tr><th>Description</th><td>Technical assets should implement secure session management (session fixation prevention, secure cookie flags, etc.).
+</td></tr>
+  <tr><th>CWE</th><td><a href="https://cwe.mitre.org/data/definitions/0">0</a></td></tr>
+  <tr><th>Mitigation</th><td>Implement secure session management.</td></tr>
+  <tr><th>URL</th><td>https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html</td></tr>
+  <tr><th>Base Likelihood</th><td>NONE(0)</td></tr>
+  <tr><th>Base Impact</th><td>NONE(0)</td></tr>
+</table>
+
+
+<!-- ── Disclaimer ─────────────────────────────────── -->
+<div class="disclaimer">
+  <h3>Disclaimer</h3>
+  Ferenc Bator conducted this threat analysis using the open-source TARALIZER toolkit on the applications and systems that were modeled as of this report's date.
+  Information security threats are continually changing, with new vulnerabilities discovered on a daily basis, and no application can ever be 100% secure no matter how much threat modeling is conducted. It is recommended to execute threat modeling and also penetration testing on a regular basis (for example yearly) to ensure a high ongoing level of security and constantly check for new attack vectors.
+  This report cannot and does not protect against personal or business loss as the result of use of the applications or systems described.
+  Ferenc Bator and the TARALIZER toolkit offers no warranties, representations or legal certifications concerning the applications or systems it tests.
+  All software includes defects: nothing in this document is intended to represent or warrant that threat modeling was complete and without error, nor does this document represent or warrant that the architecture analyzed is suitable to task, free of other defects than reported, fully compliant with any industry standards, or fully compatible with any operating system, hardware, or other application.
+  Threat modeling tries to analyze the modeled architecture without having access to a real working system and thus cannot and does not test the implementation for defects and vulnerabilities.
+  These kinds of checks would only be possible with a separate code review and penetration test against a working system and not via a threat model.
+  By using the resulting information you agree that John Doe and the Threagile toolkit shall be held harmless in any event.
+  This report is confidential and intended for internal, confidential use by the client.
+  The recipient is obligated to ensure the highly confidential contents are kept secret.
+  The recipient assumes responsibility for further distribution of this document.
+  In this particular project, a timebox approach was used to define the analysis effort.
+  This means that the author allotted a prearranged amount of time to identify and document threats.
+  Because of this, there is no guarantee that all possible threats and risks are discovered.
+  Furthermore, the analysis applies to a snapshot of the current state of the modeled architecture (based on the architecture information provided by the customer) at the examination time.
+</div>
+
+<h3>Report Distribution</h3>
+<p style="font-size:12px;color:#718096;">
+  Distribution of this report (in full or in part like diagrams or risk findings) requires that this disclaimer as well as the chapter about the TARALIZER toolkit and method used is kept intact as part of the distributed report or referenced from the distributed parts.
 </p>
 
+<!-- ── Mermaid ────────────────────────────────────── -->
 <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
 <script>
   mermaid.initialize({ securityLevel: 'loose' });

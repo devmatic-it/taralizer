@@ -96,3 +96,137 @@ is_database_protocol("sql")
 is_database_protocol("sql_encrypted")
 is_database_protocol("nosql")
 is_database_protocol("nosql_encrypted")
+
+# helpers for new rules
+
+# Direct inbound connections from end-user technologies (browser, mobile-app, etc.)
+has_direct_end_user_inbound(server) {
+    source := input.technical_assets[_]
+    source.id != server.id
+    is_end_user_technology(source.technology)
+    source.communication_links[_].target == server.id
+}
+
+# Direct inbound from end-user over an insecure protocol
+has_direct_unencrypted_end_user_inbound(server) {
+    source := input.technical_assets[_]
+    source.id != server.id
+    is_end_user_technology(source.technology)
+    conn := source.communication_links[_]
+    conn.target == server.id
+    not is_encrypted_protocol(conn.protocol)
+}
+
+# Direct inbound from end-user over an encrypted protocol
+has_direct_encrypted_end_user_inbound(server) {
+    source := input.technical_assets[_]
+    source.id != server.id
+    is_end_user_technology(source.technology)
+    conn := source.communication_links[_]
+    conn.target == server.id
+    is_encrypted_protocol(conn.protocol)
+}
+
+# Server receives traffic from a WAF (trusted intermediary handles TLS)
+has_waf_in_inbound_path(server) {
+    source := input.technical_assets[_]
+    source.id != server.id
+    source.technology == "waf"
+    source.communication_links[_].target == server.id
+}
+
+# Server receives traffic from a WAF or API-gateway (trusted intermediary handles validation)
+has_waf_or_api_gateway_in_inbound_path(server) {
+    source := input.technical_assets[_]
+    source.id != server.id
+    {
+        source.technology == "waf"
+    }
+    source.communication_links[_].target == server.id
+}
+
+# Server receives direct inbound from end-user technologies (browser, mobile-app, etc.)
+has_direct_end_user_inbound(server) {
+    source := input.technical_assets[_]
+    source.id != server.id
+    is_end_user_technology(source.technology)
+    source.communication_links[_].target == server.id
+}
+
+# Server receives direct inbound from outside its trust boundary
+has_cross_boundary_inbound(server) {
+    source := input.technical_assets[_]
+    source.id != server.id
+    source.communication_links[_].target == server.id
+    different_trust_boundaries(server.id, source.id)
+}
+
+# Server receives traffic from a WAF or API-gateway (trusted intermediary handles validation)
+has_waf_or_api_gateway_in_inbound_path(server) {
+    source := input.technical_assets[_]
+    source.id != server.id
+    {
+        source.technology == "waf"
+    }
+    source.communication_links[_].target == server.id
+}
+
+# Server receives direct inbound from end-user technologies (browser, mobile-app, etc.)
+has_direct_end_user_inbound(server) {
+    source := input.technical_assets[_]
+    source.id != server.id
+    is_end_user_technology(source.technology)
+    source.communication_links[_].target == server.id
+}
+
+# Server receives direct inbound from outside its trust boundary
+has_cross_boundary_inbound(server) {
+    source := input.technical_assets[_]
+    source.id != server.id
+    source.communication_links[_].target == server.id
+    different_trust_boundaries(server.id, source.id)
+}
+
+has_security_headers(server){
+    server.security_headers == true
+}
+
+has_external_system_review(server){
+    server.external_system_review == true
+}
+
+has_security_context(server){
+    server.security_context == true
+}
+
+has_input_validation(server){
+    server.input_validation == true
+}
+
+has_cryptographic_controls(server){
+    server.cryptographic_controls == true
+}
+
+has_access_control(server){
+    server.access_control == true
+}
+
+has_dependency_scanning(server){
+    server.dependency_scanning == true
+}
+
+has_software_integrity(server){
+    server.software_integrity == true
+}
+
+has_ssrf_protection(server){
+    server.ssrf_protection == true
+}
+
+has_monitoring(server){
+    server.monitoring == true
+}
+
+has_data_classification(server){
+    server.data_classification == true
+}

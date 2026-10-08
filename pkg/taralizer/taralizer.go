@@ -35,11 +35,20 @@ type Taralizer struct {
 	ruleset RuleSet
 }
 
+// getKeys returns the keys of a map[string]interface{}
+func getKeys(m map[string]interface{}) []string {
+	keys := []string{}
+	for k := range m {
+		keys = append(keys, k)
+	}
+	return keys
+}
+
 // New creates a new instance of the Taralizer engine.
 func NewTaralizer(ruleset string) *Taralizer {
 	instance := Taralizer{}
 	instance.ctx = context.TODO()
-	// Note: This assumes RuleSet(string) exists and returns a RuleSet. 
+	// Note: This assumes RuleSet(string) exists and returns a RuleSet.
 	// Based on previous errors, it seems the user might have intended to call a method or field.
 	// However, I will fix only the compilation errors identified.
 	instance.ruleset = instance.RuleSet(ruleset)
@@ -79,13 +88,25 @@ func (svc *Taralizer) convertMapToRisk(input interface{}) (Risk, error) {
 	}
 	risk.Impact = impact
 
-	rule := svc.findRule(risk.Id)
-	if rule != nil {
-		risk.Title = rule.Title
-		risk.Description = rule.Description
-		risk.Mitigation = rule.Mitigation
-		risk.Url = rule.Url
-		risk.Cwe = rule.Cwe
+	// Read metadata directly from the violation object (embedded in rego # METADATA block)
+	if title, ok := data["title"].(string); ok {
+		risk.Title = title
+	}
+	if desc, ok := data["description"].(string); ok {
+		risk.Description = desc
+	}
+	if mitigation, ok := data["mitigation"].(string); ok {
+		risk.Mitigation = mitigation
+	}
+	if url, ok := data["url"].(string); ok {
+		risk.Url = url
+	}
+	if cwe, ok := data["cwe"].(float64); ok {
+		risk.Cwe = int64(cwe)
+	} else if cwe, ok := data["cwe"].(int); ok {
+		risk.Cwe = int64(cwe)
+	} else if cwe, ok := data["cwe"].(int64); ok {
+		risk.Cwe = cwe
 	}
 	return risk, nil
 }
@@ -306,23 +327,116 @@ func (svc *Taralizer) Validate(fileName string) []string {
 // RulesSet returns the rules of the given rulset
 func (svc *Taralizer) RuleSet(rs string) RuleSet {
 
-	results := svc.queryString("data." + rs + ".ruleset")
-
-	// load model into structured report
-	svc.ruleset = RuleSet{}
-	svc.ruleset.Name = rs
-
-	if len(results) == 1 {
-		data, ok := results[0].Expressions[0].Value.(map[string]interface{})
-		if ok {
-			ruleSet, err := svc.convertMapToRuleSet(data)
-			if err == nil {
-				svc.ruleset = ruleSet
-			}
+	// Load ruleset.yaml directly (not through OPA) since it's metadata, not Rego code.
+	// Find the ruleset.yaml file in the asvs directory.
+	defaultRulesDirs := []string{"./rules/asvs/", "/etc/taralizer/rules/asvs/", "../../rules/asvs/"}
+	var rulesetPath string
+	for _, dir := range defaultRulesDirs {
+		path := dir + "ruleset.yaml"
+		if _, err := os.Stat(path); err == nil {
+			rulesetPath = path
+			break
 		}
 	}
 
-	return svc.ruleset
+	if rulesetPath == "" {
+		return RuleSet{}
+	}
+
+	// Read and parse the ruleset.yaml file
+	data, err := os.ReadFile(rulesetPath)
+	if err != nil {
+		return RuleSet{}
+	}
+
+	var model interface{}
+	if err := yaml.Unmarshal(data, &model); err != nil {
+		return RuleSet{}
+	}
+
+	modelMap, ok := model.(map[string]interface{})
+	if !ok {
+		return RuleSet{}
+	}
+
+	rulesetData, ok := modelMap["ruleset"].(map[string]interface{})
+	if !ok {
+		return RuleSet{}
+	}
+
+	// Convert to RuleSet struct
+	ruleSet := RuleSet{}
+	if name, ok := rulesetData["name"].(string); ok {
+		ruleSet.Name = name
+	}
+	if title, ok := rulesetData["title"].(string); ok {
+		ruleSet.Title = title
+	}
+	if desc, ok := rulesetData["description"].(string); ok {
+		ruleSet.Description = desc
+	}
+	if version, ok := rulesetData["version"].(string); ok {
+		ruleSet.Version = version
+	}
+	if url, ok := rulesetData["url"].(string); ok {
+		ruleSet.Url = url
+	}
+	if rulesData, ok := rulesetData["rules"].([]interface{}); ok {
+		for _, v := range rulesData {
+			ruleMap, ok := v.(map[string]interface{})
+			if !ok {
+				continue
+			}
+			// Handle both formats: with and without 'rule:' wrapper
+			var ruleData map[string]interface{}
+			if rd, ok := ruleMap["rule"].(map[string]interface{}); ok && rd != nil {
+				ruleData = rd
+			} else {
+				ruleData = ruleMap
+			}
+			rule := Rule{}
+			if id, ok := ruleData["id"].(string); ok {
+				rule.Id = id
+			}
+			if title, ok := ruleData["title"].(string); ok {
+				rule.Title = title
+			}
+			if desc, ok := ruleData["description"].(string); ok {
+				rule.Description = desc
+			}
+			if mitigation, ok := ruleData["mitigation"].(string); ok {
+				rule.Mitigation = mitigation
+			}
+			if url, ok := ruleData["url"].(string); ok {
+				rule.Url = url
+			}
+			if likelihood, ok := ruleData["likelihood"].(float64); ok {
+				rule.Likelihood = int64(likelihood)
+			} else if likelihood, ok := ruleData["likelihood"].(int); ok {
+				rule.Likelihood = int64(likelihood)
+			} else if likelihood, ok := ruleData["likelihood"].(int64); ok {
+				rule.Likelihood = likelihood
+			}
+			if impact, ok := ruleData["impact"].(float64); ok {
+				rule.Impact = int64(impact)
+			} else if impact, ok := ruleData["impact"].(int); ok {
+				rule.Impact = int64(impact)
+			} else if impact, ok := ruleData["impact"].(int64); ok {
+				rule.Impact = impact
+			}
+			if cwe, ok := ruleData["cwe"].(float64); ok {
+				rule.Cwe = int64(cwe)
+			} else if cwe, ok := ruleData["cwe"].(int); ok {
+				rule.Cwe = int64(cwe)
+			} else if cwe, ok := ruleData["cwe"].(int64); ok {
+				rule.Cwe = cwe
+			}
+			ruleSet.Rules = append(ruleSet.Rules, rule)
+		}
+	}
+
+	svc.ruleset = ruleSet
+	return ruleSet
 }
 
 // // Evaluate executes an Open Policy Agent (OPA) query against the rule sets calling the given query 'queryStr'
@@ -356,6 +470,7 @@ func (svc *Taralizer) query(fileName string, queryStr string) rego.ResultSet {
 	exPath := filepath.Dir(ex)
 
 	defaultRulesDir := []string{"./rules/", "/etc/taralizer/rules/", exPath + "/rules/", "../../rules/"}
+	defaultRulesDir = append(defaultRulesDir, "./rules/asvs/", "/etc/taralizer/rules/asvs/", exPath+"/rules/asvs/", "../../rules/asvs/")
 	rules := []string{}
 	for _, v := range defaultRulesDir {
 		if _, err := os.Stat(v); !os.IsNotExist(err) {
@@ -363,15 +478,47 @@ func (svc *Taralizer) query(fileName string, queryStr string) rego.ResultSet {
 		}
 	}
 
-	query, err := rego.New(rego.Query(queryStr), rego.Load(rules, nil)).PrepareForEval(svc.ctx)
+	// Build explicit list of Rego files, excluding YAML metadata files.
+	// OPA bundles directories, so we need to list individual Rego files.
+	// The ruleset.yaml is metadata used by RuleSet(), not Rego code.
+	var files []string
+	for _, r := range rules {
+		entries, err := os.ReadDir(r)
+		if err != nil {
+			continue
+		}
+		for _, entry := range entries {
+			name := entry.Name()
+			// Skip YAML metadata files (ruleset.yaml)
+			if strings.HasSuffix(name, ".yaml") {
+				continue
+			}
+			// Skip non-Rego files
+			if !entry.IsDir() && !strings.HasSuffix(name, ".rego") {
+				continue
+			}
+			if !entry.IsDir() {
+				files = append(files, r+name)
+			}
+		}
+	}
+
+	if len(files) == 0 {
+		// Fallback: use directories if no Rego files found
+		files = rules
+	}
+
+	query, err := rego.New(rego.Query(queryStr), rego.Load(files, nil)).PrepareForEval(svc.ctx)
 	if err != nil {
-		log.Fatalf("cannot load model file into rego engine: %v", err)
+		log.Printf("WARN: cannot load model file into rego engine: %v", err)
+		return nil
 	}
 
 	results, err := query.Eval(svc.ctx, rego.EvalInput(model))
 
 	if err != nil {
-		log.Fatalf("cannot evaluate rules against input: %v", err)
+		log.Printf("WARN: cannot evaluate rules against input: %v", err)
+		return nil
 	}
 	return results
 }
@@ -380,6 +527,7 @@ func (svc *Taralizer) query(fileName string, queryStr string) rego.ResultSet {
 func (svc *Taralizer) queryString(queryStr string) rego.ResultSet {
 
 	defaultRulesDir := []string{"./rules/", "/etc/taralizer/rules/", "../../rules/"}
+	defaultRulesDir = append(defaultRulesDir, "./rules/asvs/", "/etc/taralizer/rules/asvs/", "../../rules/asvs/")
 	rules := []string{}
 	for _, v := range defaultRulesDir {
 		if _, err := os.Stat(v); !os.IsNotExist(err) {
@@ -387,15 +535,47 @@ func (svc *Taralizer) queryString(queryStr string) rego.ResultSet {
 		}
 	}
 
-	query, err := rego.New(rego.Query(queryStr), rego.Load(rules, nil)).PrepareForEval(svc.ctx)
+	// Build explicit list of Rego files, excluding YAML metadata files.
+	// OPA bundles directories, so we need to list individual Rego files.
+	// The ruleset.yaml is metadata used by RuleSet(), not Rego code.
+	var files []string
+	for _, r := range rules {
+		entries, err := os.ReadDir(r)
+		if err != nil {
+			continue
+		}
+		for _, entry := range entries {
+			name := entry.Name()
+			// Skip YAML metadata files (ruleset.yaml)
+			if strings.HasSuffix(name, ".yaml") {
+				continue
+			}
+			// Skip non-Rego files
+			if !entry.IsDir() && !strings.HasSuffix(name, ".rego") {
+				continue
+			}
+			if !entry.IsDir() {
+				files = append(files, r+name)
+			}
+		}
+	}
+
+	if len(files) == 0 {
+		// Fallback: use directories if no Rego files found
+		files = rules
+	}
+
+	query, err := rego.New(rego.Query(queryStr), rego.Load(files, nil)).PrepareForEval(svc.ctx)
 	if err != nil {
-		log.Fatalf("cannot load model file into rego engine: %v", err)
+		log.Printf("WARN: cannot load model file into rego engine: %v", err)
+		return nil
 	}
 
 	results, err := query.Eval(svc.ctx)
 
 	if err != nil {
-		log.Fatalf("cannot evaluate rules against input: %v", err)
+		log.Printf("WARN: cannot evaluate rules against input: %v", err)
+		return nil
 	}
 	return results
 }

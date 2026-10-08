@@ -37,7 +37,7 @@
 
 | Name | Description | C | I | A |
 |------|-------------|---|---|---|
-{{range .DataAssets}}| {{.Name}} | {{.Description}} | {{.Confidentiality}} | {{.Integrity}} | {{.Availability}} |
+{{range .DataAssets}}| {{.Name}} | {{.Description}} | {{dataAssetLabel .Confidentiality}} | {{dataAssetLabel .Integrity}} | {{dataAssetLabel .Availability}} |
 {{end}}
 
 ### Threat Agents

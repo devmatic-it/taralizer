@@ -93,6 +93,7 @@ validation[{"id":id,"msg": msg}] {
     server.technology != "batch-processing"
     server.technology != "message-queue"
     server.technology != "stream-processing"
+    server.technology != "api-gateway"
 
     #database and storage
     server.technology != "data-lake"

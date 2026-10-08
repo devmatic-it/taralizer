@@ -45,7 +45,8 @@ var (
 				os.Exit(1)
 			}
 
-			if reportType == "pdf" {
+			switch reportType {
+			case "pdf":
 				err := r.GenerateReportFilePDF(reportFile+".pdf",
 					tplDir+"pdf_report.tpl",
 					tplDir+"pdf_report_cover.tpl", report)
@@ -53,18 +54,24 @@ var (
 					fmt.Fprintf(os.Stderr, "Error generating PDF report: %v\n", err)
 					os.Exit(1)
 				}
-			} else if reportType == "markdown" {
+			case "markdown":
 				err := r.GenerateReportFileMarkdown(reportFile+".md",
 					tplDir+"markdown_report.tpl", report)
 				if err != nil {
 					fmt.Fprintf(os.Stderr, "Error generating markdown report: %v\n", err)
 					os.Exit(1)
 				}
-			} else {
+			case "html":
 				err := r.GenerateReportFile(reportFile+".html",
 					tplDir+"html.tpl", report)
 				if err != nil {
 					fmt.Fprintf(os.Stderr, "Error generating HTML report: %v\n", err)
+					os.Exit(1)
+				}
+			default:
+				err := r.GenerateConsoleStyledReport(report)
+				if err != nil {
+					fmt.Fprintf(os.Stderr, "Error generating styled console report: %v\n", err)
 					os.Exit(1)
 				}
 			}
@@ -74,6 +81,6 @@ var (
 
 func init() {
 	reportCmd.Flags().StringVar(&reportFile, "out", "report", "output file name")
-	reportCmd.Flags().StringVar(&reportType, "type", "html", "type of report")
+	reportCmd.Flags().StringVar(&reportType, "type", "", "type of report (html, pdf, markdown; default: styled console)")
 	rootCmd.AddCommand(reportCmd)
 }
