@@ -17,43 +17,45 @@ GOBIN=$(GOBASE)/dist
 PKG := "github.com/devmatic-it/taralizer"
 PKG_LIST := $(shell go list ${PKG}/... | grep -v /vendor/)
 
-all:  compile test-coverage
+all: build test
 
-compile: build
+.PHONY: all build test lint test-coverage clean
 
-init: get compile
-
-get:
-	@echo "Downloading dependencies..."	
-	GOBIN=$(GOBIN) go get -u -v github.com/xuri/xgen/cmd/...
-	GOBIN=$(GOBIN) go get github.com/securego/gosec/v2/cmd/gosec
-	GOBIN=$(GOBIN) go get
-
-security:
-	@echo "Gosec security scan..."
-	dist/gosec ./...
-
-test: compile
-	go CGO_ENABLED=0 test -v ${PKG_LIST} 
-
+# Build the binary
 build:
 	@echo "Building binary..."
-	GOBIN=$(GOBIN) CGO_ENABLED=0 go build -v -ldflags="-X 'github.com/devmatic-it/taralizer/cmd.ProductVersion=${VERSION}'"  -o dist/taralizer
+	CGO_ENABLED=0 go build -v -ldflags="-X 'github.com/devmatic-it/taralizer/cmd.ProductVersion=${VERSION}'" -o dist/taralizer
 	cp -R templates dist/templates
 	cp -R profiles dist/profiles
 
+# Run tests with coverage
+test:
+	@echo "Running tests..."
+	go test -v -race -coverprofile=coverage.txt -covermode=atomic ./...
+
+# Run linter
 test-coverage:
-	@go test -short -coverprofile cover.out -covermode=atomic ${PKG_LIST} 
+	@go test -short -coverprofile cover.out -covermode=atomic ${PKG_LIST}
 	@cat cover.out >> coverage.txt
 
-antlr:
-	@echo "Executing ANTLR to generate terraform parser..."	
-	antlr4 -Dlanguage=Go  -no-visitor -package terraform terraform.g4
+# Run golangci-lint
+lint:
+	@echo "Running linter..."
+	golangci-lint run --config=.golangci.yml
 
+# Clean build artifacts
 clean:
-	@echo "Cleanup dependencies..."	
-	rm -Rf ./src/github.com 
-	rm -Rf ./src/golang.org
-	rm -Rf ./src/gopkg.in
-	rm -Rf ./dist/*
-	rm -f cover.out coverage.txt gosec_report.html
+	@echo "Cleaning..."
+	rm -rf dist/*
+	rm -f cover.out coverage.txt
+
+# Initialize development environment
+init:
+	@echo "Installing dependencies..."
+	go mod download
+	go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+
+# Generate terraform parser (requires antlr4)
+antml:
+	@echo "Generating terraform parser with ANTLR..."
+	antlr4 -Dlanguage=Go -no-visitor -package terraform terraform.g4

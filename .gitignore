@@ -1,10 +1,33 @@
+# Build artifacts
+dist/
+build/
+*.exe
+taralizer
+taralizer*
+
+# Test artifacts
 coverage.txt
 cover.out
 gosec_report.*
-dist
-build/debcvescan
-contrib/
-dist/
-taralizer
-taralizer_new
-taralizer
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Report outputs (generated)
+report.html
+report.md
+report.pdf
+
+# Vendor (if used)
+vendor/
+
+# Local config (optional override)
+config.yaml

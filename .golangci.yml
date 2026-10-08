@@ -1,0 +1,72 @@
+# Copyright 2024 Taralizer authors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+run:
+  timeout: 5m
+  modules-download-mode: readonly
+
+linters:
+  enable:
+    - errcheck
+    - gosimple
+    - govet
+    - ineffassign
+    - staticcheck
+    - unused
+    - gofmt
+    - goimports
+    - revive
+    - gocyclo
+    - gocognit
+    - misspell
+    - unconvert
+    - prealloc
+    - stylecheck
+
+linters-settings:
+  errcheck:
+    check-type-assertions: true
+    check-blank: false
+  revive:
+    rules:
+      - name: exported
+        arguments: ["disable-stuttering"]
+      - name: var-naming
+        arguments: [["ID", "URL", "HTTP", "JSON", "API"]
+  gocyclo:
+    min-complexity: 15
+  gocognit:
+    min-complexity: 30
+  misspell:
+    locale: US
+  staticcheck:
+    checks: ["all", "-ST1000", "-ST1003", "-ST1016", "-ST1020", "-ST1021", "-ST1022"]
+  govet:
+    enable:
+      - shadow
+
+issues:
+  exclude-rules:
+    - path: _test\.go
+      linters:
+        - dupl
+        - gosec
+    - path: cmd/
+      linters:
+        - dupl
+    - path: pkg/taralizer/taralizer.go
+      linters:
+        - gocognit
+  max-same-issues: 0
+  max-issues-per-linter: 0

@@ -1,84 +1,361 @@
-# Taralizer - The Threat and Risk Analyzer
+# Taralizer — Threat & Risk Analyzer for Cloud Architecture
 
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/devmatic-it/taralizer/blob/master/LICENSE)
-[![codecov](https://codecov.io/gh/devmatic-it/taralizer/branch/main/graph/badge.svg)](https://codecov.io/gh/devmatic-it/taralizer)
+<div align="center">
 
-The following project performs a **Threat and Risk Analysis** based on an architecture model defined through simple YAML file.
-We aim to implement the **OWASP Application Security Verification Standard** (ASVS)(<https://owasp.org/www-project-application-security-verification-standard/>) and also destribute their great database (<https://github.com/OWASP/ASVS/raw/v4.0.2/4.0/docs_en/OWASP%20Application%20Security%20Verification%20Standard%204.0.2-en.csv>).
-Furthermore, we use and distribute MITRE Common Weakness Enumeration (<https://cwe.mitre.org/data/downloads.html>) as a way to classify weaknesses.
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
+[![Go Report Card](https://goreportcard.com/badge/github.com/devmatic-it/taralizer)](https://goreportcard.com/report/github.com/devmatic-it/taralizer)
+[![Go Reference](https://pkg.go.dev/badge/github.com/devmatic-it/taralizer.svg)](https://pkg.go.dev/github.com/devmatic-it/taralizer)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/devmatic-it/taralizer)](https://github.com/devmatic-it/taralizer/releases)
+[![GitHub Downloads](https://img.shields.io/github/downloads/devmatic-it/taralizer/total)](https://github.com/devmatic-it/taralizer/releases)
+[![GitHub stars](https://img.shields.io/github/stars/devmatic-it/taralizer)](https://github.com/devmatic-it/taralizer/stargazers)
+[![GitHub issues](https://img.shields.io/github/issues/devmatic-it/taralizer)](https://github.com/devmatic-it/taralizer/issues)
 
-## Motivation
+**Automated threat modeling and risk analysis for cloud architectures.**
 
-The **taralizer** project was highly inspired by the **Threagile** (<https://threagile.io>) project which is a first class threat modelling tool for OWASP ASVP.
-Unfortunately, **Threagile** has some limits in the customization of reports and the extendability with custom rules.
-Taralizer tries to overcome these limitations with the following approach:
+</div>
 
-- Using Golang templating (<https://golang.org/pkg/text/template/>) for all reports
-- Use the Open Policy Agent (OPA) engine (<https://www.openpolicyagent.org>) to allow extentabilty
-- Use the 'chromedp' library to create PDF reports (requires Chrome or Chromium installed)
-- Embed mermaid.js in HTML/PDF reports to render Data Flow Diagrams inline (no external tools needed)
+---
+
+## What is Taralizer?
+
+Taralizer is a **Threat and Risk Analysis** tool that evaluates cloud architecture models against industry security standards. It transforms a simple YAML architecture model into comprehensive security reports with actionable findings.
+
+### Key Capabilities
+
+- **OWASP ASVS Compliance** — 22 security rules covering authentication, authorization, encryption, injection, and more
+- **MITRE CWE Integration** — Classify findings using the Common Weakness Enumeration database
+- **Three Report Formats** — HTML (interactive), PDF (print-ready), Markdown (GitHub/GitLab native)
+- **Custom Rules** — Extensible via Open Policy Agent (OPA) Rego rules
+- **Zero External Dependencies** — HTML reports render diagrams inline via mermaid.js; PDF uses headless Chrome
+
+### Why Taralizer?
+
+Built by security practitioners for security practitioners, Taralizer fills the gap between lightweight threat modeling and heavy enterprise tools. It integrates seamlessly into CI/CD pipelines, supports custom security profiles, and produces stakeholder-ready reports.
+
+---
+
+## Quick Start
+
+### Prerequisites
+
+- Go 1.23+ (for building from source)
+- Chrome or Chromium (for PDF report generation)
+
+### Installation
+
+#### Option 1: Download Pre-built Binary (Recommended)
+
+```bash
+# Download the latest release for your platform
+# macOS (Intel)
+curl -L https://github.com/devmatic-it/taralizer/releases/latest/download/taralizer_darwin_amd64.zip -o taralizer.zip
+unzip taralizer.zip
+
+# macOS (Apple Silicon)
+curl -L https://github.com/devmatic-it/taralizer/releases/latest/download/taralizer_darwin_arm64.zip -o taralizer.zip
+unzip taralizer.zip
+
+# Linux
+curl -L https://github.com/devmatic-it/taralizer/releases/latest/download/taralizer_linux_amd64.zip -o taralizer.zip
+unzip taralizer.zip
+
+# Windows
+curl -L https://github.com/devmatic-it/taralizer/releases/latest/download/taralizer_windows_amd64.zip -o taralizer.zip
+tar -xzf taralizer.zip
+```
+
+Add to your PATH and verify:
+
+```bash
+./taralizer version
+```
+
+#### Option 2: Install from Source
+
+```bash
+go install github.com/devmatic-it/taralizer@latest
+```
+
+Or build from repository:
+
+```bash
+git clone https://github.com/devmatic-it/taralizer.git
+cd taralizer
+make build
+```
+
+### First Report
+
+Generate a security report from the Bank of Anthos example:
+
+```bash
+# HTML report (interactive, with inline diagrams)
+./taralizer report examples/gcp/bank_of_anthos.yaml
+
+# PDF report (print-ready)
+./taralizer report examples/gcp/bank_of_anthos.yaml --type pdf
+
+# Markdown report (renders in GitHub/GitLab/VS Code)
+./taralizer report examples/gcp/bank_of_anthos.yaml --type markdown
+```
+
+Open `report.html` in your browser to see the full report with interactive diagrams.
+
+---
 
 ## Features
 
-Taralizer currently provides the following features:
+### Security Standards
 
-- backward compatiblity with Threagile (<https://threagile.io>) model files
-- taralizer is packaged for all major devopment environments:
-  - MacOSX (x86_64, ARM64 M1)
-  - Linux (x86, x86_64, ARM64)
-  - Windows (x86, x86_64)
-- three report types:
-  - **HTML** — self-contained report with inline DFD (renders via mermaid.js)
-  - **PDF** — self-contained report with inline DFD (rendered by chromedp)
-  - **Markdown** — DFD embedded as mermaid text (renders natively in GitHub, GitLab, VS Code)
-- support of PDF and HTML reports
+- **OWASP ASVS v4.0.2** — 22 rules covering:
+  - Authentication & Session Management
+  - Authorization & Access Control
+  - Cryptography & Data Protection
+  - Input Validation & Injection Protection
+  - Security Misconfiguration
+  - Logging & Monitoring
 
-![PDF Report](<https://github.com/devmatic-it/taralizer/blob/main/docs/images/report_pdf.png>)
-![HTML Report](<https://github.com/devmatic-it/taralizer/blob/main/docs/images/report_html.png>)
+### Report Formats
 
-We demonstate the usage of **Taralizer** on the popular **Bank of Anthos** example application [HERE](<https://github.com/devmatic-it/taralizer/blob/main/examples/gcp/README.md>)
+| Format | Use Case | Diagrams |
+|--------|----------|----------|
+| **HTML** | Interactive review | Inline mermaid.js (CDN) |
+| **PDF** | Print & distribution | Rendered by chromedp |
+| **Markdown** | CI/CD, GitHub docs | Embedded mermaid code |
 
-## Installation
+### Extensibility
 
-### Getting Started
+- **Custom Rules** — Write Rego rules following OPA conventions
+- **Custom Profiles** — Define technology mappings and trust boundaries
+- **Custom Templates** — Customize report output with Go templates
 
-1. Download latest release for your platform: <https://github.com/devmatic-it/taralizer/releases/latest>
-2. extract archive: `unzip taralizer_X.Y.Z_linux_amd64.zip`
-3. create example HTML report: `./taralizer report ./examples/gcp/bank_of_anthos.yaml`
-4. open examples HTML report `report.html` on browser (DFD renders via mermaid.js)
-5. create example PDF report: `./taralizer report ./examples/gcp/bank_of_anthos.yaml --type pdf`
-6. create example Markdown report: `./taralizer report ./examples/gcp/bank_of_anthos.yaml --type markdown`
+---
 
-**Note:** PDF report generation requires Chrome or Chromium to be installed on your system (`google-chrome`, `chromium-browser`, or `chromium`). This is a dependency of the chromedp library, which drives headless Chrome via the DevTools Protocol.
+## Architecture
 
-**Note:** HTML reports load mermaid.js from a CDN at render time. PDF reports are self-contained since the DFD is rendered during generation.
+```
+┌─────────────────────────────────────────────────────────┐
+│                    Input Model (YAML)                    │
+│  (technical_assets, data_assets, trust_boundaries,       │
+│   communication_links, terraform_config)                 │
+└──────────────────────┬──────────────────────────────────┘
+                       │
+                       ▼
+┌─────────────────────────────────────────────────────────┐
+│                   Taralizer Engine                       │
+│                                                         │
+│  ┌─────────────┐  ┌──────────────┐  ┌───────────────┐ │
+│  │  Model      │  │  OPA Engine  │  │  Rule Engine  │ │
+│  │  Parser     │→ │  (Rego)     │→ │  (ASVS Rules) │ │
+│  └─────────────┘  └──────────────┘  └───────────────┘ │
+│                       │                    │            │
+│                       ▼                    ▼            │
+│  ┌─────────────┐  ┌──────────────┐  ┌───────────────┐ │
+│  │  Terraform  │  │  CWE/ASVS   │  │  Risk         │ │
+│  │  Parser     │  │  Database   │  │  Calculator   │ │
+│  └─────────────┘  └──────────────┘  └───────────────┘ │
+└──────────────────────┬──────────────────────────────────┘
+                       │
+                       ▼
+┌─────────────────────────────────────────────────────────┐
+│                    Report Output                         │
+│                                                         │
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐             │
+│  │  HTML   │  │   PDF    │  │ Markdown │             │
+│  └──────────┘  └──────────┘  └──────────┘             │
+└─────────────────────────────────────────────────────────┘
+```
 
-## Contribute
+---
 
-### New Issues
+## Usage
 
-1. Use the search tool before opening a new issue: <https://github.com/devmatic-it/taralizer/issues>
-2. Please provide source code and commit fix if you found a bug.
-3. Review existing issues and provide feedback or react to them.
+### Commands
 
-### Pull requests
+```bash
+# Generate a report (default: HTML)
+taralizer report <model.yaml> [--type html|pdf|markdown]
 
-1. Open your pull request against master:  <https://github.com/devmatic-it/taralizer/pulls>
-2. Your pull request should have no more than two commits, if not you should squash them.
-3. It should pass all tests in the available continuous integrations systems such as TravisCI.
-4. You should add/modify tests to cover your proposed code changes.
-5. If your pull request contains a new feature, please document it on the <https://github.com/devmatic-it/taralizer/blob/master/README.md>
+# List available rules
+taralizer rules
+
+# Validate a model
+taralizer validate <model.yaml>
+
+# Show version information
+taralizer version
+```
+
+### Flags
+
+| Flag | Description | Default |
+|------|-------------|---------|
+| `--ruleset` | Security standard to use | `asvs` |
+| `--type` | Report format | `html` |
+| `--config` | Configuration file path | `~/.taralizer/config.yaml` |
+
+### Custom Rules
+
+Create custom Rego rules in `~/.taralizer/rules/`:
+
+```rego
+# ~/.taralizer/rules/custom_policy.rego
+package rules.custom
+
+violation[{
+    "id": sprintf("custom-rule@%v", [server.id]),
+    "msg": sprintf("Custom finding: %v", [server.id]),
+    "likelihood": 2,
+    "impact": 3,
+}] {
+    server := input.technical_assets[_]
+    server.technology == "web-application"
+    # your custom logic here
+}
+```
+
+### Custom Profiles
+
+Define technology mappings in `~/.taralizer/profiles/`:
+
+```yaml
+# ~/.taralizer/profiles/custom.yaml
+name: custom
+description: Custom technology mappings
+terraform_provider: "custom_provider"
+technologies:
+  - id: "my-service"
+    name: "My Service"
+    type: "technical_asset"
+    terraform: "my_resource"
+```
+
+---
+
+## Examples
+
+### Bank of Anthos
+
+The included Bank of Anthos example demonstrates a retail banking architecture with intentional security issues:
+
+```bash
+./taralizer report examples/gcp/bank_of_anthos.yaml
+```
+
+See the [Bank of Anthos README](examples/gcp/README.md) for details.
+
+### Custom Model
+
+Create your own architecture model:
+
+```yaml
+# my_architecture.yaml
+technical_assets:
+  - id: "web-app"
+    name: "Web Application"
+    technology: "kubernetes-pod"
+    data_assets_processed:
+      - "user-credentials"
+    data_assets_stored:
+      - "session-data"
+    communication_links:
+      - target: "database"
+        protocol: "https"
+        authentication: "mutual-tls"
+trust_boundaries:
+  - id: "internet"
+    technical_assets_inside:
+      - "web-app"
+data_assets:
+  - id: "user-credentials"
+    confidentiality: 3
+    integrity: 2
+    availability: 1
+```
+
+---
+
+## Contributing
+
+We welcome contributions! Please see our [Contributing Guide](.github/CONTRIBUTING.md) for details.
+
+### Development Setup
+
+```bash
+# Clone the repository
+git clone https://github.com/devmatic-it/taralizer.git
+cd taralizer
+
+# Install dependencies
+go mod download
+
+# Run tests
+make test
+
+# Build the binary
+make build
+
+# Run linter
+make lint
+```
+
+### Pull Request Process
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+Please ensure:
+- All tests pass (`make test`)
+- Code is linted (`make lint`)
+- New features include tests
+- Documentation is updated
+
+---
+
+## Roadmap
+
+- [ ] AWS, Azure, and GCP terraform provider support
+- [ ] Interactive web UI for model editing
+- [ ] Custom rule marketplace
+- [ ] Integration with popular CI/CD platforms
+- [ ] Export to Jira, ServiceNow, and other ticketing systems
+
+---
 
 ## Credits
 
-This work has been inspired and would not be possible without the following awesome open source projects:
+This project was inspired by and builds upon the following excellent open-source projects:
 
-- Threagile - Agile Threat Modelling (<https://threagile.io>)
-- Open Policy Agent (<https://www.openpolicyagent.org>)
-- chromedp (<https://github.com/chromedp/chromedp>)
-- mermaid.js (<https://mermaid.js.org>)
-- OWASP Application Security Verification Standard <https://owasp.org/www-project-application-security-verification-standard/>
-- Common Weakness Enumeration (<https://cwe.mitre.org/index.html>)
-- GoRleaser Builder Image (<https://github.com/goreleaser/goreleaser>)
-- Building a basic CI/CD pipeline for a Golang application using GitHub Actions
-(<https://dev.to/brpaz/building-a-basic-ci-cd-pipeline-for-a-golang-application-using-github-actions-icj>)
+- **[Threagile](https://threagile.io)** — Agile Threat Modelling
+- **[Open Policy Agent](https://www.openpolicyagent.org)** — Policy Engine
+- **[chromedp](https://github.com/chromedp/chromedp)** — Headless Chrome Automation
+- **[mermaid.js](https://mermaid.js.org)** — Diagram Rendering
+- **[OWASP ASVS](https://owasp.org/www-project-application-security-verification-standard/)** — Application Security Verification Standard
+- **[MITRE CWE](https://cwe.mitre.org)** — Common Weakness Enumeration
+
+---
+
+## License
+
+This project is licensed under the [Apache License 2.0](LICENSE).
+
+---
+
+## Support
+
+- **Documentation**: This README and inline documentation
+- **Issues**: [GitHub Issues](https://github.com/devmatic-it/taralizer/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/devmatic-it/taralizer/discussions)
+
+---
+
+<div align="center">
+
+**Built with ❤️ by the Taralizer team**
+
+[Report a Bug](https://github.com/devmatic-it/taralizer/issues) · [Request Feature](https://github.com/devmatic-it/taralizer/issues) · [Ask a Question](https://github.com/devmatic-it/taralizer/discussions)
+
+</div>
