@@ -21,11 +21,11 @@ on:
 
 jobs:
   test:
-    name: Test
+    name: Test (Go ${{ matrix.go-version }})
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        go-version: ['1.23', '1.24']
+        go-version: ['1.27']
     steps:
       - name: Set up Go
         uses: actions/setup-go@v5
@@ -58,11 +58,14 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version: '1.23'
+          go-version: '1.27'
           cache: true
 
       - name: Check out code
         uses: actions/checkout@v4
+
+      - name: Download dependencies
+        run: go mod download
 
       - name: Run golangci-lint
         uses: golangci/golangci-lint-action@v4
@@ -78,11 +81,14 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version: '1.23'
+          go-version: '1.27'
           cache: true
 
       - name: Check out code
         uses: actions/checkout@v4
+
+      - name: Download dependencies
+        run: go mod download
 
       - name: Build binary
         run: go build -o taralizer ./main.go
