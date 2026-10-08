@@ -1,6 +1,6 @@
 module github.com/devmatic-it/taralizer
 
-go 1.27
+go 1.24
 
 require (
 	github.com/antlr/antlr4/runtime/Go/antlr/v4 v4.0.0-20221202181307-76fa05c21b12
