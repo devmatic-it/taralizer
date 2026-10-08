@@ -31,3 +31,4 @@ vendor/
 
 # Local config (optional override)
 config.yaml
+.pi-lens/cache/*

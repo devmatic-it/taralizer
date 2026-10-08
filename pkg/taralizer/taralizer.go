@@ -16,7 +16,7 @@ package taralizer
 import (
 	"context"
 	"fmt"
-	"github.com/open-policy-agent/opa/rego"
+	"github.com/open-policy-agent/opa/v1/rego"
 	"gopkg.in/yaml.v3"
 	"io"
 	"log"
@@ -33,15 +33,6 @@ const RULE_REGO = "rego rule"
 type Taralizer struct {
 	ctx     context.Context
 	ruleset RuleSet
-}
-
-// getKeys returns the keys of a map[string]interface{}
-func getKeys(m map[string]interface{}) []string {
-	keys := []string{}
-	for k := range m {
-		keys = append(keys, k)
-	}
-	return keys
 }
 
 // New creates a new instance of the Taralizer engine.
@@ -111,145 +102,7 @@ func (svc *Taralizer) convertMapToRisk(input interface{}) (Risk, error) {
 	return risk, nil
 }
 
-// findRule searches metadata
-func (svc *Taralizer) findRule(id string) *Rule {
-	for _, rule := range svc.ruleset.Rules {
-		if strings.HasPrefix(id, rule.Id) {
-			return &rule
-		}
-	}
-	return nil
-}
 
-// convertMapToRule converts an untyped instance Rule into a typed one.
-func (svc *Taralizer) convertMapToRule(input interface{}) (Rule, error) {
-	if input == nil {
-		return Rule{}, fmt.Errorf("convertMapToRule: interface cannot be nil")
-	}
-
-	loc := svc.ruleset.Name + "/" + RULSET_YAML
-	data := input.(map[string]interface{})
-	rule := Rule{
-		Id:          "",
-		Title:       "",
-		Description: "",
-		Mitigation:  "",
-		Url:         "",
-	}
-
-	id, err := GetMapStringValue(data, "id", loc)
-	if err != nil {
-		return Rule{}, err
-	}
-	rule.Id = id
-
-	title, err := GetMapStringValue(data, "title", loc)
-	if err != nil {
-		return Rule{}, err
-	}
-	rule.Title = title
-
-	description, err := GetMapStringValue(data, "description", loc)
-	if err != nil {
-		return Rule{}, err
-	}
-	rule.Description = description
-
-	mitigation, err := GetMapStringValue(data, "mitigation", loc)
-	if err != nil {
-		return Rule{}, err
-	}
-	rule.Mitigation = mitigation
-
-	url, err := GetMapStringValue(data, "url", loc)
-	if err != nil {
-		return Rule{}, err
-	}
-	rule.Url = url
-
-	cwe, err := GetMapIntValue(data, "cwe", loc)
-	if err != nil {
-		return Rule{}, err
-	}
-	rule.Cwe = cwe
-
-	likelihood, err := GetMapIntValue(data, "likelihood", loc)
-	if err != nil {
-		return Rule{}, err
-	}
-	rule.Likelihood = likelihood
-
-	impact, err := GetMapIntValue(data, "impact", loc)
-	if err != nil {
-		return Rule{}, err
-	}
-	rule.Impact = impact
-
-	return rule, nil
-}
-
-// convertMapToRuleSet converts an untyped instance RuleSet
-func (svc *Taralizer) convertMapToRuleSet(input interface{}) (RuleSet, error) {
-	if input == nil {
-		return RuleSet{}, fmt.Errorf("convertMapToRuleSet: interface cannot be nil")
-	}
-
-	loc := svc.ruleset.Name + "/" + RULSET_YAML
-	data := input.(map[string]interface{})
-	ruleSet := RuleSet{
-		Name:        "",
-		Title:       "",
-		Description: "",
-		Version:     "",
-		Url:         "",
-		Rules:       []Rule{},
-	}
-
-	name, err := GetMapStringValue(data, "name", loc)
-	if err != nil {
-		return RuleSet{}, err
-	}
-	ruleSet.Name = name
-
-	title, err := GetMapStringValue(data, "title", loc)
-	if err != nil {
-		return RuleSet{}, err
-	}
-	ruleSet.Title = title
-
-	description, err := GetMapStringValue(data, "description", loc)
-	if err != nil {
-		return RuleSet{}, err
-	}
-	ruleSet.Description = description
-
-	version, err := GetMapStringValue(data, "version", loc)
-	if err != nil {
-		return RuleSet{}, err
-	}
-	ruleSet.Version = version
-
-	url, err := GetMapStringValue(data, "url", loc)
-	if err != nil {
-		return RuleSet{}, err
-	}
-	ruleSet.Url = url
-
-	rulesData, ok := data["rules"].([]interface{})
-	if !ok {
-		return RuleSet{}, fmt.Errorf("rules field is not an array")
-	}
-
-	for _, v := range rulesData {
-		rule, err := svc.convertMapToRule(v)
-		if err != nil {
-			return RuleSet{}, err
-		}
-		ruleSet.Rules = append(ruleSet.Rules, rule)
-	}
-
-	return ruleSet, nil
-}
 
 // mitigateRisk reads out the measures from the model to fill in the risk mitigations
 func (report *Report) addRisk(risk Risk) {
@@ -439,17 +292,14 @@ func (svc *Taralizer) RuleSet(rs string) RuleSet {
 	return ruleSet
 }
 
-// // Evaluate executes an Open Policy Agent (OPA) query against the rule sets calling the given query 'queryStr'
+// query executes an Open Policy Agent (OPA) query against the rule sets
 func (svc *Taralizer) query(fileName string, queryStr string) rego.ResultSet {
 
-	/* #nosec G304 */
 	jsonFile, err := os.Open(fileName)
-
-	/* #nosec G307 */
-	defer jsonFile.Close()
 	if err != nil {
 		log.Fatalf("cannot load model file: %v", err)
 	}
+	defer jsonFile.Close()
 
 	data, err := io.ReadAll(jsonFile)
 	var model interface{}

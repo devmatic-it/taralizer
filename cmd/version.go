@@ -18,11 +18,9 @@ import (
 	"fmt"
 	"runtime"
 
+	"github.com/devmatic-it/taralizer/pkg/version"
 	"github.com/spf13/cobra"
 )
-
-// ProductVersion contains the product version injected by the build system
-var ProductVersion string = "0.0.0"
 
 // version command
 var versionCmd = &cobra.Command{
@@ -30,7 +28,11 @@ var versionCmd = &cobra.Command{
 	Short: "product version",
 	Long:  `provides version information.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Printf("taralizer version: %s\n", ProductVersion)
+		v := version.Get()
+		fmt.Printf("taralizer version: %s\n", v.Version)
+		fmt.Printf("  git commit:  %s\n", v.Commit)
+		fmt.Printf("  build date:  %s\n", v.Date)
+		fmt.Printf("  built by:    %s\n", v.BuiltBy)
 		fmt.Printf("go version: %s %s/%s\n", runtime.Version(), runtime.GOOS, runtime.GOARCH)
 	},
 }

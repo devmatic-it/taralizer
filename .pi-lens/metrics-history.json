@@ -78,14 +78,14 @@
     },
     "pkg/taralizer/taralizer.go": {
       "latest": {
-        "commit": "3165741",
-        "timestamp": "2026-10-08T20:21:55.116Z",
-        "mi": 47,
-        "cognitive": 256,
+        "commit": "664de76",
+        "timestamp": "2026-10-08T21:36:50.425Z",
+        "mi": 46.7,
+        "cognitive": 271,
         "nesting": 6,
-        "lines": 446,
+        "lines": 457,
         "maxCyclomatic": 31,
-        "entropy": 6.34
+        "entropy": 6.28
       },
       "history": [
         {
@@ -107,6 +107,16 @@
           "lines": 446,
           "maxCyclomatic": 31,
           "entropy": 6.34
+        },
+        {
+          "commit": "664de76",
+          "timestamp": "2026-10-08T21:36:50.425Z",
+          "mi": 46.7,
+          "cognitive": 271,
+          "nesting": 6,
+          "lines": 457,
+          "maxCyclomatic": 31,
+          "entropy": 6.28
         }
       ],
       "trend": "regressing"
@@ -160,7 +170,82 @@
         }
       ],
       "trend": "stable"
+    },
+    "main.go": {
+      "latest": {
+        "commit": "664de76",
+        "timestamp": "2026-10-08T21:36:50.396Z",
+        "mi": 85.6,
+        "cognitive": 0,
+        "nesting": 1,
+        "lines": 13,
+        "maxCyclomatic": 1,
+        "entropy": 3.15
+      },
+      "history": [
+        {
+          "commit": "664de76",
+          "timestamp": "2026-10-08T21:36:50.396Z",
+          "mi": 85.6,
+          "cognitive": 0,
+          "nesting": 1,
+          "lines": 13,
+          "maxCyclomatic": 1,
+          "entropy": 3.15
+        }
+      ],
+      "trend": "stable"
+    },
+    "pkg/terraform/terraform_parser.go": {
+      "latest": {
+        "commit": "664de76",
+        "timestamp": "2026-10-08T21:36:50.513Z",
+        "mi": 21.5,
+        "cognitive": 1211,
+        "nesting": 5,
+        "lines": 4459,
+        "maxCyclomatic": 17,
+        "entropy": 6.13
+      },
+      "history": [
+        {
+          "commit": "664de76",
+          "timestamp": "2026-10-08T21:36:50.513Z",
+          "mi": 21.5,
+          "cognitive": 1211,
+          "nesting": 5,
+          "lines": 4459,
+          "maxCyclomatic": 17,
+          "entropy": 6.13
+        }
+      ],
+      "trend": "stable"
+    },
+    "cmd/version.go": {
+      "latest": {
+        "commit": "664de76",
+        "timestamp": "2026-10-08T21:37:08.110Z",
+        "mi": 82,
+        "cognitive": 0,
+        "nesting": 1,
+        "lines": 19,
+        "maxCyclomatic": 1,
+        "entropy": 4.01
+      },
+      "history": [
+        {
+          "commit": "664de76",
+          "timestamp": "2026-10-08T21:37:08.110Z",
+          "mi": 82,
+          "cognitive": 0,
+          "nesting": 1,
+          "lines": 19,
+          "maxCyclomatic": 1,
+          "entropy": 4.01
+        }
+      ],
+      "trend": "stable"
     }
   },
-  "capturedAt": "2026-10-08T20:30:48.013Z"
+  "capturedAt": "2026-10-08T21:37:13.111Z"
 }

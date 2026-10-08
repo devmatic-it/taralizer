@@ -1,43 +1,20 @@
 {
-  "generatedAt": "2026-10-08T20:32:02.015Z",
+  "generatedAt": "2026-10-08T21:41:22.097Z",
   "scope": "turn_delta",
   "sessionId": "01a11d14-e057-76c7-962d-3559589e2edc",
-  "turnIndex": 87,
-  "projectSeqStart": 67,
-  "projectSeqEnd": 68,
+  "turnIndex": 126,
+  "projectSeqStart": 127,
+  "projectSeqEnd": 128,
   "deltaOnly": true,
-  "files": [
-    {
-      "filePath": "/Users/bator/Documents/projects/taralizer/templates/console.tpl",
-      "displayPath": "templates/console.tpl",
-      "fileSeq": 8,
-      "warnings": [
-        {
-          "id": "cq:7c180a4223b1",
-          "filePath": "/Users/bator/Documents/projects/taralizer/templates/console.tpl",
-          "displayPath": "templates/console.tpl",
-          "severity": "warning",
-          "tool": "pi-lens",
-          "message": "Pi-lens helm-template analysis unavailable — a language tool is missing, timed out, or failed to run, or the LSP server isn't ready yet, so this file was not fully checked (not a clean result).",
-          "category": "other",
-          "origin": "dispatch"
-        }
-      ]
-    }
-  ],
+  "files": [],
   "summary": {
-    "warnings": 1,
-    "files": 1,
+    "warnings": 0,
+    "files": 0,
     "byTier": {
-      "warning": 1,
+      "warning": 0,
       "info": 0,
       "hint": 0
     },
-    "topRules": [
-      {
-        "rule": "pi-lens",
-        "count": 1
-      }
-    ]
+    "topRules": []
   }
 }
