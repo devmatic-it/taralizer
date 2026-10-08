@@ -43,7 +43,7 @@ linters-settings:
       - name: exported
         arguments: ["disable-stuttering"]
       - name: var-naming
-        arguments: [["ID", "URL", "HTTP", "JSON", "API"]
+        arguments: [["ID", "URL", "HTTP", "JSON", "API"]]
   gocyclo:
     min-complexity: 15
   gocognit:
