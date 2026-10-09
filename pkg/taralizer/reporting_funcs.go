@@ -21,7 +21,7 @@ import (
 	"text/template"
 )
 
-const REPORT_FMT_STRING = "%s(%d)"
+const REPORT_FMT_STRING = "%s (%d)"
 
 // createFuncMap returns template functions bound to the given report.
 func (svc *ReportEngine) createFuncMap(report Report) template.FuncMap {
@@ -53,7 +53,7 @@ func severity(severity int64) string {
 	case severity >= 6:
 		return fmt.Sprintf(REPORT_FMT_STRING, "HIGH", severity)
 	case severity >= 4:
-		return fmt.Sprintf(REPORT_FMT_STRING, "MEDIUM", severity)
+		return fmt.Sprintf(REPORT_FMT_STRING, "MED", severity)
 	case severity >= 1:
 		return fmt.Sprintf(REPORT_FMT_STRING, "LOW", severity)
 	case severity == 0:
@@ -78,7 +78,7 @@ func levelLabel(level int64) string {
 	case level == 1:
 		return "LOW"
 	case level == 2:
-		return "MEDIUM"
+		return "MED"
 	case level == 3:
 		return "HIGH"
 	case level >= 4:

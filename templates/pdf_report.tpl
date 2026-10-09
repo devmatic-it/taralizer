@@ -123,17 +123,17 @@
     overflow-wrap: break-word;
     hyphens: auto;
   }
-  .risks-table .col-id { width: 5%; }
-  .risks-table .col-likelihood { width: 5%; }
-  .risks-table .col-impact { width: 5%; }
-  .risks-table .col-severity { width: 5%; }
-  .risks-table .col-risk { width: 30%; }
-  .risks-table .col-action { width: 15%; }
+  .risks-table .col-id { width: 10%; }
+  .risks-table .col-likelihood { width: 6%; }
+  .risks-table .col-impact { width: 6%; }
+  .risks-table .col-severity { width: 6%; }
+  .risks-table .col-risk { width: 24%; }
+  .risks-table .col-action { width: 8%; }
   .risks-table .col-mitigation { width: 15%; }
-  .risks-table .col-res-impact { width: 5%; }
-  .risks-table .col-res-likelihood { width: 5%; }
-  .risks-table .col-res-severity { width: 5%; }
-  .risks-table .col-status { width: 5%; }
+  .risks-table .col-res-impact { width: 6%; }
+  .risks-table .col-res-likelihood { width: 6%; }
+  .risks-table .col-res-severity { width: 6%; }
+  .risks-table .col-status { width: 7%; }
   .risks-table a {
     color: #2b6cb0;
     text-decoration: none;

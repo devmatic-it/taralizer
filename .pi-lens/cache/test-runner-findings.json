@@ -1,157 +1,74 @@
 {
-  "content": "[from a prior turn — the edit that triggered this run had already been superseded by the time results came back]\n\n[Tests] ✗ 1/1 failed, 0 passed — go\n  ✗ TestTaralizerEvaluate\n    TestTaralizerEvaluate\n  → Fix failing tests before proceeding",
-  "stale": true,
+  "content": "",
+  "stale": false,
   "results": [
     {
-      "file": "/Users/bator/Documents/projects/taralizer/pkg/taralizer/taralizer_test.go",
+      "file": "/Users/bator/Documents/projects/taralizer/pkg/taralizer/reporting_test.go",
       "sourceFile": "",
       "runner": "go",
-      "passed": 0,
-      "failed": 1,
+      "passed": 1,
+      "failed": 0,
       "skipped": 0,
-      "failures": [
-        {
-          "name": "TestTaralizerEvaluate",
-          "message": "TestTaralizerEvaluate"
-        }
-      ]
+      "failures": [],
+      "duration": 1403
     }
   ],
-  "verdicts": [
-    {
-      "file": "/Users/bator/Documents/projects/taralizer/pkg/taralizer/taralizer_test.go",
-      "sourceFile": "/Users/bator/Documents/projects/taralizer/pkg/taralizer/taralizer.go",
-      "fileSeq": {
-        "state": "known",
-        "value": 12
-      }
-    }
-  ],
-  "testRunGeneration": 11,
+  "testRunGeneration": 1,
   "launchedFrom": {
     "revision": {
       "sessionId": "01a11d14-e057-76c7-962d-3559589e2edc",
-      "projectSeq": 144,
-      "turnIndex": 188,
-      "generation": 11,
-      "capturedAt": 1791496951862
+      "projectSeq": 244,
+      "turnIndex": 622,
+      "generation": 1,
+      "capturedAt": 1791574781723
     },
     "files": [
       {
-        "path": "/Users/bator/Documents/projects/taralizer/Makefile",
+        "path": "/Users/bator/Documents/projects/taralizer/pkg/taralizer/reporting_test.go",
         "role": "source",
-        "mtimeMs": 1791496889554.604,
-        "size": 2301,
-        "sha256": "8bc5a74e10cb40eff617505b700581b6f7deda7b667c852565ae0daf301d4d56"
-      },
-      {
-        "path": "/Users/bator/Documents/projects/taralizer/.pi-lens/turn-state.json",
-        "role": "source",
-        "mtimeMs": 1791496942541.1096,
-        "size": 932,
-        "sha256": "d62ad06ff5ec07c7be10e4f596faa79be84647b64ad970f92493c0d4f71339f5"
-      },
-      {
-        "path": "/Users/bator/Documents/projects/taralizer/pkg/taralizer/taralizer.go",
-        "role": "source",
-        "mtimeMs": 1791496942539.2815,
-        "size": 10277,
-        "sha256": "2b958cad5a8fbb2f7c457f3146be58d71d9e4df7ee2b8ecb43f514b354ab2b90"
-      },
-      {
-        "path": "/Users/bator/Documents/projects/taralizer/pkg/taralizer/taralizer_test.go",
-        "role": "test",
-        "mtimeMs": 1791491568745.0552,
-        "size": 1185,
-        "sha256": "71b11423a0097e93d905587b380837feb4a3235fe6488091103b81d88c43fcb7"
+        "mtimeMs": 1791557987156.2393,
+        "size": 5268,
+        "sha256": "eeee6d0f375d5f9f4cdbf0126db12483bc8715fa45260151d7c1aa4c1ae15995"
       }
     ]
   },
   "publishedAgainst": {
     "revision": {
       "sessionId": "01a11d14-e057-76c7-962d-3559589e2edc",
-      "projectSeq": 144,
-      "turnIndex": 189,
-      "generation": 11,
-      "capturedAt": 1791496953852
+      "projectSeq": 245,
+      "turnIndex": 622,
+      "generation": 1,
+      "capturedAt": 1791574784575
     },
     "files": [
       {
-        "path": "/Users/bator/Documents/projects/taralizer/Makefile",
+        "path": "/Users/bator/Documents/projects/taralizer/pkg/taralizer/reporting_test.go",
         "role": "source",
-        "mtimeMs": 1791496889554.604,
-        "size": 2301,
-        "sha256": "8bc5a74e10cb40eff617505b700581b6f7deda7b667c852565ae0daf301d4d56"
-      },
-      {
-        "path": "/Users/bator/Documents/projects/taralizer/.pi-lens/turn-state.json",
-        "role": "source",
-        "mtimeMs": 1791496951863.8342,
-        "size": 340,
-        "sha256": "eeb44b85f19d1989ca0b060ee93517530482d2922c30f183716c871574397050"
-      },
-      {
-        "path": "/Users/bator/Documents/projects/taralizer/pkg/taralizer/taralizer.go",
-        "role": "source",
-        "mtimeMs": 1791496942539.2815,
-        "size": 10277,
-        "sha256": "2b958cad5a8fbb2f7c457f3146be58d71d9e4df7ee2b8ecb43f514b354ab2b90"
-      },
-      {
-        "path": "/Users/bator/Documents/projects/taralizer/pkg/taralizer/taralizer_test.go",
-        "role": "test",
-        "mtimeMs": 1791491568745.0552,
-        "size": 1185,
-        "sha256": "71b11423a0097e93d905587b380837feb4a3235fe6488091103b81d88c43fcb7"
+        "mtimeMs": 1791557987156.2393,
+        "size": 5268,
+        "sha256": "eeee6d0f375d5f9f4cdbf0126db12483bc8715fa45260151d7c1aa4c1ae15995"
       }
     ]
   },
   "provenance": {
     "revision": {
       "sessionId": "01a11d14-e057-76c7-962d-3559589e2edc",
-      "projectSeq": 144,
-      "turnIndex": 189,
-      "generation": 11,
-      "capturedAt": 1791496953852
+      "projectSeq": 245,
+      "turnIndex": 622,
+      "generation": 1,
+      "capturedAt": 1791574784575
     },
     "files": [
       {
-        "path": "/Users/bator/Documents/projects/taralizer/Makefile",
+        "path": "/Users/bator/Documents/projects/taralizer/pkg/taralizer/reporting_test.go",
         "role": "source",
-        "mtimeMs": 1791496889554.604,
-        "size": 2301,
-        "sha256": "8bc5a74e10cb40eff617505b700581b6f7deda7b667c852565ae0daf301d4d56"
-      },
-      {
-        "path": "/Users/bator/Documents/projects/taralizer/.pi-lens/turn-state.json",
-        "role": "source",
-        "mtimeMs": 1791496951863.8342,
-        "size": 340,
-        "sha256": "eeb44b85f19d1989ca0b060ee93517530482d2922c30f183716c871574397050"
-      },
-      {
-        "path": "/Users/bator/Documents/projects/taralizer/pkg/taralizer/taralizer.go",
-        "role": "source",
-        "mtimeMs": 1791496942539.2815,
-        "size": 10277,
-        "sha256": "2b958cad5a8fbb2f7c457f3146be58d71d9e4df7ee2b8ecb43f514b354ab2b90"
-      },
-      {
-        "path": "/Users/bator/Documents/projects/taralizer/pkg/taralizer/taralizer_test.go",
-        "role": "test",
-        "mtimeMs": 1791491568745.0552,
-        "size": 1185,
-        "sha256": "71b11423a0097e93d905587b380837feb4a3235fe6488091103b81d88c43fcb7"
+        "mtimeMs": 1791557987156.2393,
+        "size": 5268,
+        "sha256": "eeee6d0f375d5f9f4cdbf0126db12483bc8715fa45260151d7c1aa4c1ae15995"
       }
     ]
   },
   "superseded": true,
-  "runnerErrorOnly": false,
   "deferredTargets": [],
-  "retiredTargets": [],
-  "deliveryEligible": {
-    "sessionId": "01a11d14-e057-76c7-962d-3559589e2edc",
-    "generation": 11,
-    "eligibleAt": 1791497318230
-  }
+  "retiredTargets": []
 }

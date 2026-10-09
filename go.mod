@@ -79,3 +79,5 @@ require (
 	golang.org/x/text v0.42.0 // indirect
 	google.golang.org/protobuf v1.36.12 // indirect
 )
+
+replace github.com/yuin/goldmark => github.com/yuin/goldmark v1.7.13
