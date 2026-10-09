@@ -10,8 +10,14 @@ func GetMapIntValue(data map[string]interface{}, key string, location string) (i
 	result := int64(-1)
 	val, exists := data[key]
 	if exists {
-		valNum, ok := val.(json.Number)
-		if ok {
+		// OPA returns numbers as float64
+		if floatVal, ok := val.(float64); ok {
+			result = int64(floatVal)
+		} else if intVal, ok := val.(int); ok {
+			result = int64(intVal)
+		} else if int64Val, ok := val.(int64); ok {
+			result = int64Val
+		} else if valNum, ok := val.(json.Number); ok {
 			res, err := valNum.Int64()
 			if err != nil {
 				return 0, fmt.Errorf("parse error in %s: key '%s' is not a valid number", location, key)

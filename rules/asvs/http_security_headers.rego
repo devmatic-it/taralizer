@@ -30,7 +30,8 @@ violation[{
     "id":id,
     "msg": msg,
     "likelihood": likelihood,
-    "impact": impact
+    "impact": impact,
+    "cwe": 693
 }] contains true if {
     server := input.technical_assets[_]
     server.technology == "web-application"

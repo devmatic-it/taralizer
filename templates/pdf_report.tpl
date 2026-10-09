@@ -342,7 +342,7 @@
   <td class="col-severity"><span class="badge sev-{{lower $risk.Severity}}">{{severity $risk.Severity}}</span></td>
   <td class="col-risk">
     <a href="https://cwe.mitre.org/data/definitions/{{$risk.Cwe}}">CWE-{{$risk.Cwe}}</a>
-    {{$risk.Title}}: {{$risk.Message}}
+    {{if gt $risk.Cwe 0}}<a href="https://cwe.mitre.org/data/definitions/{{$risk.Cwe}}">CWE-{{$risk.Cwe}}</a> {{end}}{{$risk.Title}}: {{$risk.Message}}
     <p>{{$risk.Description}}</p>
   </td>
   <td class="col-action">{{$risk.Action}}</td>

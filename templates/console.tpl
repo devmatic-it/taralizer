@@ -11,7 +11,7 @@
 
 | ID | Likelihood | Impact | Severity | Risk |
 |----|------------|--------|----------|------|
-{{range $risk := .Risks}}| {{$risk.Id}} | {{likelihood $risk.Likelihood}} | {{impact $risk.Impact}} | {{severity $risk.Severity}} | {{if $risk.Url}}[CWE-{{$risk.Cwe}}]({{$risk.Url}}) {{end}}**{{$risk.Title}}**: {{$risk.Message}} |---|
+{{range $risk := .Risks}}| {{$risk.Id}} | {{likelihood $risk.Likelihood}} | {{impact $risk.Impact}} | {{severity $risk.Severity}} | {{if gt $risk.Cwe 0}}[CWE-{{$risk.Cwe}}](https://cwe.mitre.org/data/definitions/{{$risk.Cwe}}) {{end}}**{{$risk.Title}}**: {{$risk.Message}} |---|
 {{end}}
 
 ---

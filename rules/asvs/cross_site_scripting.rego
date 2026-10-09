@@ -30,7 +30,8 @@ violation[{
     "id":id,
      "msg": msg, 
      "likelihood":likelihood,
-     "impact": impact}] contains true if {
+     "impact": impact,
+    "cwe": 79}] contains true if {
     server := input.technical_assets[_]
 
     # a WAF has some rules againest XSS

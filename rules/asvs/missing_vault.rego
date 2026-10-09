@@ -30,7 +30,8 @@ violation[{
     "id":id,
      "msg": msg,     
      "likelihood":likelihood,
-     "impact": impact}] contains true if {
+     "impact": impact,
+    "cwe": 352}] contains true if {
     #server := input.technical_assets[_]
 
     count({x | input.technical_assets[x] ; input.technical_assets[x].technology == "vault"} ) == 0

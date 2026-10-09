@@ -15,6 +15,7 @@ package taralizer
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"github.com/open-policy-agent/opa/v1/rego"
 	"gopkg.in/yaml.v3"
@@ -92,7 +93,12 @@ func (svc *Taralizer) convertMapToRisk(input interface{}) (Risk, error) {
 	if url, ok := data["url"].(string); ok {
 		risk.Url = url
 	}
-	if cwe, ok := data["cwe"].(float64); ok {
+	// OPA returns numbers as json.Number, so handle that type
+	if cwe, ok := data["cwe"].(json.Number); ok {
+		if parsed, err := cwe.Int64(); err == nil {
+			risk.Cwe = parsed
+		}
+	} else if cwe, ok := data["cwe"].(float64); ok {
 		risk.Cwe = int64(cwe)
 	} else if cwe, ok := data["cwe"].(int); ok {
 		risk.Cwe = int64(cwe)
@@ -129,7 +135,9 @@ func (report *Report) addRisk(risk Risk) {
 // and stores the resulting risks into the returned report.
 func (svc *Taralizer) Evaluate(fileName string) Report {
 
-	results := svc.query(fileName, fmt.Sprintf("data.rules.%s.violation[msg]", svc.ruleset.Name))
+	// Query violation maps AND resolve titles from the rule_title lookup in core.rego
+	queryStr := fmt.Sprintf("data.rules.%s.violation[risk]; data.rules.resolve_title(risk.id) = title", svc.ruleset.Name)
+	results := svc.query(fileName, queryStr)
 
 	// load model into structured report
 	report, err := Load(fileName)
@@ -138,16 +146,24 @@ func (svc *Taralizer) Evaluate(fileName string) Report {
 	} else {
 		report.RuleSet = svc.ruleset
 		for i := 0; i < len(results); i++ {
-			msg := results[i].Bindings["msg"]
-			if msg != nil {
-				item, err := svc.convertMapToRisk(msg)
-				if err != nil {
-					log.Printf("Error converting risk: %v", err)
-					continue
-				}
-				item.Severity = int64(item.Likelihood) * int64(item.Impact)
-				report.addRisk(item)
+			riskMap, ok := results[i].Bindings["risk"].(map[string]interface{})
+			if !ok {
+				log.Printf("WARN: expected violation map, got %T", results[i].Bindings["risk"])
+				continue
 			}
+			item, err := svc.convertMapToRisk(riskMap)
+			if err != nil {
+				log.Printf("Error converting risk: %v", err)
+				continue
+			}
+			// Resolve title from the rule_title lookup in core.rego
+			if titleRaw, ok := results[i].Bindings["title"]; ok && titleRaw != nil {
+				if titleStr, ok := titleRaw.(string); ok && titleStr != "" {
+					item.Title = titleStr
+				}
+			}
+			item.Severity = int64(item.Likelihood) * int64(item.Impact)
+			report.addRisk(item)
 		}
 	}
 

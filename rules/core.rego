@@ -13,6 +13,38 @@
 # limitations under the License.
 package rules
 
+# Title lookup table — maps rule IDs (from METADATA blocks) to human-readable titles.
+# Used by convertMapToRisk to resolve $risk.Title.
+rule_title["authentication-failure"] = "Authentication Failure"
+rule_title["container-baseimage-backdooring"] = "Container Baseimage Backdooring"
+rule_title["cross-site-request-forgery"] = "Cross-Site Request Forgery"
+rule_title["cross-site-scripting"] = "Cross-Site Scripting"
+rule_title["http-security-headers"] = "HTTP Security Headers"
+rule_title["insecure-proto"] = "Insecure Protocol"
+rule_title["insufficient-logging"] = "Insufficient Logging"
+rule_title["missing-access-control"] = "Missing Access Control"
+rule_title["missing-audit-logging"] = "Missing Audit Logging"
+rule_title["missing-authentication"] = "Missing Authentication"
+rule_title["missing-authorization"] = "Missing Authorization"
+rule_title["missing-cryptographic-controls"] = "Missing Cryptographic Controls"
+rule_title["missing-external-system-review"] = "Missing External System Review"
+rule_title["missing-injection-protection"] = "Missing Injection Protection"
+rule_title["missing-input-validation"] = "Missing Input Validation"
+rule_title["missing-vault"] = "Missing Vault"
+rule_title["missing-waf"] = "Missing WAF"
+rule_title["security-misconfiguration"] = "Security Misconfiguration"
+rule_title["session-management"] = "Session Management"
+rule_title["software-integrity"] = "Software Integrity"
+rule_title["ssrf-vulnerability"] = "SSRF Vulnerability"
+rule_title["vulnerable-dependencies"] = "Vulnerable Dependencies"
+
+# Resolve title from a risk ID (e.g. "cross-site-request-forgery@balance_reader" -> "Cross-Site Request Forgery")
+resolve_title(risk_id) = title if {
+    parts := split(risk_id, "@")
+    rule_id := parts[0]
+    title := rule_title[rule_id]
+} else = risk_id
+
 technical_asset_by_id(myid) = asset if {
     some k
     input.technical_assets[k].id == myid
@@ -28,7 +60,6 @@ data_asset_by_id(myid) = asset if {
 calc_impact(base) = base if {
     count({x | input.data_assets[x]; input.data_assets[x].confidentiality == 3}) == 0
     count({x | input.data_assets[x]; input.data_assets[x].integrity == 3}) == 0
-    count({x | input.data_assets[x]; input.data_assets[x].availability == 3}) == 0
 } else = base + 1
 
 different_trust_boundaries(id1, id2) if {
@@ -95,7 +126,7 @@ is_database_protocol("sql_encrypted")
 is_database_protocol("nosql")
 is_database_protocol("nosql_encrypted")
 
-# helpers for new rules
+# helpers for new helpers
 
 # Direct inbound connections from end-user technologies (browser, mobile-app, etc.)
 has_direct_end_user_inbound(server) if {

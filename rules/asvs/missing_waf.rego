@@ -30,7 +30,8 @@ violation[{
     "id":id,
      "msg": msg,     
      "likelihood":likelihood,
-     "impact": impact}] contains true if {
+     "impact": impact,
+    "cwe": 754}] contains true if {
 
     count({x | input.technical_assets[x] ; input.technical_assets[x].technology == "waf"} ) == 0 
     msg := "No Web Application Firewall (WAF) has been found  in your model"

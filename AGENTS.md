@@ -1,18 +1,6 @@
 # Agent Governance
 
-`CONSTRAINTS.md` is the absolute source of truth. If a conflict arises, constraints win.
-
-## The Development Workflow
-
-```
- DEFINE          PLAN           BUILD          VERIFY         REVIEW          SHIP
-┌──────┐      ┌──────┐      ┌──────┐      ┌──────┐      ┌──────┐      ┌──────┐
-│ Idea │ ───▶ │ Spec │ ───▶ │ Code │ ───▶ │ Test │ ───▶ │  QA  │ ───▶ │  Go  │
-│Refine│      │  PRD │      │ Impl │      │Debug │      │ Gate │      │ Live │
-└──────┘      └──────┘      └──────┘      └──────┘      └──────┘      └──────┘
- /spec          /plan          /build        /test         /review       /ship
-```
-
+YOU MUST follow the phase order DEFINE -> PLAN ->  BUILD -> VERIFY -> REVIEW -> SHIP
 Each phase has a dedicated skill that enforces its discipline. Invoke the relevant skill by name when the work enters that phase.
 
 ---
