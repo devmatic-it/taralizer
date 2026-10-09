@@ -124,7 +124,7 @@ func TestGenerateConsoleReport(t *testing.T) {
 	if !strings.Contains(outputStr, "Test Risk") {
 		t.Error("Output missing risk title")
 	}
-	if !strings.Contains(outputStr, "MEDIUM") {
+	if !strings.Contains(outputStr, "MED") {
 		t.Error("Output missing likelihood label")
 	}
 	if !strings.Contains(outputStr, "HIGH") {

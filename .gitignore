@@ -2,8 +2,8 @@
 dist/
 build/
 *.exe
-taralizer
-taralizer*
+./taralizer
+./taralizer*
 
 # Generated ANTLR code (regenerate during build from Terraform.g4)
 .antlr/
