@@ -9,8 +9,12 @@
 [![GitHub Downloads](https://img.shields.io/github/downloads/devmatic-it/taralizer/total)](https://github.com/devmatic-it/taralizer/releases)
 [![GitHub stars](https://img.shields.io/github/stars/devmatic-it/taralizer)](https://github.com/devmatic-it/taralizer/stargazers)
 [![GitHub issues](https://img.shields.io/github/issues/devmatic-it/taralizer)](https://github.com/devmatic-it/taralizer/issues)
+[![Go](https://img.shields.io/badge/Go-1.27+-00ADD8?style=flat&logo=go)](https://go.dev/)
+[![OPA](https://img.shields.io/badge/OPA-Rego-blueviolet?style=flat&logo=open-policy-agent)](https://www.openpolicyagent.org)
 
 **Automated threat modeling and risk analysis for cloud architectures.**
+
+[Get Started](#quick-start) · [Examples](#examples) · [Documentation](#documentation) · [Contributing](#contributing)
 
 </div>
 
@@ -20,6 +24,8 @@
 
 Taralizer is a **Threat and Risk Analysis** tool that evaluates cloud architecture models against industry security standards. It transforms a simple YAML architecture model into comprehensive security reports with actionable findings.
 
+Built by security practitioners for security practitioners, Taralizer fills the gap between lightweight threat modeling and heavy enterprise tools. It integrates seamlessly into CI/CD pipelines, supports custom security profiles, and produces stakeholder-ready reports.
+
 ### Key Capabilities
 
 - **OWASP ASVS Compliance** — 22 security rules covering authentication, authorization, encryption, injection, and more
@@ -28,17 +34,13 @@ Taralizer is a **Threat and Risk Analysis** tool that evaluates cloud architectu
 - **Custom Rules** — Extensible via Open Policy Agent (OPA) Rego rules
 - **Zero External Dependencies** — HTML reports render diagrams inline via mermaid.js; PDF uses headless Chrome
 
-### Why Taralizer?
-
-Built by security practitioners for security practitioners, Taralizer fills the gap between lightweight threat modeling and heavy enterprise tools. It integrates seamlessly into CI/CD pipelines, supports custom security profiles, and produces stakeholder-ready reports.
-
 ---
 
 ## Quick Start
 
 ### Prerequisites
 
-- Go 1.23+ (for building from source)
+- Go 1.27+ (for building from source)
 - Chrome or Chromium (for PDF report generation)
 
 ### Installation
@@ -133,38 +135,110 @@ Open `report.html` in your browser to see the full report with interactive diagr
 
 ## Architecture
 
+### System Overview
+
+```mermaid
+graph TB
+    subgraph Input["📥 Input Layer"]
+        YAML["Model YAML\n(technical_assets, data_assets,\n trust_boundaries, communication_links)"]
+        TF["Terraform Config\n(terraform.tfstate)"]
+    end
+
+    subgraph CLI["🖥️ CLI Interface"]
+        CMD_REPORT["taralizer report"]
+        CMD_RULES["taralizer rules"]
+        CMD_VALIDATE["taralizer validate"]
+        CMD_VERSION["taralizer version"]
+    end
+
+    subgraph Core["⚙️ Taralizer Core Engine"]
+        MP["Model Parser\n(pkg/taralizer)"]
+        OPA["OPA Engine\n(Open Policy Agent)"]
+        RE["Rule Engine\n(ASVS Rules)"]
+        TP["Terraform Parser\n(pkg/terraform)"]
+        CWE["CWE Database\n(pkg/cwe)"]
+        ASVS["ASVS Database\n(pkg/asvs)"]
+        RC["Risk Calculator\n(OWASP Methodology)"]
+    end
+
+    subgraph Rules["📋 Rule Sets"]
+        CORE["core.rego\n(Validation Rules)"]
+        ASVS_RULES["asvs/*.rego\n(22 Security Rules)"]
+        METADATA["#METADATA\n(Rule Metadata)"]
+    end
+
+    subgraph Output["📤 Output Layer"]
+        HTML["HTML Report\n(Interactive, Mermaid.js)"]
+        PDF["PDF Report\n(chromedp rendering)"]
+        MD["Markdown Report\n(CI/CD friendly)"]
+    end
+
+    %% CLI to Core
+    CMD_REPORT --> Core
+    CMD_RULES --> RE
+    CMD_VALIDATE --> MP
+    CMD_VERSION --> Core
+
+    %% Input to Core
+    YAML --> MP
+    TF --> TP
+
+    %% Core Processing Pipeline
+    MP --> OPA
+    OPA --> RE
+    RE --> RC
+    TP --> MP
+
+    %% Database Access
+    RE --> CWE
+    RE --> ASVS
+    RC --> CWE
+    RC --> ASVS
+
+    %% Rule Files
+    OPA --> CORE
+    RE --> ASVS_RULES
+    ASVS_RULES --> METADATA
+
+    %% Output
+    RC --> HTML
+    RC --> PDF
+    RC --> MD
+
+    %% Styling
+    classDef input fill:#e3f2fd,stroke:#1565c0,stroke-width:2px
+    classDef cli fill:#fff3e0,stroke:#e65100,stroke-width:2px
+    classDef core fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px
+    classDef rules fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px
+    classDef output fill:#fce4ec,stroke:#c2185b,stroke-width:2px
+    class YAML,TF input
+    class CMD_REPORT,CMD_RULES,CMD_VALIDATE,CMD_VERSION cli
+    class MP,OPA,RE,TP,CWE,ASVS,RC core
+    class CORE,ASVS_RULES,METADATA rules
+    class HTML,PDF,MD output
 ```
-┌─────────────────────────────────────────────────────────┐
-│                    Input Model (YAML)                    │
-│  (technical_assets, data_assets, trust_boundaries,       │
-│   communication_links, terraform_config)                 │
-└──────────────────────┬──────────────────────────────────┘
-                       │
-                       ▼
-┌─────────────────────────────────────────────────────────┐
-│                   Taralizer Engine                       │
-│                                                         │
-│  ┌─────────────┐  ┌──────────────┐  ┌───────────────┐ │
-│  │  Model      │  │  OPA Engine  │  │  Rule Engine  │ │
-│  │  Parser     │→ │  (Rego)     │→ │  (ASVS Rules) │ │
-│  └─────────────┘  └──────────────┘  └───────────────┘ │
-│                       │                    │            │
-│                       ▼                    ▼            │
-│  ┌─────────────┐  ┌──────────────┐  ┌───────────────┐ │
-│  │  Terraform  │  │  CWE/ASVS   │  │  Risk         │ │
-│  │  Parser     │  │  Database   │  │  Calculator   │ │
-│  └─────────────┘  └──────────────┘  └───────────────┘ │
-└──────────────────────┬──────────────────────────────────┘
-                       │
-                       ▼
-┌─────────────────────────────────────────────────────────┐
-│                    Report Output                         │
-│                                                         │
-│  ┌──────────┐  ┌──────────┐  ┌──────────┐             │
-│  │  HTML   │  │   PDF    │  │ Markdown │             │
-│  └──────────┘  └──────────┘  └──────────┘             │
-└─────────────────────────────────────────────────────────┘
-```
+
+### Component Details
+
+| Component | Package | Responsibility |
+|-----------|---------|----------------|
+| **Model Parser** | `pkg/taralizer` | Parses YAML architecture models into internal representation |
+| **OPA Engine** | `pkg/taralizer` | Loads and evaluates Rego policies against the model |
+| **Rule Engine** | `rules/asvs/` | 22 ASVS-compliant security rules (missing-authentication, injection, etc.) |
+| **Terraform Parser** | `pkg/terraform` | Parses Terraform state files to extract resource configurations |
+| **CWE Database** | `pkg/cwe` | Maps findings to Common Weakness Enumeration IDs |
+| **ASVS Database** | `pkg/asvs` | Maps findings to OWASP Application Security Verification Standard |
+| **Risk Calculator** | `cmd/report.go` | Calculates risk severity using OWASP Risk Rating Methodology |
+| **Report Generator** | `pkg/taralizer/reporting.go` | Generates HTML, PDF, and Markdown reports |
+
+### Data Flow
+
+1. **Input**: Architecture model (YAML) or Terraform state file
+2. **Parse**: Model is parsed into structured data (technical assets, data assets, trust boundaries, communication links)
+3. **Validate**: Core validation rules check model integrity
+4. **Analyze**: 22 ASVS security rules evaluate the architecture against security best practices
+5. **Calculate**: Risk severity is computed using OWASP methodology (Impact × Likelihood)
+6. **Report**: Findings are rendered as interactive HTML, printable PDF, or Markdown
 
 ---
 

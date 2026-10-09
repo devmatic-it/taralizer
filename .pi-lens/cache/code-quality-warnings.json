@@ -1,20 +1,43 @@
 {
-  "generatedAt": "2026-10-08T21:41:22.097Z",
+  "generatedAt": "2026-10-09T13:04:31.321Z",
   "scope": "turn_delta",
   "sessionId": "01a11d14-e057-76c7-962d-3559589e2edc",
-  "turnIndex": 126,
-  "projectSeqStart": 127,
-  "projectSeqEnd": 128,
+  "turnIndex": 277,
+  "projectSeqStart": 220,
+  "projectSeqEnd": 221,
   "deltaOnly": true,
-  "files": [],
+  "files": [
+    {
+      "filePath": "/Users/bator/Documents/projects/taralizer/docs/token-optimization-summary.md",
+      "displayPath": "docs/token-optimization-summary.md",
+      "fileSeq": 1,
+      "warnings": [
+        {
+          "id": "cq:d7720ab14b90",
+          "filePath": "/Users/bator/Documents/projects/taralizer/docs/token-optimization-summary.md",
+          "displayPath": "docs/token-optimization-summary.md",
+          "severity": "warning",
+          "tool": "pi-lens",
+          "message": "Pi-lens markdown analysis unavailable — a language tool is missing, timed out, or failed to run, or the LSP server isn't ready yet, so this file was not fully checked (not a clean result).",
+          "category": "other",
+          "origin": "dispatch"
+        }
+      ]
+    }
+  ],
   "summary": {
-    "warnings": 0,
-    "files": 0,
+    "warnings": 1,
+    "files": 1,
     "byTier": {
-      "warning": 0,
+      "warning": 1,
       "info": 0,
       "hint": 0
     },
-    "topRules": []
+    "topRules": [
+      {
+        "rule": "pi-lens",
+        "count": 1
+      }
+    ]
   }
 }

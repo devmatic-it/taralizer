@@ -102,8 +102,6 @@ func (svc *Taralizer) convertMapToRisk(input interface{}) (Risk, error) {
 	return risk, nil
 }
 
-
-
 // mitigateRisk reads out the measures from the model to fill in the risk mitigations
 func (report *Report) addRisk(risk Risk) {
 	for _, measure := range report.RiskTracking {
@@ -365,63 +363,6 @@ func (svc *Taralizer) query(fileName string, queryStr string) rego.ResultSet {
 	}
 
 	results, err := query.Eval(svc.ctx, rego.EvalInput(model))
-
-	if err != nil {
-		log.Printf("WARN: cannot evaluate rules against input: %v", err)
-		return nil
-	}
-	return results
-}
-
-// // Evaluate executes an Open Policy Agent (OPA) query against the rule sets calling the given query 'queryStr'
-func (svc *Taralizer) queryString(queryStr string) rego.ResultSet {
-
-	defaultRulesDir := []string{"./rules/", "/etc/taralizer/rules/", "../../rules/"}
-	defaultRulesDir = append(defaultRulesDir, "./rules/asvs/", "/etc/taralizer/rules/asvs/", "../../rules/asvs/")
-	rules := []string{}
-	for _, v := range defaultRulesDir {
-		if _, err := os.Stat(v); !os.IsNotExist(err) {
-			rules = append(rules, v)
-		}
-	}
-
-	// Build explicit list of Rego files, excluding YAML metadata files.
-	// OPA bundles directories, so we need to list individual Rego files.
-	// The ruleset.yaml is metadata used by RuleSet(), not Rego code.
-	var files []string
-	for _, r := range rules {
-		entries, err := os.ReadDir(r)
-		if err != nil {
-			continue
-		}
-		for _, entry := range entries {
-			name := entry.Name()
-			// Skip YAML metadata files (ruleset.yaml)
-			if strings.HasSuffix(name, ".yaml") {
-				continue
-			}
-			// Skip non-Rego files
-			if !entry.IsDir() && !strings.HasSuffix(name, ".rego") {
-				continue
-			}
-			if !entry.IsDir() {
-				files = append(files, r+name)
-			}
-		}
-	}
-
-	if len(files) == 0 {
-		// Fallback: use directories if no Rego files found
-		files = rules
-	}
-
-	query, err := rego.New(rego.Query(queryStr), rego.Load(files, nil)).PrepareForEval(svc.ctx)
-	if err != nil {
-		log.Printf("WARN: cannot load model file into rego engine: %v", err)
-		return nil
-	}
-
-	results, err := query.Eval(svc.ctx)
 
 	if err != nil {
 		log.Printf("WARN: cannot evaluate rules against input: %v", err)

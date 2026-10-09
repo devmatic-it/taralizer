@@ -17,7 +17,7 @@ GOBIN=$(GOBASE)/dist
 PKG := "github.com/devmatic-it/taralizer"
 PKG_LIST := $(shell go list ${PKG}/... | grep -v /vendor/)
 
-all: build test
+all: lint build test
 
 .PHONY: all build test lint test-coverage clean
 

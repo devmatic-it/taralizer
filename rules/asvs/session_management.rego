@@ -35,7 +35,7 @@ violation[{
     "msg": msg,
     "likelihood": likelihood,
     "impact": impact
-}] {
+}] contains true if {
     server := input.technical_assets[_]
     server.technology == "web-application"
     has_direct_unencrypted_end_user_inbound(server)
@@ -52,7 +52,7 @@ violation[{
     "msg": msg,
     "likelihood": likelihood,
     "impact": impact
-}] {
+}] contains true if {
     server := input.technical_assets[_]
     server.technology == "web-application"
     has_direct_encrypted_end_user_inbound(server)

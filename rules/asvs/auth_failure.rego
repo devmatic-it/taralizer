@@ -31,7 +31,7 @@ violation[{
     "msg": msg,
     "likelihood": likelihood,
     "impact": impact
-}] {
+}] contains true if {
     server := input.technical_assets[_]
     conn := server.communication_links[_]
     is_web_access_protocol(conn.protocol)

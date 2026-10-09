@@ -13,41 +13,39 @@
 # limitations under the License.
 package rules
 
-technical_asset_by_id (myid) = asset{
+technical_asset_by_id(myid) = asset if {
     some k
     input.technical_assets[k].id == myid
-    asset:= input.technical_assets[k]
+    asset := input.technical_assets[k]
 }
 
-data_asset_by_id (myid) = asset{
+data_asset_by_id(myid) = asset if {
     some k
     input.data_assets[k].id == myid
-    asset:= input.data_assets[k]
+    asset := input.data_assets[k]
 }
 
+calc_impact(base) = base if {
+    count({x | input.data_assets[x]; input.data_assets[x].confidentiality == 3}) == 0
+    count({x | input.data_assets[x]; input.data_assets[x].integrity == 3}) == 0
+    count({x | input.data_assets[x]; input.data_assets[x].availability == 3}) == 0
+} else = base + 1
 
-calc_impact (base)= base {
- count({x | input.data_assets[x] ; input.data_assets[x].confidentiality == 3} ) == 0
- count({x | input.data_assets[x] ; input.data_assets[x].integrity == 3} ) == 0
- count({x | input.data_assets[x] ; input.data_assets[x].availability == 3} ) ==0 
-} else = base+1
-
-
-different_trust_boundaries(id1, id2){
+different_trust_boundaries(id1, id2) if {
     some i, j
     input.trust_boundaries[i].technical_assets_inside[_] == id1
     input.trust_boundaries[j].technical_assets_inside[_] == id2
     i != j
 }
 
-same_trust_boundaries(id1, id2){
+same_trust_boundaries(id1, id2) if {
     some i, j
     input.trust_boundaries[i].technical_assets_inside[_] == id1
     input.trust_boundaries[j].technical_assets_inside[_] == id2
     i == j
 }
 
-direct_connection(id1, id2){
+direct_connection(id1, id2) if {
     some i
     input.technical_assets[i].id == id1
     input.technical_assets[i].communication_links[_].target == id2
@@ -88,7 +86,7 @@ is_encrypted_protocol("ftps")
 is_encrypted_protocol("sftp")
 is_encrypted_protocol("smtps")
 
-is_unencrypted_protocol(protocol){
+is_unencrypted_protocol(protocol) if {
     not is_encrypted_protocol(protocol)
 }
 
@@ -100,7 +98,7 @@ is_database_protocol("nosql_encrypted")
 # helpers for new rules
 
 # Direct inbound connections from end-user technologies (browser, mobile-app, etc.)
-has_direct_end_user_inbound(server) {
+has_direct_end_user_inbound(server) if {
     source := input.technical_assets[_]
     source.id != server.id
     is_end_user_technology(source.technology)
@@ -108,7 +106,7 @@ has_direct_end_user_inbound(server) {
 }
 
 # Direct inbound from end-user over an insecure protocol
-has_direct_unencrypted_end_user_inbound(server) {
+has_direct_unencrypted_end_user_inbound(server) if {
     source := input.technical_assets[_]
     source.id != server.id
     is_end_user_technology(source.technology)
@@ -118,7 +116,7 @@ has_direct_unencrypted_end_user_inbound(server) {
 }
 
 # Direct inbound from end-user over an encrypted protocol
-has_direct_encrypted_end_user_inbound(server) {
+has_direct_encrypted_end_user_inbound(server) if {
     source := input.technical_assets[_]
     source.id != server.id
     is_end_user_technology(source.technology)
@@ -128,7 +126,7 @@ has_direct_encrypted_end_user_inbound(server) {
 }
 
 # Server receives traffic from a WAF (trusted intermediary handles TLS)
-has_waf_in_inbound_path(server) {
+has_waf_in_inbound_path(server) if {
     source := input.technical_assets[_]
     source.id != server.id
     source.technology == "waf"
@@ -136,17 +134,15 @@ has_waf_in_inbound_path(server) {
 }
 
 # Server receives traffic from a WAF or API-gateway (trusted intermediary handles validation)
-has_waf_or_api_gateway_in_inbound_path(server) {
+has_waf_or_api_gateway_in_inbound_path(server) if {
     source := input.technical_assets[_]
     source.id != server.id
-    {
-        source.technology == "waf"
-    }
+    source.technology == "waf"
     source.communication_links[_].target == server.id
 }
 
 # Server receives direct inbound from end-user technologies (browser, mobile-app, etc.)
-has_direct_end_user_inbound(server) {
+has_direct_end_user_inbound(server) if {
     source := input.technical_assets[_]
     source.id != server.id
     is_end_user_technology(source.technology)
@@ -154,7 +150,7 @@ has_direct_end_user_inbound(server) {
 }
 
 # Server receives direct inbound from outside its trust boundary
-has_cross_boundary_inbound(server) {
+has_cross_boundary_inbound(server) if {
     source := input.technical_assets[_]
     source.id != server.id
     source.communication_links[_].target == server.id
@@ -162,17 +158,15 @@ has_cross_boundary_inbound(server) {
 }
 
 # Server receives traffic from a WAF or API-gateway (trusted intermediary handles validation)
-has_waf_or_api_gateway_in_inbound_path(server) {
+has_waf_or_api_gateway_in_inbound_path(server) if {
     source := input.technical_assets[_]
     source.id != server.id
-    {
-        source.technology == "waf"
-    }
+    source.technology == "waf"
     source.communication_links[_].target == server.id
 }
 
 # Server receives direct inbound from end-user technologies (browser, mobile-app, etc.)
-has_direct_end_user_inbound(server) {
+has_direct_end_user_inbound(server) if {
     source := input.technical_assets[_]
     source.id != server.id
     is_end_user_technology(source.technology)
@@ -180,53 +174,53 @@ has_direct_end_user_inbound(server) {
 }
 
 # Server receives direct inbound from outside its trust boundary
-has_cross_boundary_inbound(server) {
+has_cross_boundary_inbound(server) if {
     source := input.technical_assets[_]
     source.id != server.id
     source.communication_links[_].target == server.id
     different_trust_boundaries(server.id, source.id)
 }
 
-has_security_headers(server){
+has_security_headers(server) if {
     server.security_headers == true
 }
 
-has_external_system_review(server){
+has_external_system_review(server) if {
     server.external_system_review == true
 }
 
-has_security_context(server){
+has_security_context(server) if {
     server.security_context == true
 }
 
-has_input_validation(server){
+has_input_validation(server) if {
     server.input_validation == true
 }
 
-has_cryptographic_controls(server){
+has_cryptographic_controls(server) if {
     server.cryptographic_controls == true
 }
 
-has_access_control(server){
+has_access_control(server) if {
     server.access_control == true
 }
 
-has_dependency_scanning(server){
+has_dependency_scanning(server) if {
     server.dependency_scanning == true
 }
 
-has_software_integrity(server){
+has_software_integrity(server) if {
     server.software_integrity == true
 }
 
-has_ssrf_protection(server){
+has_ssrf_protection(server) if {
     server.ssrf_protection == true
 }
 
-has_monitoring(server){
+has_monitoring(server) if {
     server.monitoring == true
 }
 
-has_data_classification(server){
+has_data_classification(server) if {
     server.data_classification == true
 }

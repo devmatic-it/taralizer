@@ -31,7 +31,7 @@ violation[{
     "msg": msg,
     "likelihood": likelihood,
     "impact": impact
-}] {
+}] contains true if {
     server := input.technical_assets[_]
     server.technology == "web-application"
     not has_monitoring(server)

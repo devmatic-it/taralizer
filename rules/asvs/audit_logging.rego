@@ -23,43 +23,43 @@ auth_data_asset("refresh-token")
 auth_data_asset("user-credentials")
 
 # A server processes authentication data
-has_auth_data_processing(server) {
-    data := server.data_assets_processed[_]
-    auth_data_asset(data)
+has_auth_data_processing(server) if {
+    asset_id := server.data_assets_processed[_]
+    auth_data_asset(asset_id)
 }
 
 # A server stores authentication data
-has_auth_data_storing(server) {
-    data := server.data_assets_stored[_]
-    auth_data_asset(data)
+has_auth_data_storing(server) if {
+    asset_id := server.data_assets_stored[_]
+    auth_data_asset(asset_id)
 }
 
 # A server handles authentication data (processes or stores)
-has_auth_data_handling(server) {
+has_auth_data_handling(server) if {
     has_auth_data_processing(server)
 }
 
-has_auth_data_handling(server) {
+has_auth_data_handling(server) if {
     has_auth_data_storing(server)
 }
 
 # A server has audit logging configured (manual override or exempt)
-has_audit_logging(server) {
+has_audit_logging(server) if {
     server.audit_logging == true
 }
 
 # Servers that handle auth data but are exempt (WAF, databases, logging services)
-has_audit_logging(server) {
+has_audit_logging(server) if {
     has_auth_data_handling(server)
     server.technology == "waf"
 }
 
-has_audit_logging(server) {
+has_audit_logging(server) if {
     has_auth_data_handling(server)
     server.technology == "logging"
 }
 
-has_audit_logging(server) {
+has_audit_logging(server) if {
     has_auth_data_handling(server)
     server.technology == "monitoring"
 }
@@ -80,7 +80,7 @@ violation[{
     "msg": msg,
     "likelihood": likelihood,
     "impact": impact
-}] {
+}] contains true if {
     server := input.technical_assets[_]
     server.technology == "web-application"
     has_auth_data_handling(server)
