@@ -5,6 +5,14 @@ build/
 taralizer
 taralizer*
 
+# Generated ANTLR code (regenerate during build from Terraform.g4)
+.antlr/
+pkg/terraform/.antlr/
+pkg/terraform/terraform_parser.go
+pkg/terraform/terraform_lexer.go
+pkg/terraform/terraform_base_listener.go
+pkg/terraform/terraform_listener.go
+
 # Test artifacts
 coverage.txt
 cover.out
@@ -25,6 +33,9 @@ Thumbs.db
 report.html
 report.md
 report.pdf
+examples/gcp/report.html
+examples/gcp/report.pdf
+examples/gcp/report_graphviz.pdf
 
 # Vendor (if used)
 vendor/
@@ -32,3 +43,6 @@ vendor/
 # Local config (optional override)
 config.yaml
 .pi-lens/cache/*
+
+# Working documents (optional - remove if obsolete)
+tasks/
