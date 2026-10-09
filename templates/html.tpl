@@ -14,7 +14,7 @@
     line-height: 1.6;
     color: #2d3748;
     background: #ffffff;
-    max-width: 960px;
+    max-width: 100%;
     margin: 0 auto;
     padding: 40px 24px;
   }
@@ -95,11 +95,60 @@
   tbody tr:nth-child(even):hover { background: #f0f4f8; }
 
   /* ── Severity badges ───────────────────────────── */
+  /* ── Identified Risks Table ──────────────────────── */
+  .risks-table {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+    margin: 16px 0 24px;
+    font-size: 11px;
+    line-height: 1.4;
+  }
+  .risks-table th {
+    background: #2d3748;
+    color: #ffffff;
+    padding: 8px 6px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 11px;
+    border: 1px solid #cbd5e0;
+    white-space: nowrap;
+  }
+  .risks-table td {
+    padding: 8px 6px;
+    border: 1px solid #cbd5e0;
+    vertical-align: top;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+  }
+  .risks-table .col-id { width: 5%; }
+  .risks-table .col-likelihood { width: 5%; }
+  .risks-table .col-impact { width: 5%; }
+  .risks-table .col-severity { width: 5%; }
+  .risks-table .col-risk { width: 30%; }
+  .risks-table .col-action { width: 15%; }
+  .risks-table .col-mitigation { width: 15%; }
+  .risks-table .col-res-impact { width: 5%; }
+  .risks-table .col-res-likelihood { width: 5%; }
+  .risks-table .col-res-severity { width: 5%; }
+  .risks-table .col-status { width: 5%; }
+  .risks-table a {
+    color: #2b6cb0;
+    text-decoration: none;
+    font-size: 11px;
+  }
+  .risks-table p {
+    margin: 4px 0 0 0;
+    font-size: 11px;
+    color: #4a5568;
+    line-height: 1.3;
+  }
   .badge {
     display: inline-block;
-    padding: 2px 10px;
-    border-radius: 12px;
-    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 10px;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.3px;
@@ -273,37 +322,37 @@
 </table>
 
 <h3>Identified Risks</h3>
-<table>
+<table class="risks-table">
 <tr>
-  <th>ID</th>
-  <th>Likelihood</th>
-  <th>Impact</th>
-  <th>Severity</th>
-  <th>Risk</th>
-  <th>Action</th>
-  <th>Mitigation</th>
-  <th>Res. Impact</th>
-  <th>Res. Likelihood</th>
-  <th>Res. Severity</th>
-  <th>Res. Status</th>
+  <th class="col-id">ID</th>
+  <th class="col-likelihood">Like.</th>
+  <th class="col-impact">Impact</th>
+  <th class="col-severity">Severity</th>
+  <th class="col-risk">Risk</th>
+  <th class="col-action">Action</th>
+  <th class="col-mitigation">Mitigation</th>
+  <th class="col-res-impact">R. Imp.</th>
+  <th class="col-res-likelihood">R. Like.</th>
+  <th class="col-res-severity">R. Sev.</th>
+  <th class="col-status">Status</th>
 </tr>
 {{range $index, $risk :=.Risks}}
 <tr>
-  <td>{{$risk.Id}}</td>
-  <td><span class="badge badge-{{lower $risk.Likelihood}}">{{likelihood $risk.Likelihood}}</span></td>
-  <td><span class="badge badge-{{lower $risk.Impact}}">{{impact $risk.Impact}}</span></td>
-  <td><span class="badge sev-{{lower $risk.Severity}}">{{severity $risk.Severity}}</span></td>
-  <td>
+  <td class="col-id">{{$risk.Id}}</td>
+  <td class="col-likelihood"><span class="badge badge-{{lower $risk.Likelihood}}">{{likelihood $risk.Likelihood}}</span></td>
+  <td class="col-impact"><span class="badge badge-{{lower $risk.Impact}}">{{impact $risk.Impact}}</span></td>
+  <td class="col-severity"><span class="badge sev-{{lower $risk.Severity}}">{{severity $risk.Severity}}</span></td>
+  <td class="col-risk">
     <a href="https://cwe.mitre.org/data/definitions/{{$risk.Cwe}}">CWE-{{$risk.Cwe}}</a>
     {{$risk.Title}}: {{$risk.Message}}
-    <p style="margin-top:4px;color:#4a5568;">{{$risk.Description}}</p>
+    <p>{{$risk.Description}}</p>
   </td>
-  <td>{{$risk.Action}}</td>
-  <td>{{$risk.Mitigation}}</td>
-  <td><span class="badge badge-{{lower $risk.ResidualImpact}}">{{impact $risk.ResidualImpact}}</span></td>
-  <td><span class="badge badge-{{lower $risk.ResidualLikelihood}}">{{likelihood $risk.ResidualLikelihood}}</span></td>
-  <td><span class="badge sev-{{lower $risk.ResidualSeverity}}">{{severity $risk.ResidualSeverity}}</span></td>
-  <td>{{$risk.Status}}</td>
+  <td class="col-action">{{$risk.Action}}</td>
+  <td class="col-mitigation">{{$risk.Mitigation}}</td>
+  <td class="col-res-impact"><span class="badge badge-{{lower $risk.ResidualImpact}}">{{impact $risk.ResidualImpact}}</span></td>
+  <td class="col-res-likelihood"><span class="badge badge-{{lower $risk.ResidualLikelihood}}">{{likelihood $risk.ResidualLikelihood}}</span></td>
+  <td class="col-res-severity"><span class="badge sev-{{lower $risk.ResidualSeverity}}">{{severity $risk.ResidualSeverity}}</span></td>
+  <td class="col-status">{{$risk.Status}}</td>
 </tr>
 {{end}}
 </table>
