@@ -14,7 +14,7 @@ pkg/terraform/terraform_base_listener.go
 pkg/terraform/terraform_listener.go
 
 # Test artifacts
-coverage.txt
+coverage.*
 cover.out
 gosec_report.*
 
@@ -30,13 +30,11 @@ gosec_report.*
 Thumbs.db
 
 # Report outputs (generated)
-report.html
-report.md
-report.pdf
+report.*
 examples/gcp/report.html
 examples/gcp/report.pdf
 examples/gcp/report_graphviz.pdf
-
+taralizer.rb
 # Vendor (if used)
 vendor/
 
@@ -46,3 +44,5 @@ config.yaml
 
 # Working documents (optional - remove if obsolete)
 tasks/
+examples/gcp/terraform/taralizer.yaml
+taralizer

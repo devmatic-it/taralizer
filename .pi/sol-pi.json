@@ -4,7 +4,7 @@
   "observationPack": true,
   "evidencePreservingReducer": true,
   "evidencePreservingReducerProvider": "lmstudio",
-  "evidencePreservingReducerModel": "qwen/qwen3.6-35b-a3b",
+  "evidencePreservingReducerModel": "qwen3.8-27b-mlx",
   "onlineContextCompact": true,
   "cacheWriteReadRatio": 12.5
 }

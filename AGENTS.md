@@ -255,8 +255,6 @@ Each phase has a dedicated skill that enforces its discipline. Invoke the releva
 - Redeploy previous version: < 5 minutes
 ```
 
-**Do NOT ship until the shipping checklist is complete.**
-
 ---
 
 ## Quality Control
@@ -270,55 +268,46 @@ Bypassing checks is strictly forbidden unless an Exception ID is documented in `
 
 ---
 
-## Audit Requirement
+## KISS Improvements for Hallucination and Infinite Loop Prevention
 
-Every PR/CR must include a **Quality Compliance Report**:
+### 1. Simplified Task Structure
+- Remove complex multi-phase tasks that can cause confusion
+- Define explicit boundaries for each task to prevent infinite loops
+- Keep task descriptions simple and actionable
 
-- Build Status (`make build`)
-- Test Status (`make test`)
-- Lint Status (`make lint`)
-- Race Safety (`go test -race ./...`)
-- Coverage Delta (e.g., +2.5%)
-- Constraint Check (No floor violations)
-- Review Status (Approved by code-review-and-quality)
-- Shipping Checklist (All items green)
+### 2. Clear Decision Points
+- Add specific checkpoints where decisions must be made
+- Define clear success/failure criteria for each phase
 
----
+### 3. Reduced Cognitive Load
+- Limit the number of skills that can be invoked in sequence
+- Provide concrete examples instead of abstract concepts where possible
 
-## Quick Reference: Skill Invocation
+### 4. Explicit Error Handling
+- Define clear error states and recovery paths
+- Prevent agents from looping indefinitely by setting explicit timeouts
 
-When the work enters a phase, invoke the relevant skill by name:
+### 5. Direct Feedback Loops
+- Ensure all agent actions produce clear, actionable feedback
+- Avoid ambiguous responses that could lead to misinterpretation
 
-```
-# Phase 1: Define
-/skill idea-refine "Help me refine this feature idea"
-/skill spec-driven-development "Create a spec for the auth module"
-/skill interview-me "Build me a notification system"
+### 6. Documentation Consistency Protocol
+- All documentation files must reference each other appropriately  
+- Regular consistency checks should be performed quarterly
+- Any change to one document must be reviewed for impact on related documents
 
-# Phase 2: Plan
-/skill planning-and-task-breakdown "Break this spec into tasks"
-/skill constraint-driven-development "Define our quality constraints"
+## Implementation Guidelines
 
-# Phase 3: Build
-/skill incremental-implementation "Implement Task 3 from the plan"
-/skill test-driven-development "Write tests for the validation logic"
-/skill source-driven-development "Verify this approach against the docs"
-/skill security-and-hardening "Review this auth flow for vulnerabilities"
+### For All Agents
+- **Task Boundaries**: Each task must have clearly defined start and end conditions
+- **Decision Points**: Every phase should include a decision point where the agent evaluates if it can proceed
+- **Feedback Loops**: All actions must return clear, actionable feedback to the user or system
+- **Error Handling**: When errors occur, agents must follow predefined recovery paths with timeouts
 
-# Phase 4: Verify
-/skill debugging-and-error-recovery "This test is failing — help me find the root cause"
-/skill performance-optimization "Profile the API endpoint for bottlenecks"
-
-# Phase 5: Review
-/skill code-review-and-quality "Review this PR"
-/skill code-simplification "Simplify this function for clarity"
-/skill doubt-driven-development "Stress-test this production auth change"
-
-# Phase 6: Ship
-/skill git-workflow-and-versioning "Help me cut a release"
-/skill shipping-and-launch "I need to deploy to production — what's the checklist?"
-/skill ci-cd-and-automation "Set up CI for this pipeline"
-```
+### For Developers
+- **Consistent Documentation**: All documentation should use the same terminology and structure
+- **Cross-referencing**: Every document should reference related documents appropriately
+- **Regular Audits**: Conduct quarterly reviews to ensure documentation alignment
 
 ---
 
