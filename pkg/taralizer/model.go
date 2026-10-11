@@ -16,7 +16,7 @@ package taralizer
 import (
 	"fmt"
 	"io"
-	
+
 	"os"
 	"path/filepath"
 	"strings"
@@ -88,6 +88,7 @@ type TechnicalAsset struct {
 	Integrity           string              `yaml:"integrity,omitempty"`
 	Availability        string              `yaml:"availability,omitempty"`
 	Technology          string              `yaml:"technology,omitempty"`
+	TerraformRef        string              `yaml:"terraform_ref,omitempty"`
 	Puml                string              `yaml:"puml,omitempty"`
 	UsedAsClientByHuman bool                `yaml:"used_as_client_by_human,omitempty"`
 	OutOfScope          bool                `yaml:"out_of_scope,omitempty"`
@@ -102,6 +103,7 @@ type TrustBoundary struct {
 	Name                  string   `yaml:"name"`
 	Description           string   `yaml:"description,omitempty"`
 	Technology            string   `yaml:"technology,omitempty"`
+	TerraformRef          string   `yaml:"terraform_ref,omitempty"`
 	Puml                  string   `yaml:"puml,omitempty"`
 	TrustBoundariesNested []string `yaml:"trust_boundaries_nested,omitempty"`
 	TechnicalAssetsInside []string `yaml:"technical_assets_inside,omitempty"`
@@ -125,7 +127,7 @@ type Report struct {
 	Version         string           `yaml:"version,omitempty"`
 	Customer        string           `yaml:"customer,omitempty"`
 	Date            string           `yaml:"date,omitempty"`
-	Author          Author          `yaml:"author,omitempty"`
+	Author          Author           `yaml:"author,omitempty"`
 	RuleSet         RuleSet          `yaml:"ruleset,omitempty"`
 }
 
@@ -158,6 +160,7 @@ type Technology struct {
 	Name      string `yaml:"name"`
 	Type      string `yaml:"type"`
 	Terraform string `yaml:"terraform"`
+	Scaffold  string `yaml:"scaffold,omitempty"`
 }
 
 // ProfileSet represents a mapping profile to cloud technologies

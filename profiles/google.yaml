@@ -48,22 +48,43 @@ technologies:
     name: "vpc"
     type: "trust_boundary"
     terraform: "google_compute_network"
+    scaffold: |
+      name                    = "{name}"
+      auto_create_subnetworks = false
 
   - id: "subnet"
     name: "subnet"
     type: "trust_boundary"
-    terraform: ""
+    terraform: "google_compute_subnetwork"
+    scaffold: |
+      name          = "{name}"
+      ip_cidr_range = "10.0.0.0/24"
+      region        = var.region
+
+      # TODO(taralizer): point at the VPC network resource, e.g.
+      # google_compute_network.vpc.name
+      network = "default"
 
   - id: "project"
     name: "project"
     type: "trust_boundary"
-    terraform: ""
+    terraform: "google_project"
+    scaffold: |
+      name       = "{name}"
+      project_id = "{name}"
 
   # networking technologies
   - id: "waf"
     name: "waf"
     type: "technical_asset"
-    terraform: ""
+    # approximate mapping — Cloud Armor is the closest GCP WAF;
+    # review before use
+    terraform: "google_cloud_armor_security_policy"
+    scaffold: |
+      name = "{name}"
+      type = "EXPLICIT"
+
+      # TODO(taralizer): add rule blocks for the WAF policy
 
   - id: "load-balancer"
     name: "load-balancer"
@@ -99,12 +120,24 @@ technologies:
   - id: "database-sql"
     name: "Cloud SQL"
     type: "technical_asset"
-    terraform: ""
+    terraform: "google_sql_database_instance"
+    scaffold: |
+      name = "{name}"
+
+      settings {
+        tier = "db-f1-micro"
+      }
 
   - id: "database-nosql"
     name: "Datastore"
     type: "technical_asset"
-    terraform: ""
+    # approximate mapping — Firestore is the successor to Datastore;
+    # review before use
+    terraform: "google_firestore_database"
+    scaffold: |
+      name     = "{name}"
+      location = "firestore-default-location"
+      type     = "FIRESTORE_NATIVE"
 
   - id: "file-server"
     name: "file-server"
@@ -130,21 +163,81 @@ technologies:
     name: "web-server"
     type: "technical_asset"
     terraform: "google_compute_instance"
+    scaffold: |
+      name         = "{name}"
+      machine_type = "e2-micro"
+
+      boot_disk {
+        initialize_params {
+          image = "debian-cloud/debian-12"
+        }
+      }
+
+      network_interface {
+        # TODO(taralizer): point at the VPC network resource, e.g.
+        # google_compute_network.vpc.name
+        network = "default"
+      }
 
   - id: "web-application"
     name: "web-application"
     type: "technical_asset"
     terraform: "google_compute_instance"
+    scaffold: |
+      name         = "{name}"
+      machine_type = "e2-micro"
+
+      boot_disk {
+        initialize_params {
+          image = "debian-cloud/debian-12"
+        }
+      }
+
+      network_interface {
+        # TODO(taralizer): point at the VPC network resource, e.g.
+        # google_compute_network.vpc.name
+        network = "default"
+      }
 
   - id: "web-service-rest"
     name: "web-service-rest"
     type: "technical_asset"
     terraform: "google_compute_instance"
+    scaffold: |
+      name         = "{name}"
+      machine_type = "e2-micro"
+
+      boot_disk {
+        initialize_params {
+          image = "debian-cloud/debian-12"
+        }
+      }
+
+      network_interface {
+        # TODO(taralizer): point at the VPC network resource, e.g.
+        # google_compute_network.vpc.name
+        network = "default"
+      }
 
   - id: "web-service-soap"
     name: "web-service-soap"
     type: "technical_asset"
     terraform: "google_compute_instance"
+    scaffold: |
+      name         = "{name}"
+      machine_type = "e2-micro"
+
+      boot_disk {
+        initialize_params {
+          image = "debian-cloud/debian-12"
+        }
+      }
+
+      network_interface {
+        # TODO(taralizer): point at the VPC network resource, e.g.
+        # google_compute_network.vpc.name
+        network = "default"
+      }
 
   - id: "ejb"
     name: "ejb"
@@ -199,7 +292,12 @@ technologies:
   - id: "hsm"
     name: "Cloud Key Management"
     type: "technical_asset"
-    terraform: ""
+    # approximate mapping — a KMS key ring is the closest standalone
+    # GCP resource; review before use
+    terraform: "google_kms_key_ring"
+    scaffold: |
+      name     = "{name}"
+      location = var.region
 
   - id: "vault"
     name: "Cloud Secret"
@@ -214,7 +312,14 @@ technologies:
   - id: "logging"
     name: "Cloud Logging"
     type: "technical_asset"
-    terraform: ""
+    # approximate mapping — a project sink to Cloud Storage is the
+    # closest standalone GCP resource; review before use
+    terraform: "google_logging_project_sink"
+    scaffold: |
+      name        = "{name}"
+      destination = "storage.googleapis.com/{name}"
+
+      # TODO(taralizer): set a filter to scope the sink
 
   # Integration technologies
   - id: "event-listener"
@@ -284,8 +389,16 @@ technologies:
   - id: "container-platform"
     name: "Google Kubernetes Engine"
     type: "technical_asset"
-    terraform: ""
+    terraform: "google_container_cluster"
+    scaffold: |
+      name     = "{name}"
+      location = var.region
 
+      # TODO(taralizer): configure node pools (initial_node_count or a
+      # node_pool block)
+
+  # Intentionally unmapped to Terraform: pods, ingress and network policies are
+  # managed inside the GKE cluster (container-platform), not as standalone resources.
   - id: "kubernetes-pod"
     name: "kubernetes-pod"
     type: "technical_asset"

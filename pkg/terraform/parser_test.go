@@ -31,8 +31,14 @@ func TestParseTerraform(t *testing.T) {
 func TestParseTerraformDir(t *testing.T) {
 	resources, err := ParseTerraformDir("../../examples/gcp/terraform")
 	assert.NoError(t, err)
-	// The current implementation returns an empty slice because it's not properly parsing the files
-	assert.Empty(t, resources)
+	// examples/gcp/terraform/main.tf declares exactly two resources
+	assert.Len(t, resources, 2)
+
+	assert.Equal(t, "google_compute_network", resources[0].Type)
+	assert.Equal(t, "vpc_network", resources[0].Name)
+
+	assert.Equal(t, "google_compute_instance", resources[1].Type)
+	assert.Equal(t, "vm_instance", resources[1].Name)
 }
 
 func TestParseTerraformDirWithValidFiles(t *testing.T) {

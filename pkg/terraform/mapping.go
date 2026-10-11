@@ -26,6 +26,7 @@ type Technology struct {
 	Name      string `yaml:"name"`
 	Type      string `yaml:"type"`
 	Terraform string `yaml:"terraform"`
+	Scaffold  string `yaml:"scaffold,omitempty"`
 }
 
 // MappingProfile represents the structure of google.yaml profile

@@ -14,15 +14,40 @@
 
 package terraform
 
+import (
+	"github.com/hashicorp/hcl/v2/hclsyntax"
+)
+
 // GCPResource represents a Google Cloud Platform resource
 type GCPResource struct {
 	Name string
 	Type string
 }
 
-// ParseTerraformDir parses Terraform files in a directory and returns the parsed content
+// ParseTerraformDir parses Terraform files in a directory and returns the resources declared in them.
+// Every resource block contributes one GCPResource with Type = labels[0] and Name = labels[1].
 func ParseTerraformDir(tfDir string) ([]GCPResource, error) {
-	// This function should parse Terraform files and return a list of GCP resources
-	// For now, we'll implement it as a stub that returns an empty slice
-	return []GCPResource{}, nil
+	files, err := ParseTerraform(tfDir)
+	if err != nil {
+		return nil, err
+	}
+
+	resources := []GCPResource{}
+	for _, file := range files {
+		body, ok := file.Body.(*hclsyntax.Body)
+		if !ok {
+			continue
+		}
+		for _, block := range body.Blocks {
+			if block.Type != "resource" || len(block.Labels) < 2 {
+				continue
+			}
+			resources = append(resources, GCPResource{
+				Name: block.Labels[1],
+				Type: block.Labels[0],
+			})
+		}
+	}
+
+	return resources, nil
 }

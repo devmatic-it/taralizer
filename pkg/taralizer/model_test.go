@@ -18,6 +18,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"gopkg.in/yaml.v3"
 )
 
 func TestLoad(t *testing.T) {
@@ -36,4 +37,41 @@ func TestLoadProfileSet(t *testing.T) {
 		t.Fatalf("Failed to load profile set: %v", err)
 	}
 	assert.Greater(t, len(profileSet.Technologies), 0)
+}
+
+func TestTerraformRefRoundTrip(t *testing.T) {
+	report, err := Load("../../examples/gcp/bank_of_anthos.yaml")
+	if err != nil {
+		t.Fatalf("Failed to load report: %v", err)
+	}
+
+	report.TechnicalAssets[0].TerraformRef = "google_compute_instance.frontend"
+	report.TrustBoundaries[0].TerraformRef = "google_compute_network.vpc"
+
+	data, err := yaml.Marshal(report)
+	if err != nil {
+		t.Fatalf("Failed to marshal report: %v", err)
+	}
+
+	var roundTripped Report
+	if err := yaml.Unmarshal(data, &roundTripped); err != nil {
+		t.Fatalf("Failed to unmarshal report: %v", err)
+	}
+
+	assert.Equal(t, "google_compute_instance.frontend", roundTripped.TechnicalAssets[0].TerraformRef)
+	assert.Equal(t, "google_compute_network.vpc", roundTripped.TrustBoundaries[0].TerraformRef)
+}
+
+func TestTerraformRefOmitEmpty(t *testing.T) {
+	report := Report{
+		Title:           "test",
+		TechnicalAssets: []TechnicalAsset{{Id: "a1", Name: "asset one"}},
+	}
+
+	data, err := yaml.Marshal(report)
+	if err != nil {
+		t.Fatalf("Failed to marshal report: %v", err)
+	}
+
+	assert.NotContains(t, string(data), "terraform_ref")
 }
