@@ -16,8 +16,8 @@ package terraform
 
 import (
 	"gopkg.in/yaml.v3"
-	"io/ioutil"
 	"log"
+	"os"
 )
 
 // Technology represents a technology mapping in the taralizer model
@@ -40,7 +40,7 @@ type MappingProfile struct {
 // LoadGoogleProfile loads the google.yaml profile to map GCP resources to taralizer assets
 func LoadGoogleProfile(profilePath string) (*MappingProfile, error) {
 	// Read the YAML file
-	yamlContent, err := ioutil.ReadFile(profilePath)
+	yamlContent, err := os.ReadFile(profilePath)
 	if err != nil {
 		return nil, err
 	}

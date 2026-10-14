@@ -73,16 +73,23 @@ technologies:
       name       = "{name}"
       project_id = "{name}"
 
+  - id: "cloud-services"
+    name: "cloud-services"
+    type: "trust_boundary"
+    # Intentionally unmapped to Terraform: a generic grouping concept for
+    # cloud-hosted services, not a standalone GCP resource.
+    terraform: ""
+
   # networking technologies
   - id: "waf"
     name: "waf"
     type: "technical_asset"
-    # approximate mapping — Cloud Armor is the closest GCP WAF;
+    # approximate mapping — Compute security policy is the closest GCP WAF;
     # review before use
-    terraform: "google_cloud_armor_security_policy"
+    terraform: "google_compute_security_policy"
     scaffold: |
       name = "{name}"
-      type = "EXPLICIT"
+      type = "CLOUD_ARMOR"
 
       # TODO(taralizer): add rule blocks for the WAF policy
 
@@ -122,7 +129,8 @@ technologies:
     type: "technical_asset"
     terraform: "google_sql_database_instance"
     scaffold: |
-      name = "{name}"
+      name             = "{name}"
+      database_version = "POSTGRES_16"
 
       settings {
         tier = "db-f1-micro"
@@ -135,8 +143,8 @@ technologies:
     # review before use
     terraform: "google_firestore_database"
     scaffold: |
-      name     = "{name}"
-      location = "firestore-default-location"
+      name        = "{name}"
+      location_id = "firestore-default-location"
       type     = "FIRESTORE_NATIVE"
 
   - id: "file-server"
@@ -332,7 +340,7 @@ technologies:
     name: "Dataproc"
     type: "technical_asset"
     terraform: ""
-    
+
   - id: "message-queue"
     name: "Cloud Pub/Sub"
     type: "technical_asset"
@@ -397,6 +405,17 @@ technologies:
       # TODO(taralizer): configure node pools (initial_node_count or a
       # node_pool block)
 
+  - id: "kubernetes-cluster"
+    name: "Kubernetes Cluster"
+    type: "technical_asset"
+    terraform: "google_container_cluster"
+    scaffold: |
+      name     = "{name}"
+      location = var.region
+
+      # TODO(taralizer): configure node pools (initial_node_count or a
+      # node_pool block)
+
   # Intentionally unmapped to Terraform: pods, ingress and network policies are
   # managed inside the GKE cluster (container-platform), not as standalone resources.
   - id: "kubernetes-pod"
@@ -404,22 +423,29 @@ technologies:
     type: "technical_asset"
 
   - id: "kubernetes-ingress"
-    name: "kubernetes-ingress"      
+    name: "kubernetes-ingress"
     type: "technical_asset"
-    terraform: ""    
-      
+    terraform: ""
+
+  - id: "kubernetes-network-policies"
+    name: "kubernetes-network-policies"
+    type: "trust_boundary"
+    # Intentionally unmapped to Terraform: network policies are managed inside
+    # the GKE cluster (container-platform), not as standalone resources.
+    terraform: ""
+
   - id: "kubernetes-service"
-    name: "kubernetes-service"      
+    name: "kubernetes-service"
     type: "technical_asset"
     terraform: ""
 
   - id: "kubernetes-deployment"
-    name: "kubernetes-deployment"      
+    name: "kubernetes-deployment"
     type: "technical_asset"
     terraform: ""
 
   - id: "kubernetes-configmap"
-    name: "kubernetes-configmap"      
+    name: "kubernetes-configmap"
     type: "technical_asset"
     terraform: ""
 
@@ -439,11 +465,11 @@ technologies:
     terraform: ""
 
   - id: "kubernetes-job"
-    name: "kubernetes-job"      
+    name: "kubernetes-job"
     type: "technical_asset"
     terraform: ""
 
   - id: "kubernetes-cronjob"
-    name: "kubernetes-cronjob"      
+    name: "kubernetes-cronjob"
     type: "technical_asset"
     terraform: ""

@@ -16,7 +16,7 @@ package cmd
 
 import (
 	"fmt"
-	"io/ioutil"
+	"os"
 
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
@@ -64,7 +64,7 @@ and mapping the resources to appropriate taralizer assets using the google.yaml 
 		}
 
 		// Write to output file
-		err = ioutil.WriteFile(outputFile, []byte(yamlContent), 0644)
+		err = os.WriteFile(outputFile, []byte(yamlContent), 0644)
 		if err != nil {
 			fmt.Printf("Error writing output file: %v\n", err)
 			return

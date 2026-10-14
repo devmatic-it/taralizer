@@ -1,0 +1,106 @@
+// Copyright 2021 taralizer authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//	http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+package terraform
+
+import (
+	"testing"
+
+	"github.com/devmatic-it/taralizer/pkg/taralizer"
+	"github.com/stretchr/testify/assert"
+)
+
+const googleProfilePath = "../../profiles/google.yaml"
+
+func TestLoadGoogleProfile(t *testing.T) {
+	profile, err := LoadGoogleProfile(googleProfilePath)
+	if err != nil {
+		t.Fatalf("Failed to load google profile: %v", err)
+	}
+
+	assert.Equal(t, "Google Cloud", profile.Name)
+	assert.Equal(t, "google", profile.TerraformProvider)
+	assert.Greater(t, len(profile.Technologies), 0)
+}
+
+func TestGoogleProfileDualLoaderAgreement(t *testing.T) {
+	profile, err := LoadGoogleProfile(googleProfilePath)
+	if err != nil {
+		t.Fatalf("Failed to load google profile: %v", err)
+	}
+
+	profileSet, err := taralizer.LoadProfileSet("google.yaml")
+	if err != nil {
+		t.Fatalf("Failed to load google profile set: %v", err)
+	}
+
+	assert.Equal(t, len(profile.Technologies), len(profileSet.Technologies))
+	assert.Equal(t, profile.TerraformProvider, profileSet.TerraformProvider)
+
+	// Both loaders must agree on the technology IDs.
+	ids := make(map[string]bool, len(profile.Technologies))
+	for _, tech := range profile.Technologies {
+		ids[tech.ID] = true
+	}
+	for _, tech := range profileSet.Technologies {
+		assert.True(t, ids[tech.Id], "technology %q missing from LoadProfileSet result", tech.Id)
+	}
+}
+
+func TestScaffoldCoversAllMappedTechnologies(t *testing.T) {
+	profile, err := LoadGoogleProfile(googleProfilePath)
+	if err != nil {
+		t.Fatalf("Failed to load google profile: %v", err)
+	}
+
+	for _, tech := range profile.Technologies {
+		if tech.Terraform == "" {
+			continue
+		}
+		assert.NotEmpty(t, tech.Scaffold, "technology %q maps to %s but has no scaffold", tech.ID, tech.Terraform)
+	}
+}
+
+func TestBankOfAnthosExportableCount(t *testing.T) {
+	report, err := taralizer.Load("../../examples/gcp/bank_of_anthos.yaml")
+	if err != nil {
+		t.Fatalf("Failed to load bank of anthos model: %v", err)
+	}
+
+	profile, err := LoadGoogleProfile(googleProfilePath)
+	if err != nil {
+		t.Fatalf("Failed to load google profile: %v", err)
+	}
+
+	mapped := make(map[string]bool, len(profile.Technologies))
+	for _, tech := range profile.Technologies {
+		if tech.Terraform != "" {
+			mapped[tech.ID] = true
+		}
+	}
+
+	exportable := 0
+	for _, asset := range report.TechnicalAssets {
+		if mapped[asset.Technology] {
+			exportable++
+		}
+	}
+	for _, boundary := range report.TrustBoundaries {
+		if mapped[boundary.Technology] {
+			exportable++
+		}
+	}
+
+	assert.GreaterOrEqual(t, exportable, 8)
+}

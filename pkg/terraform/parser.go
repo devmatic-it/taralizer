@@ -18,7 +18,6 @@ package terraform
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
@@ -40,7 +39,7 @@ func ParseTerraform(tfDir string) ([]*hcl.File, error) {
 
 		// Only process .tf files
 		if strings.HasSuffix(path, ".tf") {
-			content, err := ioutil.ReadFile(path)
+			content, err := os.ReadFile(path)
 			if err != nil {
 				return fmt.Errorf("failed to read file %s: %w", path, err)
 			}

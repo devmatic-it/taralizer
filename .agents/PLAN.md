@@ -172,3 +172,55 @@ Direction A from the one-pager, in three phases: Task 0 (green suite) → A1 exp
 - Comment-preserving YAML writer for write-back (yaml.v3 Node-based)
 - Attribute-level drift (beyond structural) — explicitly Not Doing for v1
 - CI gate packaging of the whole pipeline (one-pager direction B) — thin follow-up after A3
+
+## Task A1.2 Implementation Plan (detailed, 2026-07 session)
+
+### Verified current state (before change)
+
+- pkg/taralizer/model.go Technology struct already has Scaffold string with yaml tag scaffold,omitempty (done in earlier session).
+- pkg/terraform/mapping.go Technology struct already has Scaffold string with yaml tag scaffold,omitempty (done in earlier session).
+- profiles/google.yaml: 13 technologies already have non-empty terraform, all with scaffolds: vpc, subnet, project, waf, database-sql, database-nosql, web-server, web-application, web-service-rest, web-service-soap, hsm, logging, container-platform.
+- examples/gcp/bank_of_anthos.yaml uses technologies missing from the profile: kubernetes-cluster (line 540), kubernetes-network-policies (x4, trust boundaries), cloud-services (line 587, trust boundary). None exist in google.yaml or default.yaml.
+
+### Changes
+
+1. profiles/google.yaml:
+   - Add kubernetes-cluster (type technical_asset, terraform google_container_cluster, scaffold = name/location + node-pool TODO). Plan requires this exact mapping; keep existing container-platform entry (renaming would break other models; two technologies may map to the same terraform type in export direction).
+   - Add kubernetes-network-policies (type trust_boundary, terraform empty) with explanatory comment: workload-level, managed inside the GKE cluster.
+   - Add cloud-services (type trust_boundary, terraform empty) with explanatory comment: generic grouping concept, not a standalone GCP resource.
+2. pkg/terraform/mapping_test.go (new file):
+   - TestLoadGoogleProfile: LoadGoogleProfile(../../profiles/google.yaml) — name/provider non-empty, technologies > 0.
+   - TestGoogleProfileDualLoaderAgreement: same profile via taralizer.LoadProfileSet(google.yaml) — technology count and provider equal across both loaders.
+   - TestScaffoldCoversAllMappedTechnologies: every technology with non-empty terraform has non-empty scaffold (acceptance invariant).
+   - TestBankOfAnthosExportableCount: load report via taralizer.Load(../../examples/gcp/bank_of_anthos.yaml); count technical assets + trust boundaries whose technology maps to non-empty terraform; assert >= 8 (expected 13 after kubernetes-cluster added).
+
+### Verify
+
+make lint && make check-coverage; then go test ./pkg/terraform/... ./pkg/taralizer/...
+
+### Document
+
+No new CLI flags/rules — profile content + struct field only; docs/specs.md and docs/prd.md updates are owned by the A1 DOCUMENT task (export architecture), so no doc change for this slice beyond STATE.md.
+
+## A1.2 Session Record (completion, lint unblock, coverage decision)
+
+### make lint was red on clean HEAD — pre-existing debt, unblocked this session
+
+- enforce-rules failed: two `//nolint:varread` comments in pkg/terraform/terraform_parser.go (before `var _la int` and before `var _prevctx`). "varread" is not a valid staticcheck code, so they suppressed nothing; the gate (added after the parser existed) simply forbids them. Both lines deleted.
+- staticcheck then reported 5 real pre-existing findings, all fixed:
+  - SA1019 io/ioutil deprecated: cmd/root.go (ioutil.WriteFile → os.WriteFile), pkg/terraform/mapping.go and pkg/terraform/parser.go (ioutil.ReadFile → os.ReadFile; imports updated).
+  - SA4006 dead assignment pkg/terraform/terraform_parser.go File_(): `_la = p.GetTokenStream().LA(1)` before the for-loop — proven dead (loop condition only evaluates after each iteration; every path reassigns `_la` at loop end or panics in default). Line deleted.
+  - SA4006 dead assignment pkg/terraform/terraform_parser.go expression(): `_prevctx = localctx` inside the loop — `_prevctx`'s only read is `var _ antlr.ParserRuleContext = _prevctx` before the loop. Line deleted.
+- Result: `make lint` fully green (enforce-rules, go vet, staticcheck 0 findings, govulncheck 0 vulns). `go build ./...` clean.
+- Toolchain note (follow-up for A1.6 CI work): released staticcheck 2026.2.1 (v0.8.1, @latest) fails on Go 1.27 with "export data version 5 is greater than maximum supported version 4" for every package; local env uses a staticcheck@master build in $(go env GOPATH)/bin. CI must pin a Go-1.27-compatible staticcheck or the lint job will fail.
+
+### Coverage gate decision (user-directed)
+
+- `make check-coverage` fails: 32.7% total vs COVERAGE_THRESHOLD := 85 (Makefile line 19). Threshold introduced in commit fb27a5f (2026-10-11, "updated struture"); parent commit had no threshold — repo has never met 85%. Per-package: asvs 82.4%, cwe 84.2%, taralizer 58.5%, terraform 27.2% (dominated by the ~5600-line ANTLR parser), version 0.0%.
+- User instruction (m00228–m00233): ignore unit-test coverage for the terraform task until it is complete; keep baselines only for asvs/cwe/taralizer; do NOT modify the Makefile; stop spending time on coverage and move on.
+- User instruction (m00238): add task A1.7 "improve code coverage to 85%" before finishing Phase A1 — the deferred work is now an explicit STATE.md task (between A1.6 and DOCUMENT). Coverage gate stays red until A1.7; all other gates (build, lint, test) must stay green.
+
+### A1.2 verification status
+
+- make lint: PASS (after unblock above). go test ./...: all pass, including 4 new tests in pkg/terraform/mapping_test.go. make check-coverage: FAIL — pre-existing, deferred to A1.7 per user instruction.
+

@@ -82,6 +82,33 @@ jobs:
       - name: Run govulncheck
         run: govulncheck ./...
 
+  terraform-validate:
+    name: Terraform Validate (exported scaffolds)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.27.2'
+          cache: true
+
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: '1.16.5'
+
+      - name: Download dependencies
+        run: go mod download
+
+      # Exports the Bank of Anthos example model and runs `terraform init` +
+      # `terraform validate` on the result, so scaffold regressions (bad GCP
+      # names, missing required arguments, unknown resource types) fail CI.
+      - name: Build and validate exported scaffolds
+        run: make check-tf
+
   build:
     name: Build
     runs-on: ubuntu-latest

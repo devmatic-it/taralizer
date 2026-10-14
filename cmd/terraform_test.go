@@ -1,0 +1,239 @@
+// Copyright 2021 taralizer authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//	http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+package cmd
+
+import (
+	"bytes"
+	"os"
+	"path/filepath"
+	"strings"
+	"testing"
+
+	"github.com/spf13/cobra"
+)
+
+// cliProfilePath is the google.yaml profile relative to this package's test
+// working directory (cmd/).
+const cliProfilePath = "../profiles/google.yaml"
+
+// cliModelFixture is a minimal model with one exportable asset and one
+// unmapped boundary (which must produce a warning, not an error).
+const cliModelFixture = `title: CLI Test
+technical_assets:
+  - id: vpc
+    name: VPC
+    technology: vpc
+
+trust_boundaries:
+  - id: cloud
+    name: Cloud boundary
+    technology: internet
+`
+
+// runRoot executes the root command with args and returns combined output.
+func runRoot(t *testing.T, args ...string) (string, error) {
+	t.Helper()
+	var buf bytes.Buffer
+	rootCmd.SetOut(&buf)
+	rootCmd.SetErr(&buf)
+	rootCmd.SetArgs(args)
+	err := rootCmd.Execute()
+	return buf.String(), err
+}
+
+// writeCLIModel writes the model fixture into a temp dir and returns its path.
+func writeCLIModel(t *testing.T) string {
+	t.Helper()
+	path := filepath.Join(t.TempDir(), "model.yaml")
+	if err := os.WriteFile(path, []byte(cliModelFixture), 0644); err != nil {
+		t.Fatalf("write model: %v", err)
+	}
+	return path
+}
+
+func TestTerraformExportCommand(t *testing.T) {
+	modelPath := writeCLIModel(t)
+	outDir := filepath.Join(t.TempDir(), "tf")
+
+	out, err := runRoot(t, "terraform", "export", modelPath, "-o", outDir, "--profile", cliProfilePath)
+	if err != nil {
+		t.Fatalf("terraform export: %v\noutput:\n%s", err, out)
+	}
+
+	for _, base := range []string{"provider.tf", "variables.tf", "vpc.tf"} {
+		if _, err := os.Stat(filepath.Join(outDir, base)); err != nil {
+			t.Errorf("expected %s to be written: %v", base, err)
+		}
+	}
+
+	if !strings.Contains(out, "Exported 1 resource(s)") {
+		t.Errorf("expected success summary in output, got:\n%s", out)
+	}
+	if !strings.Contains(out, "WARNING") || !strings.Contains(out, `boundary "cloud"`) {
+		t.Errorf("expected warning for unmapped boundary cloud, got:\n%s", out)
+	}
+
+	// Write-back must have recorded the ref in the model file.
+	model, err := os.ReadFile(modelPath)
+	if err != nil {
+		t.Fatalf("read model: %v", err)
+	}
+	if !strings.Contains(string(model), "terraform_ref: google_compute_network.vpc") {
+		t.Errorf("model missing terraform_ref write-back; got:\n%s", model)
+	}
+	if !strings.Contains(string(model), "terraform_ref: google_compute_network.vpc\n    name: VPC") {
+		t.Errorf("terraform_ref not inserted below the id line; got:\n%s", model)
+	}
+}
+
+func TestTerraformExportNoWriteBack(t *testing.T) {
+	modelPath := writeCLIModel(t)
+	outDir := filepath.Join(t.TempDir(), "tf")
+
+	if _, err := runRoot(t, "terraform", "export", modelPath, "-o", outDir, "--profile", cliProfilePath, "--write-back=false"); err != nil {
+		t.Fatalf("terraform export --write-back=false: %v", err)
+	}
+
+	model, err := os.ReadFile(modelPath)
+	if err != nil {
+		t.Fatalf("read model: %v", err)
+	}
+	if strings.Contains(string(model), "terraform_ref") {
+		t.Errorf("model modified despite --no-write-back; got:\n%s", model)
+	}
+	if _, err := os.Stat(filepath.Join(outDir, "vpc.tf")); err != nil {
+		t.Errorf("expected vpc.tf to be written: %v", err)
+	}
+}
+
+func TestTerraformExportRefusesNonEmptyDir(t *testing.T) {
+	modelPath := writeCLIModel(t)
+	outDir := filepath.Join(t.TempDir(), "tf")
+	if err := os.MkdirAll(outDir, 0755); err != nil {
+		t.Fatalf("mkdir outDir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(outDir, "existing.tf"), []byte("# user\n"), 0644); err != nil {
+		t.Fatalf("seed existing.tf: %v", err)
+	}
+
+	out, err := runRoot(t, "terraform", "export", modelPath, "-o", outDir, "--profile", cliProfilePath)
+	if err == nil {
+		t.Fatalf("expected error for non-empty outDir, output:\n%s", out)
+	}
+	if !strings.Contains(out, "not empty") {
+		t.Errorf("expected 'not empty' error in output, got:\n%s", out)
+	}
+
+	if _, err := os.Stat(filepath.Join(outDir, "provider.tf")); !os.IsNotExist(err) {
+		t.Error("expected no provider.tf after refused export")
+	}
+
+	// --force must succeed.
+	if _, err := runRoot(t, "terraform", "export", modelPath, "-o", outDir, "--profile", cliProfilePath, "--force"); err != nil {
+		t.Fatalf("terraform export --force: %v", err)
+	}
+	if _, err := os.Stat(filepath.Join(outDir, "provider.tf")); err != nil {
+		t.Errorf("expected provider.tf after forced export: %v", err)
+	}
+}
+
+func TestTerraformExportRequiresOutDir(t *testing.T) {
+	modelPath := writeCLIModel(t)
+
+	// Flag state persists across Execute calls on the shared command tree, so
+	// reset out-dir to its empty default before asserting the required check.
+	if err := terraformExportCmd.Flags().Set("out-dir", ""); err != nil {
+		t.Fatalf("reset out-dir flag: %v", err)
+	}
+
+	out, err := runRoot(t, "terraform", "export", modelPath, "--profile", cliProfilePath)
+	if err == nil {
+		t.Fatalf("expected error when -o is missing, output:\n%s", out)
+	}
+	if !strings.Contains(out, "out-dir") {
+		t.Errorf("expected required-flag error mentioning out-dir, got:\n%s", out)
+	}
+}
+
+func TestTerraformExportBadModel(t *testing.T) {
+	badPath := filepath.Join(t.TempDir(), "missing.yaml")
+
+	out, err := runRoot(t, "terraform", "export", badPath, "-o", t.TempDir(), "--profile", cliProfilePath)
+	if err == nil {
+		t.Fatalf("expected error for missing model file, output:\n%s", out)
+	}
+	if !strings.Contains(out, "load model") {
+		t.Errorf("expected load-model error in output, got:\n%s", out)
+	}
+}
+
+func TestTerraformParentShowsHelp(t *testing.T) {
+	out, err := runRoot(t, "terraform")
+	if err != nil {
+		t.Fatalf("bare terraform command should not error: %v", err)
+	}
+	for _, want := range []string{"Available Commands", "export", "import"} {
+		if !strings.Contains(out, want) {
+			t.Errorf("terraform help missing %q; got:\n%s", want, out)
+		}
+	}
+}
+
+// TestTerraformExportCommandWrongArgCount guards the Args validator.
+func TestTerraformExportCommandWrongArgCount(t *testing.T) {
+	out, err := runRoot(t, "terraform", "export")
+	if err == nil {
+		t.Fatalf("expected error with no args, output:\n%s", out)
+	}
+	if !strings.Contains(out, "accepts 1 arg") {
+		t.Errorf("expected ExactArgs error, got:\n%s", out)
+	}
+
+	out, err = runRoot(t, "terraform", "export", "a.yaml", "b.yaml")
+	if err == nil {
+		t.Fatalf("expected error with two args, output:\n%s", out)
+	}
+	if !strings.Contains(out, "accepts 1 arg") {
+		t.Errorf("expected ExactArgs error, got:\n%s", out)
+	}
+}
+
+// TestTerraformCommandTreeShape asserts the parent/subcommand wiring.
+func TestTerraformCommandTreeShape(t *testing.T) {
+	if terraformCmd.HasParent() && terraformCmd.Parent() != rootCmd {
+		t.Errorf("terraform parent should be root, got %v", terraformCmd.Parent())
+	}
+	var names []string
+	for _, sub := range terraformCmd.Commands() {
+		names = append(names, sub.Name())
+	}
+	if len(names) != 2 || names[0] != "export" || names[1] != "import" {
+		t.Errorf("terraform subcommands = %v, want [export import]", names)
+	}
+
+	var found *cobra.Command
+	for _, sub := range terraformCmd.Commands() {
+		if sub.Name() == "export" {
+			found = sub
+		}
+	}
+	if found == nil {
+		t.Fatal("export subcommand not found")
+	}
+	for _, flag := range []string{"out-dir", "profile", "force", "write-back"} {
+		if found.Flags().Lookup(flag) == nil {
+			t.Errorf("export subcommand missing flag %q", flag)
+		}
+	}
+}

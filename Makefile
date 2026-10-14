@@ -20,49 +20,46 @@ COVERAGE_THRESHOLD := 85
 
 all: lint build test
 
-.PHONY: all build test lint check-coverage enforce-rules clean init
+.PHONY: all build test lint check-coverage enforce-rules clean init check-tf
 
 # Build the binary
 build:
 	@echo "Building binary..."
-	CGO_ENABLED=0 go build -v -ldflags="-X 'github.com/devmatic-it/taralizer/cmd.ProductVersion=${VERSION}'" -o dist/taralizer
+	CGO_ENABLED=0 go build  -json -v -ldflags="-X 'github.com/devmatic-it/taralizer/cmd.ProductVersion=${VERSION}'" -o dist/taralizer
 	cp -R templates dist/templates
 	cp -R profiles dist/profiles
 
 # Run tests with race detector and generate coverage
 test:
 	@echo "Running tests..."
-	go test -v -race -coverprofile=coverage.txt -covermode=atomic ./...
+	go test -json -race -coverprofile=coverage.txt -covermode=atomic ./...
+
+# Validate exported Terraform scaffolds with the terraform CLI (requires terraform).
+# Exports the Bank of Anthos example model and runs `terraform init` +
+# `terraform validate` on the result, so scaffold regressions (bad GCP names,
+# missing required arguments, unknown resource types) fail the build.
+check-tf: build
+	@echo "Validating exported Terraform scaffolds..."
+	sh scripts/check-tf.sh ./dist/taralizer examples/gcp/bank_of_anthos.yaml
 
 # Hard constraints that fail the build if the agent cheats
 enforce-rules:
 	@echo "Enforcing anti-pattern rules..."
-	@if grep -rnw . --include=\*.go -e '//nolint'; then echo "FAIL: //nolint is forbidden"; exit 1; fi
-	@if grep -rnw . --include=\*.go -e '_ = err' -e '_ = fmt.Errorf'; then echo "FAIL: Blank identifier error suppression is forbidden"; exit 1; fi
-	@if grep -rnw . --include=\*.go -e 't.Skip()'; then echo "FAIL: Skipping tests is forbidden"; exit 1; fi
+	sh scripts/enforce-rules.sh
 
 # Run linters (Hard failures only)
 lint: enforce-rules
 	@echo "Running go vet..."
-	go vet ./...
+	go vet -json ./...
 	@echo "Running staticcheck..."
 	staticcheck ./...
 	@echo "Running govulncheck..."
-	govulncheck ./...
+	govulncheck -json ./...
 
 # Evaluate coverage against the threshold
 check-coverage: test
 	@echo "Checking coverage threshold..."
-	@go tool cover -func=coverage.txt | tail -n 1 | awk '{ print $$3 }' | sed 's/%//' > .cov
-	@COVERAGE=$$(cat .cov); \
-	echo "Current coverage: $$COVERAGE%"; \
-	if [ 1 -eq $$(echo "$$COVERAGE < $(COVERAGE_THRESHOLD)" | bc -l) ]; then \
-		echo "Coverage $$COVERAGE% is below threshold of $(COVERAGE_THRESHOLD)%"; \
-		rm .cov; \
-		exit 1; \
-	fi
-	@rm .cov
-	@echo "Coverage OK."
+	sh scripts/check-coverage.sh $(COVERAGE_THRESHOLD)
 
 # Clean build artifacts
 clean:
