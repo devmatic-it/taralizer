@@ -225,6 +225,18 @@ func Load(fileName string) (Report, error) {
 	return report, nil
 }
 
+// Save writes the report to fileName as YAML.
+func Save(report Report, fileName string) error {
+	data, err := yaml.Marshal(&report)
+	if err != nil {
+		return fmt.Errorf("Save: marshal error: %w", err)
+	}
+	if err := os.WriteFile(fileName, data, 0644); err != nil {
+		return fmt.Errorf("Save: write error: %w", err)
+	}
+	return nil
+}
+
 // findDataAsset locates a data asset by ID
 func findDataAsset(report *Report, id string) *DataAsset {
 	for i := 0; i < len(report.DataAssets); i++ {

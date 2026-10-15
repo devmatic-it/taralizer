@@ -37,8 +37,8 @@ Subcommands:
   export   Render a model's technical assets and trust boundaries into
            Terraform scaffolds and record each HCL address in the model's
            terraform_ref field.
-  import   Build a taralizer report from Terraform files (legacy single-file
-           mode; directory-based import is planned).`,
+  import   Build a taralizer report from the resource blocks in every .tf
+           file under a directory.`,
 	}
 
 	// terraformExportCmd renders a model into Terraform scaffolds (Phase A1).
@@ -100,15 +100,44 @@ Example:
 		},
 	}
 
-	// terraformImportCmd keeps the legacy single-file import behavior. Phase A2
-	// replaces its body with directory-based ImportFromDir.
+	// terraformImportCmd builds a taralizer report from a directory of
+	// Terraform files (Phase A2).
 	terraformImportCmd = &cobra.Command{
-		Use:   "import <terraform_file>",
-		Short: "Import the model from a terraform file",
-		Args:  cobra.ExactArgs(1),
-		Run: func(cmd *cobra.Command, args []string) {
-			tf := terraform.NewTerraform()
-			tf.ImportFromFile(args[0])
+		Use:   "import <terraform_dir>",
+		Short: "Import a taralizer model from Terraform files",
+		Long: `Build a taralizer report from the resource blocks in every .tf file under
+<terraform_dir>. Each resource whose type maps to a technology in the profile
+becomes a technical asset or trust boundary, with its HCL address recorded as
+terraform_ref. Unmapped resource types produce a warning on stderr and are
+skipped; files with syntax errors abort the import.
+
+Example:
+  taralizer terraform import ./tf -o model.yaml --profile ./profiles/google.yaml`,
+		Args: cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			tfDir := args[0]
+			profilePath, _ := cmd.Flags().GetString("profile")
+			outFile, _ := cmd.Flags().GetString("out")
+
+			if outFile == "" {
+				return fmt.Errorf("out is required (use -o <model.yaml>)")
+			}
+
+			report, warnings, err := terraform.ImportFromDir(tfDir, profilePath)
+			for _, w := range warnings {
+				fmt.Fprintf(cmd.ErrOrStderr(), "WARNING: %s\n", w)
+			}
+			if err != nil {
+				return fmt.Errorf("import: %w", err)
+			}
+
+			if err := taralizer.Save(report, outFile); err != nil {
+				return fmt.Errorf("save model: %w", err)
+			}
+
+			cmd.Printf("Imported %d asset(s), %d boundary(ies) from %s into %s\n",
+				len(report.TechnicalAssets), len(report.TrustBoundaries), tfDir, outFile)
+			return nil
 		},
 	}
 )
@@ -120,6 +149,10 @@ func init() {
 	terraformExportCmd.Flags().Bool("force", false, "allow exporting into a non-empty directory")
 	terraformExportCmd.Flags().Bool("write-back", true, "write terraform_ref back into the model file (disable with --write-back=false)")
 	_ = terraformExportCmd.MarkFlagRequired("out-dir")
+
+	terraformImportCmd.Flags().String("profile", "./profiles/google.yaml", "path to the mapping profile (google.yaml)")
+	terraformImportCmd.Flags().StringP("out", "o", "", "model file to write the imported report to (required)")
+	_ = terraformImportCmd.MarkFlagRequired("out")
 
 	terraformCmd.AddCommand(terraformExportCmd, terraformImportCmd)
 	rootCmd.AddCommand(terraformCmd)

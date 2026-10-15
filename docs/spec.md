@@ -191,7 +191,7 @@ After export, each object's HCL address is written into the model file as its `t
 
 ```console
 taralizer terraform export <model.yaml> [-o dir] [--profile p] [--force] [--write-back=false]
-taralizer terraform import <terraform_file>   # legacy single-file mode; directory-based import lands in Phase A2
+taralizer terraform import <terraform_dir> -o model.yaml [--profile p]   # Phase A2
 ```
 
 `terraform` is a parent command (help only). Warnings go to stderr; the exit code reflects export success.
@@ -205,7 +205,31 @@ taralizer terraform import <terraform_file>   # legacy single-file mode; directo
 
 ### 6. Coverage Gate (Phase A1.7)
 
-`make check-coverage` requires ≥ 65% of project code, with generated files (header `// Code generated ... DO NOT EDIT.`) excluded by header detection in `scripts/check-coverage.sh`. Tests must not exist solely to inflate coverage of generated code (CONSTRAINTS.md §3). Current state: ~84% gated.
+`make check-coverage` requires ≥ 65% of project code, with generated files (header `// Code generated ... DO NOT EDIT.`) excluded by header detection in `scripts/check-coverage.sh`. Tests must not exist solely to inflate coverage of generated code (CONSTRAINTS.md §3). Current state: ~85% gated.
+
+## Phase A2: Terraform Import (Terraform → Model)
+
+### 1. Import Pipeline (`pkg/terraform/import.go`)
+
+```text
+dir/*.tf (walked in lexical order)
+  → per file: ANTLR parse (Terraform.g4), syntax errors abort the import
+  → per resource block: type + name (labels)
+      MapResourceToTechnology(type)   # nil ⇒ warning, skipped (never dropped silently)
+      technical_asset  → TechnicalAsset{Id: name, Name: tech.Name, Technology: tech.ID, TerraformRef: type.name}
+      trust_boundary   → TrustBoundary{same shape}
+  → taralizer.Save(report, outFile)   # YAML model file
+```
+
+Guards: the directory must exist and be a directory; duplicate HCL addresses warn and keep the first occurrence. `data`/`locals`/`provider`/`module`/`output` blocks are ignored — only `resource` blocks import. When several technologies share one terraform type (e.g. `google_compute_instance`), the first profile match wins; markers (Phase A3) will disambiguate later.
+
+### 2. Model Persistence (`taralizer.Save`)
+
+`pkg/taralizer/model.go` gained `Save(report, fileName)` — YAML marshal + write, the inverse of `Load`. The import command writes its report through it.
+
+### 3. CLI (`cmd/terraform.go`)
+
+The legacy single-file `import <file>` (which printed to stdout and discarded its report) is replaced by directory-based import: `taralizer terraform import <dir> -o model.yaml [--profile p]`. Warnings go to stderr; the exit code reflects import success. The legacy `Terraform.ImportFromFile` remains in `pkg/terraform/terraform.go` (still tested) until a later deprecation task.
 
 ---
 

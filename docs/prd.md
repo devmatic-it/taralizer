@@ -202,15 +202,15 @@ graph TD
 - The target directory must be empty (or `--force`) and HCL resource names must not collide; otherwise nothing is written.
 - Scaffold output is validated in CI with `terraform validate` (`make check-tf`).
 
-### 13.2 CLI Changes (Phase A1)
+### 13.2 CLI Changes (Phases A1–A2)
 ```console
 taralizer terraform export <model.yaml> [-o dir] [--profile p] [--force] [--write-back=false]
-taralizer terraform import <terraform_file>   # legacy; directory-based import planned (Phase A2)
+taralizer terraform import <terraform_dir> -o model.yaml [--profile p]
 ```
-The former top-level `terraform` command is now a parent grouping `export` and `import`.
+The former top-level `terraform` command is now a parent grouping `export` and `import`. Import (Phase A2) builds a real taralizer model from every `.tf` file in a directory: each mapped resource becomes an asset or boundary with its HCL address recorded as `terraform_ref`, so export → import round-trips.
 
 ### 13.3 Roadmap Continuation (Phases A2–A3)
-- **Phase A2**: directory-based import building a real report from Terraform files (drift engine foundation).
+- **Phase A2**: directory-based import building a real report from Terraform files (drift engine foundation). *A2.1 done: `ImportFromDir` + CLI; remaining A2 tasks continue the drift engine.*
 - **Phase A3**: structural drift report — missing assets, broken refs, unmodeled resources, stale markers — rendered as markdown via `taralizer terraform drift`.
 
 ---

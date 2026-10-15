@@ -209,6 +209,70 @@ func TestTerraformExportCommandWrongArgCount(t *testing.T) {
 	}
 }
 
+func TestTerraformImportCommand(t *testing.T) {
+	// Export the model fixture, then import the exported directory back into
+	// a new model: the round trip must preserve id, technology and ref.
+	modelPath := writeCLIModel(t)
+	tfDir := filepath.Join(t.TempDir(), "tf")
+
+	if out, err := runRoot(t, "terraform", "export", modelPath, "-o", tfDir, "--profile", cliProfilePath); err != nil {
+		t.Fatalf("terraform export: %v\noutput:\n%s", err, out)
+	}
+
+	outModel := filepath.Join(t.TempDir(), "imported.yaml")
+	out, err := runRoot(t, "terraform", "import", tfDir, "-o", outModel, "--profile", cliProfilePath)
+	if err != nil {
+		t.Fatalf("terraform import: %v\noutput:\n%s", err, out)
+	}
+
+	// The fixture's only exportable object (vpc) maps to a trust boundary.
+	if !strings.Contains(out, "Imported 0 asset(s), 1 boundary(ies)") {
+		t.Errorf("expected import summary, got:\n%s", out)
+	}
+
+	imported, err := os.ReadFile(outModel)
+	if err != nil {
+		t.Fatalf("read imported model: %v", err)
+	}
+	for _, want := range []string{
+		"trust_boundaries:",
+		"id: vpc",
+		"technology: vpc",
+		"terraform_ref: google_compute_network.vpc",
+	} {
+		if !strings.Contains(string(imported), want) {
+			t.Errorf("imported model missing %q; got:\n%s", want, imported)
+		}
+	}
+}
+
+func TestTerraformImportMissingDir(t *testing.T) {
+	out, err := runRoot(t, "terraform", "import", filepath.Join(t.TempDir(), "nope"),
+		"-o", filepath.Join(t.TempDir(), "model.yaml"), "--profile", cliProfilePath)
+	if err == nil {
+		t.Fatalf("expected error for missing dir, output:\n%s", out)
+	}
+	if !strings.Contains(out, "import:") {
+		t.Errorf("expected import error in output, got:\n%s", out)
+	}
+}
+
+func TestTerraformImportRequiresOut(t *testing.T) {
+	// Flag state persists across Execute calls on the shared command tree, so
+	// reset out to its empty default before asserting the required check.
+	if err := terraformImportCmd.Flags().Set("out", ""); err != nil {
+		t.Fatalf("reset out flag: %v", err)
+	}
+
+	out, err := runRoot(t, "terraform", "import", t.TempDir(), "--profile", cliProfilePath)
+	if err == nil {
+		t.Fatalf("expected error when -o is missing, output:\n%s", out)
+	}
+	if !strings.Contains(out, "out") {
+		t.Errorf("expected required-flag error mentioning out, got:\n%s", out)
+	}
+}
+
 // TestTerraformCommandTreeShape asserts the parent/subcommand wiring.
 func TestTerraformCommandTreeShape(t *testing.T) {
 	if terraformCmd.HasParent() && terraformCmd.Parent() != rootCmd {

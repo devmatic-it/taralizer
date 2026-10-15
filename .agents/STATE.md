@@ -17,7 +17,7 @@
 
 ## Phase A2: Import Fix (Drift engine foundation)
 
-- [ ] Task A2.1: Create `pkg/terraform/import.go`. Implement `ImportFromDir` building a real `taralizer.Report`. Update `cmd/terraform.go` to use this for the `import` subcommand.
+- [X] Task A2.1: Create `pkg/terraform/import.go`. Implement `ImportFromDir` building a real `taralizer.Report`. Update `cmd/terraform.go` to use this for the `import` subcommand. Done: `ImportFromDir(dir, profilePath)` walks .tf files (lexical order), parses each with the ANTLR parser (syntax errors abort), maps resource blocks via the profile, and returns a real `taralizer.Report` — assets/boundaries get Id = HCL name, Technology = profile tech id, TerraformRef = type.name (round-trips with export write-back). Unmapped types and duplicate addresses warn, never drop silently; only `resource` blocks import. Added `taralizer.Save` (YAML, inverse of Load). CLI: legacy single-file `import <file>` replaced by `taralizer terraform import <dir> -o model.yaml [--profile p]` (RunE, warnings to stderr). Legacy `Terraform.ImportFromFile` kept until a deprecation task. Tests: import_test.go (6-case table + field population + 3 error cases), Save round-trip/missing-dir, CLI round-trip export→import + missing dir + required -o. `make lint` exit 0; `make check-coverage` exit 0 (84.9% ≥ 65%, all green with -race). Docs updated (spec.md Phase A2 section, prd.md §13.2/13.3).
 - [ ] Task A2.2: Add parser robustness fixtures in `pkg/terraform/testdata/corpus/*.tf` and implement `TestParserCorpus` in Go tests.
 - [ ] **DOCUMENT:** Update `docs/specs.md` to reflect the new `import` behavior, directory parsing, and unknown-type handling.
 
