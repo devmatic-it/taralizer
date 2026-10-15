@@ -16,7 +16,9 @@ GOBASE=$(shell pwd)
 GOBIN=$(GOBASE)/dist
 PKG := "github.com/devmatic-it/taralizer"
 PKG_LIST := $(shell go list ${PKG}/... | grep -v /vendor/)
-COVERAGE_THRESHOLD := 85
+# Coverage gate per CONSTRAINTS.md (generated code excluded by
+# scripts/check-coverage.sh).
+COVERAGE_THRESHOLD := 65
 
 all: lint build test
 

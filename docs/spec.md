@@ -149,4 +149,64 @@ The `terraform-to-yaml` command uses the parsed GCP resources to generate a stru
 ./taralizer terraform-to-yaml --help
 ```
 
+## Phase A1: Model → Terraform Export (supersedes the HCL v2 description above)
+
+> Note: the original sections describe the early `terraform-to-yaml` prototype. The parser is now ANTLR-based (grammar in `.antlr`, generated code in `pkg/terraform/*_parser.go` / `*_lexer.go` — excluded from the coverage gate per CONSTRAINTS.md §3), and the Terraform integration is organized as a `terraform` command group. This section documents the current architecture.
+
+### 1. Export Pipeline (`pkg/terraform/export.go`)
+
+```text
+taralizer.Report (YAML model)
+  → LoadGoogleProfile(profilePath)          # profiles/google.yaml: technology → terraform type + scaffold
+  → for each technical asset / trust boundary:
+      MapResourceToTechnology(tech)         # nil or empty scaffold ⇒ warning, object skipped (never dropped silently)
+      sanitizeHCLName(id)                   # [^a-zA-Z0-9_] → _ ; hyphens normalized to underscores
+      gcpResourceName(id)                   # lowercase, hyphenated — GCP names forbid underscores
+      render scaffold with {name} → gcpName # HCL label keeps the sanitized name
+  → write <hclName>.tf per object + provider.tf + variables.tf
+  → return map[id] = HCL address (e.g. "google_compute_network.vpc")
+```
+
+Guards: the target directory must not exist or be empty unless `force` is set; duplicate HCL resource names abort the export before anything is written.
+
+### 2. Markers (drift-detection contract, Phase A3)
+
+Each exported resource block is preceded by a marker comment:
+
+```hcl
+# taralizer:asset=vpc
+resource "google_compute_network" "vpc" {
+  name                    = "vpc"
+  auto_create_subnetworks = false
+}
+```
+
+Prefixes are `# taralizer:asset=<id>` and `# taralizer:boundary=<id>` (constants `AssetMarkerPrefix` / `BoundaryMarkerPrefix`). The asset/boundary distinction keeps the mapping unambiguous when an asset id and a boundary id collide.
+
+### 3. Write-back (`WriteBackTerraformRefs`)
+
+After export, each object's HCL address is written into the model file as its `terraform_ref` field (added to `TechnicalAsset` and `TrustBoundary`, `omitempty`). The edit is surgical and line-level (insert below `- id:` or update in place), preserving comments and formatting. It refuses to write if any ref id is missing from the model or if the edited document no longer parses as a `taralizer.Report`. Idempotent: re-running produces no change.
+
+### 4. CLI (`cmd/terraform.go`)
+
+```console
+taralizer terraform export <model.yaml> [-o dir] [--profile p] [--force] [--write-back=false]
+taralizer terraform import <terraform_file>   # legacy single-file mode; directory-based import lands in Phase A2
+```
+
+`terraform` is a parent command (help only). Warnings go to stderr; the exit code reflects export success.
+
+### 5. Scaffolding Rules (profile-driven)
+
+- A technology is exportable iff its profile entry has a non-empty `terraform` resource type **and** a non-empty `scaffold` template.
+- The scaffold body is the resource's attribute block; `{name}` renders as the GCP-safe name (lowercase, hyphens), while the HCL resource label uses the sanitized id.
+- `provider.tf` (google provider) and `variables.tf` are always written alongside the per-object files.
+- Scaffold correctness is gated in CI: `make check-tf` exports the Bank of Anthos example and runs `terraform init -backend=false && terraform validate` (`.github/workflows/test.yml`, job `terraform-validate`).
+
+### 6. Coverage Gate (Phase A1.7)
+
+`make check-coverage` requires ≥ 65% of project code, with generated files (header `// Code generated ... DO NOT EDIT.`) excluded by header detection in `scripts/check-coverage.sh`. Tests must not exist solely to inflate coverage of generated code (CONSTRAINTS.md §3). Current state: ~84% gated.
+
+---
+
 This specification outlines the architecture and components of taralizer, providing a clear understanding of how it processes Terraform configurations and generates technical asset inventories.

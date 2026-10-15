@@ -15,10 +15,13 @@
 package terraform
 
 import (
+	"os"
+	"path/filepath"
 	"testing"
 
 	"github.com/devmatic-it/taralizer/pkg/taralizer"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 const googleProfilePath = "../../profiles/google.yaml"
@@ -70,6 +73,59 @@ func TestScaffoldCoversAllMappedTechnologies(t *testing.T) {
 		}
 		assert.NotEmpty(t, tech.Scaffold, "technology %q maps to %s but has no scaffold", tech.ID, tech.Terraform)
 	}
+}
+
+func TestLoadGoogleProfileErrors(t *testing.T) {
+	// Non-existent file.
+	_, err := LoadGoogleProfile(filepath.Join(t.TempDir(), "missing.yaml"))
+	require.Error(t, err)
+
+	// Malformed YAML.
+	bad := filepath.Join(t.TempDir(), "bad.yaml")
+	require.NoError(t, os.WriteFile(bad, []byte(": : not: valid: yaml: ["), 0o644))
+	_, err = LoadGoogleProfile(bad)
+	require.Error(t, err)
+}
+
+func TestMapResourceToTechnology(t *testing.T) {
+	profile, err := LoadGoogleProfile(googleProfilePath)
+	require.NoError(t, err)
+
+	// Known technical asset mapping.
+	tech := profile.MapResourceToTechnology("google_sql_database_instance")
+	require.NotNil(t, tech)
+	assert.Equal(t, "database-sql", tech.ID)
+	assert.Equal(t, "technical_asset", tech.Type)
+
+	// Known trust boundary mapping.
+	tech = profile.MapResourceToTechnology("google_compute_network")
+	require.NotNil(t, tech)
+	assert.Equal(t, "vpc", tech.ID)
+	assert.Equal(t, "trust_boundary", tech.Type)
+
+	// Unknown resource type.
+	assert.Nil(t, profile.MapResourceToTechnology("google_storage_bucket"))
+}
+
+func TestResourceToAssetMapping(t *testing.T) {
+	profile, err := LoadGoogleProfile(googleProfilePath)
+	require.NoError(t, err)
+
+	resources := []GCPResource{
+		{Name: "db-1", Type: "google_sql_database_instance"},
+		{Name: "vpc-1", Type: "google_compute_network"},
+		{Name: "bucket-1", Type: "google_storage_bucket"}, // unmapped -> warning only
+	}
+
+	assets, boundaries := profile.ResourceToAssetMapping(resources)
+
+	require.Len(t, assets, 1)
+	assert.Equal(t, "db-1", assets[0].ID)
+	assert.Equal(t, "database-sql", assets[0].Technology)
+
+	require.Len(t, boundaries, 1)
+	assert.Equal(t, "vpc-1", boundaries[0].ID)
+	assert.Equal(t, "vpc", boundaries[0].Technology)
 }
 
 func TestBankOfAnthosExportableCount(t *testing.T) {

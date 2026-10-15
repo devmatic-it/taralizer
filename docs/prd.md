@@ -186,4 +186,33 @@ graph TD
 - YAML generation functionality  
 - Basic CLI interface with terraform-to-yaml command
 
+## 13. Phase A1: Terraform Export (Model → Infrastructure)
+
+> The sections above describe the original import-only prototype. Phase A1 adds the reverse direction: a taralizer model can now be rendered into Terraform scaffolds, closing the loop between security architecture and infrastructure-as-code.
+
+### 13.1 Feature: Export a Model to Terraform
+**Feature**: Render a taralizer model's technical assets and trust boundaries into Terraform scaffold files
+
+**Description**: `taralizer terraform export <model.yaml>` maps each model object's technology to a GCP resource type via the mapping profile (`profiles/google.yaml`) and writes one scaffold file per object, plus shared `provider.tf` / `variables.tf`. Every exported resource carries a marker comment (`# taralizer:asset=<id>` / `# taralizer:boundary=<id>`) so later drift detection can map infrastructure back to the model. The HCL address of each exported object is written back into the model's `terraform_ref` field (disable with `--write-back=false`).
+
+**User Story**: As a security architect, I want to export my reviewed taralizer model as Terraform scaffolds so that the approved architecture becomes a starting point for real infrastructure, and I can later detect drift between model and code.
+
+**Behavioral guarantees**:
+- Objects whose technology is missing or unmapped produce a warning on stderr — they are never dropped silently.
+- The target directory must be empty (or `--force`) and HCL resource names must not collide; otherwise nothing is written.
+- Scaffold output is validated in CI with `terraform validate` (`make check-tf`).
+
+### 13.2 CLI Changes (Phase A1)
+```console
+taralizer terraform export <model.yaml> [-o dir] [--profile p] [--force] [--write-back=false]
+taralizer terraform import <terraform_file>   # legacy; directory-based import planned (Phase A2)
+```
+The former top-level `terraform` command is now a parent grouping `export` and `import`.
+
+### 13.3 Roadmap Continuation (Phases A2–A3)
+- **Phase A2**: directory-based import building a real report from Terraform files (drift engine foundation).
+- **Phase A3**: structural drift report — missing assets, broken refs, unmodeled resources, stale markers — rendered as markdown via `taralizer terraform drift`.
+
+---
+
 This PRD serves as the foundation for development and ensures all stakeholders have a clear understanding of Taralizer's purpose, features, and implementation approach.
