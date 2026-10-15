@@ -45,4 +45,5 @@ config.yaml
 # Working documents (optional - remove if obsolete)
 tasks/
 examples/gcp/terraform/taralizer.yaml
-taralizer
+# Root build binary only — a bare "taralizer" would also ignore pkg/taralizer/.
+/taralizer
