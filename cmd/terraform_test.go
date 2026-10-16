@@ -183,7 +183,7 @@ func TestTerraformParentShowsHelp(t *testing.T) {
 	if err != nil {
 		t.Fatalf("bare terraform command should not error: %v", err)
 	}
-	for _, want := range []string{"Available Commands", "export", "import"} {
+	for _, want := range []string{"Available Commands", "export", "import", "drift"} {
 		if !strings.Contains(out, want) {
 			t.Errorf("terraform help missing %q; got:\n%s", want, out)
 		}
@@ -257,6 +257,100 @@ func TestTerraformImportMissingDir(t *testing.T) {
 	}
 }
 
+// exportCLIModel exports the CLI model fixture into a fresh tf dir and
+// returns both paths; it is the shared setup for the drift command tests.
+func exportCLIModel(t *testing.T) (modelPath, tfDir string) {
+	t.Helper()
+	modelPath = writeCLIModel(t)
+	tfDir = filepath.Join(t.TempDir(), "tf")
+
+	// --write-back=true is passed explicitly: flag state persists across
+	// Execute calls on the shared command tree, and an earlier test left it
+	// false. Drift detection needs the refs written back into the model.
+	if out, err := runRoot(t, "terraform", "export", modelPath, "-o", tfDir, "--profile", cliProfilePath, "--write-back=true"); err != nil {
+		t.Fatalf("terraform export: %v\noutput:\n%s", err, out)
+	}
+	return modelPath, tfDir
+}
+
+func TestTerraformDriftCommandClean(t *testing.T) {
+	modelPath, tfDir := exportCLIModel(t)
+
+	out, err := runRoot(t, "terraform", "drift", modelPath, tfDir)
+	if err != nil {
+		t.Fatalf("drift on in-sync model+tf must exit 0: %v\noutput:\n%s", err, out)
+	}
+	if !strings.Contains(out, "No drift detected") {
+		t.Errorf("expected 'No drift detected' in output, got:\n%s", out)
+	}
+	if !strings.Contains(out, "No drift detected.") {
+		t.Errorf("markdown report should contain the clean line, got:\n%s", out)
+	}
+}
+
+func TestTerraformDriftCommandDetects(t *testing.T) {
+	modelPath, tfDir := exportCLIModel(t)
+
+	// Remove the exported vpc resource (its model ref becomes missing) and add
+	// an unmodeled resource with no marker.
+	if err := os.Remove(filepath.Join(tfDir, "vpc.tf")); err != nil {
+		t.Fatalf("remove vpc.tf: %v", err)
+	}
+	extra := "resource \"google_compute_disk\" \"data\" {\n  name = \"d\"\n}\n"
+	if err := os.WriteFile(filepath.Join(tfDir, "extra.tf"), []byte(extra), 0644); err != nil {
+		t.Fatalf("write extra.tf: %v", err)
+	}
+
+	reportPath := filepath.Join(t.TempDir(), "report.md")
+	out, err := runRoot(t, "terraform", "drift", modelPath, tfDir, "-o", reportPath)
+	if err == nil {
+		t.Fatalf("expected non-zero exit on drift, output:\n%s", out)
+	}
+	if !strings.Contains(err.Error(), "drift detected: 2 finding(s)") {
+		t.Errorf("expected drift error with finding count, got: %v", err)
+	}
+
+	report, rerr := os.ReadFile(reportPath)
+	if rerr != nil {
+		t.Fatalf("read report: %v", rerr)
+	}
+	for _, want := range []string{
+		"# Taralizer Drift Report",
+		"- Findings: 2",
+		"## Missing assets (1)",
+		"google_compute_network.vpc",
+		"## Unmodeled resources (1)",
+		"google_compute_disk.data",
+	} {
+		if !strings.Contains(string(report), want) {
+			t.Errorf("report missing %q; got:\n%s", want, report)
+		}
+	}
+
+	// The gate must not print the usage block on an expected failure.
+	if strings.Contains(out, "Usage:") {
+		t.Errorf("drift failure should suppress usage output, got:\n%s", out)
+	}
+}
+
+func TestTerraformDriftCommandWrongArgCount(t *testing.T) {
+	out, err := runRoot(t, "terraform", "drift")
+	if err == nil {
+		t.Fatalf("expected error with no args, output:\n%s", out)
+	}
+	if !strings.Contains(out, "accepts 2 arg") {
+		t.Errorf("expected ExactArgs error, got:\n%s", out)
+	}
+
+	out, err = runRoot(t, "terraform", "drift", "a.yaml", "b", "c")
+	if err == nil {
+		t.Fatalf("expected error with three args, output:\n%s", out)
+	}
+	if !strings.Contains(out, "accepts 2 arg") {
+		t.Errorf("expected ExactArgs error, got:\n%s", out)
+	}
+}
+
 func TestTerraformImportRequiresOut(t *testing.T) {
 	// Flag state persists across Execute calls on the shared command tree, so
 	// reset out to its empty default before asserting the required check.
@@ -282,8 +376,8 @@ func TestTerraformCommandTreeShape(t *testing.T) {
 	for _, sub := range terraformCmd.Commands() {
 		names = append(names, sub.Name())
 	}
-	if len(names) != 2 || names[0] != "export" || names[1] != "import" {
-		t.Errorf("terraform subcommands = %v, want [export import]", names)
+	if len(names) != 3 || names[0] != "drift" || names[1] != "export" || names[2] != "import" {
+		t.Errorf("terraform subcommands = %v, want [drift export import] (cobra sorts alphabetically)", names)
 	}
 
 	var found *cobra.Command
@@ -299,5 +393,18 @@ func TestTerraformCommandTreeShape(t *testing.T) {
 		if found.Flags().Lookup(flag) == nil {
 			t.Errorf("export subcommand missing flag %q", flag)
 		}
+	}
+
+	var drift *cobra.Command
+	for _, sub := range terraformCmd.Commands() {
+		if sub.Name() == "drift" {
+			drift = sub
+		}
+	}
+	if drift == nil {
+		t.Fatal("drift subcommand not found")
+	}
+	if drift.Flags().Lookup("out") == nil {
+		t.Error("drift subcommand missing flag \"out\"")
 	}
 }

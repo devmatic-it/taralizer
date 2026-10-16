@@ -240,6 +240,70 @@ Import parses real-world HCL2, not just the minimal scaffold subset. Two mechani
 
 Dynamic blocks need no special grammar support: in HCL2 they are ordinary labeled blocks (`dynamic "label" { for_each = ... content { ... } }`) and parse as such.
 
+## Phase A3: Structural Drift Gate (Model ↔ Terraform)
+
+### 1. Drift Pipeline (`pkg/terraform/drift.go`)
+
+```text
+model.yaml ── taralizer.Load ─────────────┐
+tf_dir/*.tf (walked in lexical order)     │
+  → per file: ANTLR parse, syntax errors abort (as in import)
+  → per resource block: type.name address + file:line
+  → per line: taralizer export markers (asset/boundary)   │
+                                                     ▼
+                              categorized DriftReport
+```
+
+`DetectDrift(modelPath, tfDir)` compares the two sides and returns a `DriftReport` with four structural categories:
+
+| Category | Side | Semantics |
+| --- | --- | --- |
+| `MissingAssets` | model | entry whose `terraform_ref` is well-formed but has no matching resource block in the directory (deleted or renamed) |
+| `BrokenRefs` | model | entry whose `terraform_ref` is not a valid HCL address — exactly one dot separating non-empty type and name parts (corrupt model) |
+| `Unmodeled` | Terraform | resource block whose address no model entry references via `terraform_ref` (added outside the model) |
+| `StaleMarkers` | Terraform | export marker (`# taralizer:asset=<id>` / `# taralizer:boundary=<id>`) whose id no longer exists in the model (assets or boundaries) |
+
+Design decisions:
+- **`terraform_ref` is the sole model↔Terraform linkage** for `Unmodeled`. Markers only feed `StaleMarkers`; a resource with a marker but no model ref is still unmodeled. This keeps the two signals independent and the rule trivially explainable.
+- Model entries **without** a `terraform_ref` have no Terraform linkage and are not checked (they are not drift).
+- Duplicate HCL addresses across files warn (`duplicate resource address … using the first occurrence`); for `MissingAssets`/ref-owner counting the first occurrence wins, while an unmodeled duplicate address reports **each** occurrence with its own `file:line`.
+- Findings carry stable, greppable data: model-side items have `ID` + `Ref`, Terraform-side items have the address as `ID` plus a `file:line` location (stale markers append `(asset marker)` / `(boundary marker)`).
+- Attribute-level drift is **out of scope** for Phase A3 (see PRD §14.2, Phase A4).
+
+### 2. Markdown Report (`DriftReport.Markdown`)
+
+The report is a markdown document: a header with model path, Terraform directory and total finding count, then one section per **non-empty** category in fixed order (Missing assets, Broken refs, Unmodeled resources, Stale markers), each with a two-column table. Warnings (e.g. duplicate addresses) render last when present. A report with zero findings renders the header followed by `No drift detected.`
+
+```markdown
+# Taralizer Drift Report
+
+- Model: `model.yaml`
+- Terraform dir: `./tf`
+- Findings: 2
+
+## Missing assets (1)
+
+| ID | terraform_ref |
+| --- | --- |
+| `vm` | `google_compute_instance.vm` |
+
+## Unmodeled resources (1)
+
+| Resource | Location |
+| --- | --- |
+| `google_compute_disk.data` | `tf/extra.tf:1` |
+```
+
+### 3. CLI and Exit-Code Contract (`cmd/terraform.go`)
+
+```console
+taralizer terraform drift <model.yaml> <terraform_dir> [-o report.md]
+```
+
+- The markdown report goes to **stdout**, or to `-o <file>` when given; warnings always go to stderr.
+- **Exit code 0** ⇔ no findings (model and Terraform in sync). **Non-zero exit whenever any drift is found** — the command is a CI gate. On an expected failure (drift detected) the usage block is suppressed; argument and I/O errors behave like every other command.
+- The clean round-trip is the acceptance test: a model exported with `terraform export` (write-back on) drifts clean against its own exported directory.
+
 ---
 
 This specification outlines the architecture and components of taralizer, providing a clear understanding of how it processes Terraform configurations and generates technical asset inventories.

@@ -95,10 +95,11 @@ func ImportFromDir(dir, profilePath string) (taralizer.Report, []string, error) 
 	return report, warnings, nil
 }
 
-// resourceRef is one parsed resource block (type + HCL name).
+// resourceRef is one parsed resource block (type + HCL name + line).
 type resourceRef struct {
 	typ  string
 	name string
+	line int // 1-based line of the `resource` keyword, for drift locations
 }
 
 // listTerraformFiles returns the .tf files under dir in lexical order.
@@ -180,6 +181,7 @@ func parseResourceBlocks(path string) ([]resourceRef, error) {
 		refs = append(refs, resourceRef{
 			typ:  unquote(rc.Resourcetype().GetText()),
 			name: unquote(rc.Name().GetText()),
+			line: rc.GetStart().GetLine(),
 		})
 	}
 	return refs, nil

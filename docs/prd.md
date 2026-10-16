@@ -202,16 +202,39 @@ graph TD
 - The target directory must be empty (or `--force`) and HCL resource names must not collide; otherwise nothing is written.
 - Scaffold output is validated in CI with `terraform validate` (`make check-tf`).
 
-### 13.2 CLI Changes (Phases A1–A2)
+### 13.2 CLI Changes (Phases A1–A3)
 ```console
 taralizer terraform export <model.yaml> [-o dir] [--profile p] [--force] [--write-back=false]
 taralizer terraform import <terraform_dir> -o model.yaml [--profile p]
+taralizer terraform drift <model.yaml> <terraform_dir> [-o report.md]
 ```
-The former top-level `terraform` command is now a parent grouping `export` and `import`. Import (Phase A2) builds a real taralizer model from every `.tf` file in a directory: each mapped resource becomes an asset or boundary with its HCL address recorded as `terraform_ref`, so export → import round-trips.
+The former top-level `terraform` command is now a parent grouping `export`, `import` and `drift`. Import (Phase A2) builds a real taralizer model from every `.tf` file in a directory: each mapped resource becomes an asset or boundary with its HCL address recorded as `terraform_ref`, so export → import round-trips. Drift (Phase A3) compares a model with a Terraform directory and exits non-zero on any structural drift, so it gates CI pipelines.
 
-### 13.3 Roadmap Continuation (Phases A2–A3)
-- **Phase A2**: directory-based import building a real report from Terraform files (drift engine foundation). *A2.1 done: `ImportFromDir` + CLI; remaining A2 tasks continue the drift engine.*
-- **Phase A3**: structural drift report — missing assets, broken refs, unmodeled resources, stale markers — rendered as markdown via `taralizer terraform drift`.
+### 13.3 Roadmap Continuation (Phases A2–A4)
+- **Phase A2**: directory-based import building a real report from Terraform files (drift engine foundation). *Done: `ImportFromDir` + CLI, parser robustness (heredoc normalization + corpus), legacy single-file import removed.*
+- **Phase A3**: structural drift report — missing assets, broken refs, unmodeled resources, stale markers — rendered as markdown via `taralizer terraform drift`; exit code 0 ⇔ in sync, non-zero on any finding (CI gate). *Done: `DetectDrift` + markdown report + CLI, see §14.*
+- **Phase A4** (next): attribute-level drift for security-relevant technical assets — compare model-declared attributes (e.g. encryption, public access, network exposure) against the corresponding Terraform resource arguments; profile-driven attribute relevance per technology. Structural drift (Phase A3) is the prerequisite: an asset must be linked via `terraform_ref` before its attributes can be compared.
+
+## 14. Phase A3: Structural Drift Gate (Model ↔ Infrastructure)
+
+> Phase A3 closes the loop opened by export markers and `terraform_ref` write-back: it answers "does my Terraform still match the reviewed model?" at the structural level, and blocks merges when it does not.
+
+### 14.1 Feature: Detect Structural Drift Between Model and Terraform
+**Feature**: Compare a taralizer model with a directory of Terraform files and report structural drift as markdown, exiting non-zero on any finding
+
+**Description**: `taralizer terraform drift <model.yaml> <terraform_dir>` classifies discrepancies into four categories — **missing assets** (model `terraform_ref` with no matching resource), **broken refs** (malformed `terraform_ref` values), **unmodeled resources** (Terraform resources no model entry references) and **stale markers** (export markers whose id is gone from the model). The markdown report goes to stdout or `-o <file>`.
+
+**User Story**: As a security architect, I want my CI pipeline to fail when Terraform drifts structurally from the reviewed taralizer model, so that unreviewed infrastructure changes are caught before merge instead of discovered in a later audit.
+
+**Behavioral guarantees**:
+- Exit code 0 ⇔ no findings; any finding produces a non-zero exit (CI gate contract).
+- Model entries without a `terraform_ref` are not checked — no linkage, no drift.
+- `terraform_ref` is the sole model↔Terraform linkage for unmodeled detection; markers only feed stale-marker detection.
+- Files with HCL syntax errors abort the run with an error (consistent with import) — drift is never reported on a partially parsed tree.
+- The clean round-trip holds: a model exported with `terraform export` (write-back on) drifts clean against its own exported directory.
+
+### 14.2 Out of Scope (deferred to Phase A4)
+Attribute-level drift — comparing model-declared attributes of security-relevant technical assets (encryption, public access, network exposure, …) against Terraform resource arguments — is explicitly out of scope for Phase A3. It requires profile-driven attribute relevance per technology and lands as **Phase A4** (see §13.3).
 
 ---
 

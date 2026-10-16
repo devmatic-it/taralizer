@@ -16,6 +16,7 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/spf13/cobra"
 
@@ -26,8 +27,8 @@ import (
 // config variables
 var (
 	// terraformCmd is the parent command grouping all Terraform integration
-	// subcommands (export, import). It has no direct action: running it prints
-	// the help for its subcommands.
+	// subcommands (export, import, drift). It has no direct action: running it
+	// prints the help for its subcommands.
 	terraformCmd = &cobra.Command{
 		Use:   "terraform",
 		Short: "Terraform integration commands",
@@ -38,7 +39,9 @@ Subcommands:
            Terraform scaffolds and record each HCL address in the model's
            terraform_ref field.
   import   Build a taralizer report from the resource blocks in every .tf
-           file under a directory.`,
+           file under a directory.
+  drift    Detect structural drift between a model and a Terraform
+           directory; exits non-zero when any drift is found (CI gate).`,
 	}
 
 	// terraformExportCmd renders a model into Terraform scaffolds (Phase A1).
@@ -140,6 +143,66 @@ Example:
 			return nil
 		},
 	}
+
+	// terraformDriftCmd detects structural drift between a model and a
+	// Terraform directory (Phase A3). It is a CI gate: any finding makes the
+	// command exit non-zero.
+	terraformDriftCmd = &cobra.Command{
+		Use:   "drift <model.yaml> <terraform_dir>",
+		Short: "Detect structural drift between a model and Terraform files",
+		Long: `Compare the taralizer model with the resource blocks in every .tf file under
+<terraform_dir> and report structural drift:
+
+  missing assets    model entries whose terraform_ref has no matching resource
+                    in the Terraform directory
+  broken refs       model entries whose terraform_ref is not a valid HCL
+                    resource address (type.name)
+  unmodeled         resource blocks in the Terraform directory that no model
+                    entry references via terraform_ref
+  stale markers     taralizer export markers (# taralizer:asset= / :boundary=)
+                    whose id no longer exists in the model
+
+The markdown report goes to stdout, or to -o <file> when given. The command
+exits non-zero whenever any drift is found, so it can gate CI pipelines;
+exit code 0 means model and Terraform are in sync.
+
+Example:
+  taralizer terraform drift model.yaml ./tf -o report.md`,
+		Args: cobra.ExactArgs(2),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			modelPath, tfDir := args[0], args[1]
+			outFile, _ := cmd.Flags().GetString("out")
+
+			report, err := terraform.DetectDrift(modelPath, tfDir)
+			if err != nil {
+				return fmt.Errorf("drift: %w", err)
+			}
+
+			for _, w := range report.Warnings {
+				fmt.Fprintf(cmd.ErrOrStderr(), "WARNING: %s\n", w)
+			}
+
+			md := report.Markdown()
+			if outFile != "" {
+				if err := os.WriteFile(outFile, []byte(md), 0644); err != nil {
+					return fmt.Errorf("write report: %w", err)
+				}
+				cmd.Printf("Wrote drift report to %s\n", outFile)
+			} else {
+				fmt.Fprint(cmd.OutOrStdout(), md)
+			}
+
+			if n := report.Count(); n > 0 {
+				// Drift is an expected outcome for a gate, not a usage error:
+				// suppress the usage block cobra would otherwise print on failure.
+				cmd.SilenceUsage = true
+				return fmt.Errorf("drift detected: %d finding(s) between %s and %s", n, modelPath, tfDir)
+			}
+
+			cmd.Printf("No drift detected between %s and %s\n", modelPath, tfDir)
+			return nil
+		},
+	}
 )
 
 // initializes arguments for terraform commands
@@ -154,6 +217,8 @@ func init() {
 	terraformImportCmd.Flags().StringP("out", "o", "", "model file to write the imported report to (required)")
 	_ = terraformImportCmd.MarkFlagRequired("out")
 
-	terraformCmd.AddCommand(terraformExportCmd, terraformImportCmd)
+	terraformDriftCmd.Flags().StringP("out", "o", "", "write the markdown drift report to this file instead of stdout")
+
+	terraformCmd.AddCommand(terraformExportCmd, terraformImportCmd, terraformDriftCmd)
 	rootCmd.AddCommand(terraformCmd)
 }

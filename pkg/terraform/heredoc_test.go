@@ -89,7 +89,7 @@ TWO
 		},
 		{
 			name: "arrow_in_string_not_replaced",
-			src: `locals { note = "use <<SCRIPT here" }`,
+			src:  `locals { note = "use <<SCRIPT here" }`,
 			want: `locals { note = "use <<SCRIPT here" }`,
 		},
 		{
@@ -119,12 +119,12 @@ body without closing line
 		},
 		{
 			name: "arrow_with_space_not_a_heredoc",
-			src: `locals { a = 1 << 2 }`,
+			src:  `locals { a = 1 << 2 }`,
 			want: `locals { a = 1 << 2 }`,
 		},
 		{
 			name: "escaped_quote_in_string",
-			src: `locals { a = "say \"hi\" <<SCRIPT" }`,
+			src:  `locals { a = "say \"hi\" <<SCRIPT" }`,
 			want: `locals { a = "say \"hi\" <<SCRIPT" }`,
 		},
 		{
@@ -134,7 +134,7 @@ body without closing line
 		},
 		{
 			name: "no_heredocs_unchanged",
-			src: `resource "a" "b" { name = "n" }`,
+			src:  `resource "a" "b" { name = "n" }`,
 			want: `resource "a" "b" { name = "n" }`,
 		},
 	}

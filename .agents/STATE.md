@@ -24,7 +24,14 @@
 
 ## Phase A3: Structural Drift Report
 
-- [ ] Task A3.1: Create `pkg/terraform/drift.go`. Implement `DetectDrift` categorizing missing assets, broken refs, unmodeled resources, and stale markers. Add tests.
-- [ ] Task A3.2: Implement markdown rendering for `DriftReport` in `pkg/terraform/drift.go` (or `drift_report.go`). Add tests.
-- [ ] Task A3.3: Add `drift` subcommand to `cmd/terraform.go` (`drift <model.yaml> <tf_dir> [-o report.md]`).
-- [ ] **DOCUMENT:** Update `docs/specs.md` and `docs/prd.md` to reflect the final drift CLI command and structural report format.
+- [X] Task A3.1: Create `pkg/terraform/drift.go`. Implement `DetectDrift` categorizing missing assets, broken refs, unmodeled resources, and stale markers. Add tests. **Done:** `DetectDrift(modelPath, tfDir) (DriftReport, error)`; `terraform_ref` is the sole model↔TF linkage for Unmodeled (markers only feed StaleMarkers); entries without a ref are not checked; duplicate HCL addresses warn and each occurrence is reported when unmodeled; syntax errors abort (consistent with import). `resourceRef` gained a 1-based `line` field for finding locations. Table-driven tests: all four categories, clean round-trip (model + its own exported TF dir → zero findings), error paths, `validTerraformRef`.
+- [X] Task A3.2: Implement markdown rendering for `DriftReport` in `pkg/terraform/drift.go`. Add tests. **Done:** `(r DriftReport) Markdown()` — header (model path, TF dir, finding count), one section per non-empty category in fixed order with two-column tables, warnings last; zero findings → `No drift detected.` Tests: exact clean-report string, all-categories rendering, empty-category omission.
+- [X] Task A3.3: Add `drift` subcommand to `cmd/terraform.go` (`drift <model.yaml> <tf_dir> [-o report.md]`). **Exit-code contract: 0 ⇔ in sync, non-zero on any finding (CI gate).** **Done:** report to stdout or `-o <file>`, warnings to stderr; on drift the command returns an error (→ non-zero exit via `cobra.CheckErr`) with usage suppressed; clean run prints `No drift detected`. CLI tests: clean round-trip exits 0, drift case (missing + unmodeled) errors with finding count and writes the report file, arg-count guard.
+- [X] **DOCUMENT:** Update `docs/spec.md` and `docs/prd.md` to reflect the final drift CLI command and structural report format. **Done:** spec.md gained a Phase A3 section (pipeline, category semantics table, design decisions, markdown format, CLI + exit-code contract); prd.md gained §14 (feature/user story/behavioral guarantees, A4 out-of-scope note) and the §13.2–13.3 CLI/roadmap updates.
+
+## Phase A4: Attribute-Level Drift (security-relevant technical assets) — NEXT
+
+- [ ] Task A4.1: Define attribute relevance per technology in the mapping profile (e.g. for `google_compute_instance`: encryption, public IP / network exposure; for storage: public access). Extend the profile schema + `LoadGoogleProfile`.
+- [ ] Task A4.2: Extract the relevant attribute values from parsed Terraform resource blocks (argument expressions, not just labels) and compare them against model-declared attributes; classify mismatches as a new drift category (attribute drift) in `DriftReport`.
+- [ ] Task A4.3: Surface attribute drift in the markdown report and keep the Phase A3 exit-code contract (any finding, structural or attribute-level, exits non-zero). Table-driven tests per technology.
+- [ ] **DOCUMENT:** Update `docs/spec.md` and `docs/prd.md` with the attribute-drift semantics and profile schema changes.
