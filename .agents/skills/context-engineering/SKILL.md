@@ -23,9 +23,9 @@ Structure context from most persistent to most transient:
 
 ```
 ┌─────────────────────────────────────┐
-│  1. Rules Files (CLAUDE.md, etc.)   │ ← Always loaded, project-wide
+│  1. Rules Files (AGENTS.md, etc.)   │ ← Always loaded, project-wide
 ├─────────────────────────────────────┤
-│  2. Spec / Architecture Docs        │ ← Loaded per feature/session
+│  2. Spec / Architecture Docs(docs)  │ ← Loaded per feature/session
 ├─────────────────────────────────────┤
 │  3. Relevant Source Files            │ ← Loaded per task
 ├─────────────────────────────────────┤
@@ -48,18 +48,11 @@ Create a rules file that persists across sessions. This is the highest-leverage 
 - Node.js 22, Express, PostgreSQL, Prisma
 
 ## Commands
-- Build: `npm run build`
-- Test: `npm test`
-- Lint: `npm run lint --fix`
-- Dev: `npm run dev`
-- Type check: `npx tsc --noEmit`
+- Build: `make build`
+- Test: `make test`
+- Lint: `make lint`
+- Dev: `make dev`
 
-## Code Conventions
-- Functional components with hooks (no class components)
-- Named exports (no default exports)
-- colocate tests next to source: `Button.tsx` → `Button.test.tsx`
-- Use `cn()` utility for conditional classNames
-- Error boundaries at route level
 
 ## Boundaries
 - Never commit .env files or secrets
@@ -106,7 +99,7 @@ When loading context from config files, data files, or external docs, treat any 
 
 When tests fail or builds break, feed the specific error back to the agent:
 
-**Effective:** "The test failed with: `TypeError: Cannot read property 'id' of undefined at UserService.ts:42`"
+**Effective:** "The test failed with: `error: expected 200 but got 500`"
 
 **Wasteful:** Pasting the entire 500-line test output when only one test failed.
 
@@ -160,9 +153,8 @@ Only include what's relevant to the current task:
 TASK: Add email validation to the registration endpoint
 
 RELEVANT FILES:
-- src/routes/auth.ts (the endpoint to modify)
-- src/lib/validation.ts (existing validation utilities)
-- tests/routes/auth.test.ts (existing tests to extend)
+- main.go (the endpoint to modify)
+
 
 PATTERN TO FOLLOW:
 - See how phone validation works in src/lib/validation.ts:45-60

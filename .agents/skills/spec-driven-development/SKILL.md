@@ -150,7 +150,7 @@ Don't silently fill in ambiguous requirements. The spec's entire purpose is to s
 **External spec tools:** This workflow is format-agnostic. If the project
 already uses OpenSpec or another specification system, keep that system's
 artifact format and storage conventions instead of creating a duplicate
-`SPEC.md`. This skill owns the clarification, content, and approval gates; the
+`docs/spec.md`. This skill owns the clarification, content, and approval gates; the
 external tool owns how the approved spec is represented.
 
 **Reframe instructions as success criteria.** When receiving vague requirements, translate them into concrete conditions:
@@ -185,7 +185,7 @@ With the validated spec, generate a technical implementation plan:
 
 > Follow `planning-and-task-breakdown` for the dependency-graph mapping and vertical-slicing mechanics behind these steps; it is the canonical source. The bullets above are a lightweight summary; if they ever diverge, `planning-and-task-breakdown` takes precedence.
 >
-> **Output convention:** Save the plan to `tasks/plan.md` and record the task list in the task list target defined by `planning-and-task-breakdown` (default `tasks/todo.md`; projects may designate an external tracker instead). Create `tasks/` if it does not exist. Downstream commands (`/build`, etc.) expect these defaults.
+> **Output convention:** Save the plan to `.agents/PLAN.md` and record the task list in the task list target defined by `planning-and-task-breakdown` (default `.agents/STATE.md`; projects may designate an external tracker instead). Create `.agents/` if it does not exist. Downstream commands (`/build`, etc.) expect these defaults.
 
 The plan should be reviewable: the human should be able to read it and say "yes, that's the right approach" or "no, change X."
 
