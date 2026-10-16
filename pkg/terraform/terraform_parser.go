@@ -1,4 +1,4 @@
-// Code generated from java-escape by ANTLR 4.11.1. DO NOT EDIT.
+// Code generated from Terraform.g4 by ANTLR 4.13.2. DO NOT EDIT.
 
 package terraform // Terraform
 import (
@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"sync"
 
-	"github.com/antlr/antlr4/runtime/Go/antlr/v4"
+	"github.com/antlr4-go/antlr/v4"
 )
 
 // Suppress unused import errors
@@ -18,34 +18,35 @@ type TerraformParser struct {
 	*antlr.BaseParser
 }
 
-var terraformParserStaticData struct {
+var TerraformParserStaticData struct {
 	once                   sync.Once
 	serializedATN          []int32
-	literalNames           []string
-	symbolicNames          []string
-	ruleNames              []string
-	predictionContextCache *antlr.PredictionContextCache
+	LiteralNames           []string
+	SymbolicNames          []string
+	RuleNames              []string
+	PredictionContextCache *antlr.PredictionContextCache
 	atn                    *antlr.ATN
 	decisionToDFA          []*antlr.DFA
 }
 
 func terraformParserInit() {
-	staticData := &terraformParserStaticData
-	staticData.literalNames = []string{
+	staticData := &TerraformParserStaticData
+	staticData.LiteralNames = []string{
 		"", "'terraform'", "'resource'", "'data'", "'output'", "'locals'", "'module'",
-		"'='", "'local'", "'var'", "'?'", "':'", "'for'", "'jsonencode'", "','",
-		"'['", "']'", "'file'", "'+'", "'-'", "'/'", "'%'", "'>'", "'>='", "'<'",
-		"'<='", "'=='", "'!='", "'&&'", "'||'", "'variable'", "'provider'",
-		"'in'", "'*'", "'.'", "'{'", "'}'", "'('", "')'", "", "'nul'",
+		"'='", "'local'", "'var'", "'?'", "':'", "'-'", "'!'", "'['", "']'",
+		"'for'", "','", "'jsonencode'", "'file'", "'+'", "'/'", "'%'", "'>'",
+		"'>='", "'<'", "'<='", "'=='", "'!='", "'&&'", "'||'", "'=>'", "'variable'",
+		"'provider'", "'in'", "'*'", "'.'", "'{'", "'}'", "'('", "')'", "",
+		"'nul'",
 	}
-	staticData.symbolicNames = []string{
+	staticData.SymbolicNames = []string{
 		"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "",
-		"", "", "", "", "", "", "", "", "", "", "", "", "", "VARIABLE", "PROVIDER",
-		"IN", "STAR", "DOT", "LCURL", "RCURL", "LPAREN", "RPAREN", "EOF_", "NULL_",
-		"NATURAL_NUMBER", "BOOL", "DESCRIPTION", "MULTILINESTRING", "STRING",
-		"IDENTIFIER", "COMMENT", "BLOCKCOMMENT", "WS",
+		"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "VARIABLE",
+		"PROVIDER", "IN", "STAR", "DOT", "LCURL", "RCURL", "LPAREN", "RPAREN",
+		"EOF_", "NULL_", "NATURAL_NUMBER", "BOOL", "DESCRIPTION", "MULTILINESTRING",
+		"STRING", "IDENTIFIER", "COMMENT", "BLOCKCOMMENT", "WS",
 	}
-	staticData.ruleNames = []string{
+	staticData.RuleNames = []string{
 		"file_", "terraform", "resource", "data", "provider", "output", "local",
 		"module", "variable", "block", "blocktype", "resourcetype", "name",
 		"label", "blockbody", "argument", "identifier", "identifierchain", "inline_index",
@@ -53,9 +54,9 @@ func terraformParserInit() {
 		"functionarguments", "index", "filedecl", "list_", "map_", "string",
 		"signed_number", "operator_", "number",
 	}
-	staticData.predictionContextCache = antlr.NewPredictionContextCache()
+	staticData.PredictionContextCache = antlr.NewPredictionContextCache()
 	staticData.serializedATN = []int32{
-		4, 1, 49, 310, 2, 0, 7, 0, 2, 1, 7, 1, 2, 2, 7, 2, 2, 3, 7, 3, 2, 4, 7,
+		4, 1, 51, 330, 2, 0, 7, 0, 2, 1, 7, 1, 2, 2, 7, 2, 2, 3, 7, 3, 2, 4, 7,
 		4, 2, 5, 7, 5, 2, 6, 7, 6, 2, 7, 7, 7, 2, 8, 7, 8, 2, 9, 7, 9, 2, 10, 7,
 		10, 2, 11, 7, 11, 2, 12, 7, 12, 2, 13, 7, 13, 2, 14, 7, 14, 2, 15, 7, 15,
 		2, 16, 7, 16, 2, 17, 7, 17, 2, 18, 7, 18, 2, 19, 7, 19, 2, 20, 7, 20, 2,
@@ -73,122 +74,133 @@ func terraformParserInit() {
 		17, 158, 8, 17, 10, 17, 12, 17, 161, 9, 17, 1, 17, 1, 17, 1, 17, 5, 17,
 		166, 8, 17, 10, 17, 12, 17, 169, 9, 17, 1, 17, 1, 17, 1, 17, 5, 17, 174,
 		8, 17, 10, 17, 12, 17, 177, 9, 17, 3, 17, 179, 8, 17, 1, 18, 1, 18, 1,
-		19, 1, 19, 1, 19, 1, 19, 1, 19, 1, 19, 1, 19, 3, 19, 190, 8, 19, 1, 19,
-		1, 19, 1, 19, 1, 19, 1, 19, 1, 19, 1, 19, 1, 19, 1, 19, 1, 19, 5, 19, 202,
-		8, 19, 10, 19, 12, 19, 205, 9, 19, 1, 20, 1, 20, 1, 20, 1, 20, 1, 20, 1,
-		20, 1, 20, 1, 21, 1, 21, 1, 21, 3, 21, 217, 8, 21, 1, 22, 1, 22, 1, 22,
-		1, 22, 1, 22, 1, 22, 1, 22, 1, 22, 1, 22, 3, 22, 228, 8, 22, 1, 23, 1,
-		23, 1, 23, 1, 23, 1, 23, 1, 23, 1, 23, 1, 23, 5, 23, 238, 8, 23, 10, 23,
-		12, 23, 241, 9, 23, 1, 23, 3, 23, 244, 8, 23, 1, 24, 1, 24, 1, 25, 1, 25,
-		1, 25, 1, 25, 5, 25, 252, 8, 25, 10, 25, 12, 25, 255, 9, 25, 3, 25, 257,
-		8, 25, 1, 26, 1, 26, 1, 26, 1, 26, 1, 27, 1, 27, 1, 27, 1, 27, 1, 27, 1,
-		28, 1, 28, 1, 28, 1, 28, 5, 28, 272, 8, 28, 10, 28, 12, 28, 275, 9, 28,
-		1, 28, 3, 28, 278, 8, 28, 3, 28, 280, 8, 28, 1, 28, 1, 28, 1, 29, 1, 29,
-		1, 29, 3, 29, 287, 8, 29, 5, 29, 289, 8, 29, 10, 29, 12, 29, 292, 9, 29,
-		1, 29, 1, 29, 1, 30, 1, 30, 1, 31, 3, 31, 299, 8, 31, 1, 31, 1, 31, 1,
-		32, 1, 32, 1, 33, 1, 33, 1, 33, 3, 33, 308, 8, 33, 1, 33, 1, 239, 1, 38,
-		34, 0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34,
-		36, 38, 40, 42, 44, 46, 48, 50, 52, 54, 56, 58, 60, 62, 64, 66, 0, 5, 3,
-		0, 3, 3, 6, 6, 8, 9, 2, 0, 30, 32, 46, 46, 1, 0, 44, 45, 1, 0, 18, 19,
-		2, 0, 18, 29, 33, 33, 318, 0, 76, 1, 0, 0, 0, 2, 82, 1, 0, 0, 0, 4, 85,
-		1, 0, 0, 0, 6, 90, 1, 0, 0, 0, 8, 95, 1, 0, 0, 0, 10, 99, 1, 0, 0, 0, 12,
-		103, 1, 0, 0, 0, 14, 106, 1, 0, 0, 0, 16, 110, 1, 0, 0, 0, 18, 114, 1,
-		0, 0, 0, 20, 123, 1, 0, 0, 0, 22, 125, 1, 0, 0, 0, 24, 127, 1, 0, 0, 0,
-		26, 129, 1, 0, 0, 0, 28, 131, 1, 0, 0, 0, 30, 141, 1, 0, 0, 0, 32, 147,
-		1, 0, 0, 0, 34, 178, 1, 0, 0, 0, 36, 180, 1, 0, 0, 0, 38, 189, 1, 0, 0,
-		0, 40, 206, 1, 0, 0, 0, 42, 216, 1, 0, 0, 0, 44, 227, 1, 0, 0, 0, 46, 243,
-		1, 0, 0, 0, 48, 245, 1, 0, 0, 0, 50, 256, 1, 0, 0, 0, 52, 258, 1, 0, 0,
-		0, 54, 262, 1, 0, 0, 0, 56, 267, 1, 0, 0, 0, 58, 283, 1, 0, 0, 0, 60, 295,
-		1, 0, 0, 0, 62, 298, 1, 0, 0, 0, 64, 302, 1, 0, 0, 0, 66, 304, 1, 0, 0,
-		0, 68, 77, 3, 12, 6, 0, 69, 77, 3, 14, 7, 0, 70, 77, 3, 10, 5, 0, 71, 77,
-		3, 8, 4, 0, 72, 77, 3, 16, 8, 0, 73, 77, 3, 6, 3, 0, 74, 77, 3, 4, 2, 0,
-		75, 77, 3, 2, 1, 0, 76, 68, 1, 0, 0, 0, 76, 69, 1, 0, 0, 0, 76, 70, 1,
-		0, 0, 0, 76, 71, 1, 0, 0, 0, 76, 72, 1, 0, 0, 0, 76, 73, 1, 0, 0, 0, 76,
-		74, 1, 0, 0, 0, 76, 75, 1, 0, 0, 0, 77, 78, 1, 0, 0, 0, 78, 76, 1, 0, 0,
-		0, 78, 79, 1, 0, 0, 0, 79, 80, 1, 0, 0, 0, 80, 81, 5, 0, 0, 1, 81, 1, 1,
-		0, 0, 0, 82, 83, 5, 1, 0, 0, 83, 84, 3, 28, 14, 0, 84, 3, 1, 0, 0, 0, 85,
-		86, 5, 2, 0, 0, 86, 87, 3, 22, 11, 0, 87, 88, 3, 24, 12, 0, 88, 89, 3,
-		28, 14, 0, 89, 5, 1, 0, 0, 0, 90, 91, 5, 3, 0, 0, 91, 92, 3, 22, 11, 0,
-		92, 93, 3, 24, 12, 0, 93, 94, 3, 28, 14, 0, 94, 7, 1, 0, 0, 0, 95, 96,
-		5, 31, 0, 0, 96, 97, 3, 22, 11, 0, 97, 98, 3, 28, 14, 0, 98, 9, 1, 0, 0,
-		0, 99, 100, 5, 4, 0, 0, 100, 101, 3, 24, 12, 0, 101, 102, 3, 28, 14, 0,
-		102, 11, 1, 0, 0, 0, 103, 104, 5, 5, 0, 0, 104, 105, 3, 28, 14, 0, 105,
-		13, 1, 0, 0, 0, 106, 107, 5, 6, 0, 0, 107, 108, 3, 24, 12, 0, 108, 109,
-		3, 28, 14, 0, 109, 15, 1, 0, 0, 0, 110, 111, 5, 30, 0, 0, 111, 112, 3,
-		24, 12, 0, 112, 113, 3, 28, 14, 0, 113, 17, 1, 0, 0, 0, 114, 118, 3, 20,
-		10, 0, 115, 117, 3, 26, 13, 0, 116, 115, 1, 0, 0, 0, 117, 120, 1, 0, 0,
-		0, 118, 116, 1, 0, 0, 0, 118, 119, 1, 0, 0, 0, 119, 121, 1, 0, 0, 0, 120,
-		118, 1, 0, 0, 0, 121, 122, 3, 28, 14, 0, 122, 19, 1, 0, 0, 0, 123, 124,
-		5, 46, 0, 0, 124, 21, 1, 0, 0, 0, 125, 126, 5, 45, 0, 0, 126, 23, 1, 0,
-		0, 0, 127, 128, 5, 45, 0, 0, 128, 25, 1, 0, 0, 0, 129, 130, 5, 45, 0, 0,
-		130, 27, 1, 0, 0, 0, 131, 136, 5, 35, 0, 0, 132, 135, 3, 30, 15, 0, 133,
-		135, 3, 18, 9, 0, 134, 132, 1, 0, 0, 0, 134, 133, 1, 0, 0, 0, 135, 138,
-		1, 0, 0, 0, 136, 134, 1, 0, 0, 0, 136, 137, 1, 0, 0, 0, 137, 139, 1, 0,
-		0, 0, 138, 136, 1, 0, 0, 0, 139, 140, 5, 36, 0, 0, 140, 29, 1, 0, 0, 0,
-		141, 142, 3, 32, 16, 0, 142, 143, 5, 7, 0, 0, 143, 144, 3, 38, 19, 0, 144,
-		31, 1, 0, 0, 0, 145, 146, 7, 0, 0, 0, 146, 148, 5, 34, 0, 0, 147, 145,
-		1, 0, 0, 0, 147, 148, 1, 0, 0, 0, 148, 149, 1, 0, 0, 0, 149, 150, 3, 34,
-		17, 0, 150, 33, 1, 0, 0, 0, 151, 153, 7, 1, 0, 0, 152, 154, 3, 52, 26,
-		0, 153, 152, 1, 0, 0, 0, 153, 154, 1, 0, 0, 0, 154, 159, 1, 0, 0, 0, 155,
-		156, 5, 34, 0, 0, 156, 158, 3, 34, 17, 0, 157, 155, 1, 0, 0, 0, 158, 161,
-		1, 0, 0, 0, 159, 157, 1, 0, 0, 0, 159, 160, 1, 0, 0, 0, 160, 179, 1, 0,
-		0, 0, 161, 159, 1, 0, 0, 0, 162, 167, 5, 33, 0, 0, 163, 164, 5, 34, 0,
-		0, 164, 166, 3, 34, 17, 0, 165, 163, 1, 0, 0, 0, 166, 169, 1, 0, 0, 0,
-		167, 165, 1, 0, 0, 0, 167, 168, 1, 0, 0, 0, 168, 179, 1, 0, 0, 0, 169,
-		167, 1, 0, 0, 0, 170, 175, 3, 36, 18, 0, 171, 172, 5, 34, 0, 0, 172, 174,
-		3, 34, 17, 0, 173, 171, 1, 0, 0, 0, 174, 177, 1, 0, 0, 0, 175, 173, 1,
-		0, 0, 0, 175, 176, 1, 0, 0, 0, 176, 179, 1, 0, 0, 0, 177, 175, 1, 0, 0,
-		0, 178, 151, 1, 0, 0, 0, 178, 162, 1, 0, 0, 0, 178, 170, 1, 0, 0, 0, 179,
-		35, 1, 0, 0, 0, 180, 181, 5, 41, 0, 0, 181, 37, 1, 0, 0, 0, 182, 183, 6,
-		19, -1, 0, 183, 190, 3, 42, 21, 0, 184, 185, 5, 37, 0, 0, 185, 186, 3,
-		38, 19, 0, 186, 187, 5, 38, 0, 0, 187, 190, 1, 0, 0, 0, 188, 190, 3, 40,
-		20, 0, 189, 182, 1, 0, 0, 0, 189, 184, 1, 0, 0, 0, 189, 188, 1, 0, 0, 0,
-		190, 203, 1, 0, 0, 0, 191, 192, 10, 4, 0, 0, 192, 193, 3, 64, 32, 0, 193,
-		194, 3, 38, 19, 5, 194, 202, 1, 0, 0, 0, 195, 196, 10, 2, 0, 0, 196, 197,
-		5, 10, 0, 0, 197, 198, 3, 38, 19, 0, 198, 199, 5, 11, 0, 0, 199, 200, 3,
-		38, 19, 3, 200, 202, 1, 0, 0, 0, 201, 191, 1, 0, 0, 0, 201, 195, 1, 0,
-		0, 0, 202, 205, 1, 0, 0, 0, 203, 201, 1, 0, 0, 0, 203, 204, 1, 0, 0, 0,
-		204, 39, 1, 0, 0, 0, 205, 203, 1, 0, 0, 0, 206, 207, 5, 12, 0, 0, 207,
-		208, 3, 32, 16, 0, 208, 209, 5, 32, 0, 0, 209, 210, 3, 38, 19, 0, 210,
-		211, 5, 11, 0, 0, 211, 212, 3, 38, 19, 0, 212, 41, 1, 0, 0, 0, 213, 217,
-		3, 56, 28, 0, 214, 217, 3, 58, 29, 0, 215, 217, 3, 44, 22, 0, 216, 213,
-		1, 0, 0, 0, 216, 214, 1, 0, 0, 0, 216, 215, 1, 0, 0, 0, 217, 43, 1, 0,
-		0, 0, 218, 228, 5, 40, 0, 0, 219, 228, 3, 62, 31, 0, 220, 228, 3, 60, 30,
-		0, 221, 228, 3, 32, 16, 0, 222, 228, 5, 42, 0, 0, 223, 228, 5, 43, 0, 0,
-		224, 228, 3, 54, 27, 0, 225, 228, 3, 46, 23, 0, 226, 228, 5, 39, 0, 0,
-		227, 218, 1, 0, 0, 0, 227, 219, 1, 0, 0, 0, 227, 220, 1, 0, 0, 0, 227,
-		221, 1, 0, 0, 0, 227, 222, 1, 0, 0, 0, 227, 223, 1, 0, 0, 0, 227, 224,
-		1, 0, 0, 0, 227, 225, 1, 0, 0, 0, 227, 226, 1, 0, 0, 0, 228, 45, 1, 0,
-		0, 0, 229, 230, 3, 48, 24, 0, 230, 231, 5, 37, 0, 0, 231, 232, 3, 50, 25,
-		0, 232, 233, 5, 38, 0, 0, 233, 244, 1, 0, 0, 0, 234, 235, 5, 13, 0, 0,
-		235, 239, 5, 37, 0, 0, 236, 238, 9, 0, 0, 0, 237, 236, 1, 0, 0, 0, 238,
-		241, 1, 0, 0, 0, 239, 240, 1, 0, 0, 0, 239, 237, 1, 0, 0, 0, 240, 242,
-		1, 0, 0, 0, 241, 239, 1, 0, 0, 0, 242, 244, 5, 38, 0, 0, 243, 229, 1, 0,
-		0, 0, 243, 234, 1, 0, 0, 0, 244, 47, 1, 0, 0, 0, 245, 246, 5, 46, 0, 0,
-		246, 49, 1, 0, 0, 0, 247, 257, 1, 0, 0, 0, 248, 253, 3, 38, 19, 0, 249,
-		250, 5, 14, 0, 0, 250, 252, 3, 38, 19, 0, 251, 249, 1, 0, 0, 0, 252, 255,
-		1, 0, 0, 0, 253, 251, 1, 0, 0, 0, 253, 254, 1, 0, 0, 0, 254, 257, 1, 0,
-		0, 0, 255, 253, 1, 0, 0, 0, 256, 247, 1, 0, 0, 0, 256, 248, 1, 0, 0, 0,
-		257, 51, 1, 0, 0, 0, 258, 259, 5, 15, 0, 0, 259, 260, 3, 38, 19, 0, 260,
-		261, 5, 16, 0, 0, 261, 53, 1, 0, 0, 0, 262, 263, 5, 17, 0, 0, 263, 264,
-		5, 37, 0, 0, 264, 265, 3, 38, 19, 0, 265, 266, 5, 38, 0, 0, 266, 55, 1,
-		0, 0, 0, 267, 279, 5, 15, 0, 0, 268, 273, 3, 38, 19, 0, 269, 270, 5, 14,
-		0, 0, 270, 272, 3, 38, 19, 0, 271, 269, 1, 0, 0, 0, 272, 275, 1, 0, 0,
-		0, 273, 271, 1, 0, 0, 0, 273, 274, 1, 0, 0, 0, 274, 277, 1, 0, 0, 0, 275,
-		273, 1, 0, 0, 0, 276, 278, 5, 14, 0, 0, 277, 276, 1, 0, 0, 0, 277, 278,
-		1, 0, 0, 0, 278, 280, 1, 0, 0, 0, 279, 268, 1, 0, 0, 0, 279, 280, 1, 0,
-		0, 0, 280, 281, 1, 0, 0, 0, 281, 282, 5, 16, 0, 0, 282, 57, 1, 0, 0, 0,
-		283, 290, 5, 35, 0, 0, 284, 286, 3, 30, 15, 0, 285, 287, 5, 14, 0, 0, 286,
-		285, 1, 0, 0, 0, 286, 287, 1, 0, 0, 0, 287, 289, 1, 0, 0, 0, 288, 284,
-		1, 0, 0, 0, 289, 292, 1, 0, 0, 0, 290, 288, 1, 0, 0, 0, 290, 291, 1, 0,
-		0, 0, 291, 293, 1, 0, 0, 0, 292, 290, 1, 0, 0, 0, 293, 294, 5, 36, 0, 0,
-		294, 59, 1, 0, 0, 0, 295, 296, 7, 2, 0, 0, 296, 61, 1, 0, 0, 0, 297, 299,
-		7, 3, 0, 0, 298, 297, 1, 0, 0, 0, 298, 299, 1, 0, 0, 0, 299, 300, 1, 0,
-		0, 0, 300, 301, 3, 66, 33, 0, 301, 63, 1, 0, 0, 0, 302, 303, 7, 4, 0, 0,
-		303, 65, 1, 0, 0, 0, 304, 307, 5, 41, 0, 0, 305, 306, 5, 34, 0, 0, 306,
-		308, 5, 41, 0, 0, 307, 305, 1, 0, 0, 0, 307, 308, 1, 0, 0, 0, 308, 67,
-		1, 0, 0, 0, 27, 76, 78, 118, 134, 136, 147, 153, 159, 167, 175, 178, 189,
-		201, 203, 216, 227, 239, 243, 253, 256, 273, 277, 279, 286, 290, 298, 307,
+		19, 1, 19, 1, 19, 1, 19, 1, 19, 1, 19, 1, 19, 1, 19, 1, 19, 1, 19, 1, 19,
+		3, 19, 194, 8, 19, 1, 19, 1, 19, 1, 19, 1, 19, 1, 19, 1, 19, 1, 19, 1,
+		19, 1, 19, 1, 19, 1, 19, 1, 19, 1, 19, 1, 19, 1, 19, 5, 19, 211, 8, 19,
+		10, 19, 12, 19, 214, 9, 19, 1, 20, 1, 20, 1, 20, 1, 20, 3, 20, 220, 8,
+		20, 1, 20, 1, 20, 1, 20, 1, 20, 1, 20, 1, 21, 1, 21, 1, 21, 3, 21, 230,
+		8, 21, 1, 22, 1, 22, 1, 22, 1, 22, 1, 22, 1, 22, 1, 22, 1, 22, 1, 22, 3,
+		22, 241, 8, 22, 1, 23, 1, 23, 1, 23, 1, 23, 1, 23, 1, 23, 1, 23, 1, 23,
+		5, 23, 251, 8, 23, 10, 23, 12, 23, 254, 9, 23, 1, 23, 3, 23, 257, 8, 23,
+		1, 24, 1, 24, 1, 25, 1, 25, 1, 25, 1, 25, 5, 25, 265, 8, 25, 10, 25, 12,
+		25, 268, 9, 25, 3, 25, 270, 8, 25, 1, 26, 1, 26, 1, 26, 1, 26, 1, 27, 1,
+		27, 1, 27, 1, 27, 1, 27, 1, 28, 1, 28, 1, 28, 1, 28, 5, 28, 285, 8, 28,
+		10, 28, 12, 28, 288, 9, 28, 1, 28, 3, 28, 291, 8, 28, 3, 28, 293, 8, 28,
+		1, 28, 1, 28, 1, 29, 1, 29, 1, 29, 1, 29, 3, 29, 301, 8, 29, 1, 29, 5,
+		29, 304, 8, 29, 10, 29, 12, 29, 307, 9, 29, 1, 29, 3, 29, 310, 8, 29, 3,
+		29, 312, 8, 29, 1, 29, 1, 29, 1, 30, 1, 30, 1, 31, 3, 31, 319, 8, 31, 1,
+		31, 1, 31, 1, 32, 1, 32, 1, 33, 1, 33, 1, 33, 3, 33, 328, 8, 33, 1, 33,
+		1, 252, 1, 38, 34, 0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28,
+		30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50, 52, 54, 56, 58, 60, 62, 64,
+		66, 0, 5, 3, 0, 3, 3, 6, 6, 8, 9, 2, 0, 32, 34, 48, 48, 1, 0, 46, 47, 2,
+		0, 12, 12, 20, 20, 3, 0, 12, 12, 20, 31, 35, 35, 345, 0, 76, 1, 0, 0, 0,
+		2, 82, 1, 0, 0, 0, 4, 85, 1, 0, 0, 0, 6, 90, 1, 0, 0, 0, 8, 95, 1, 0, 0,
+		0, 10, 99, 1, 0, 0, 0, 12, 103, 1, 0, 0, 0, 14, 106, 1, 0, 0, 0, 16, 110,
+		1, 0, 0, 0, 18, 114, 1, 0, 0, 0, 20, 123, 1, 0, 0, 0, 22, 125, 1, 0, 0,
+		0, 24, 127, 1, 0, 0, 0, 26, 129, 1, 0, 0, 0, 28, 131, 1, 0, 0, 0, 30, 141,
+		1, 0, 0, 0, 32, 147, 1, 0, 0, 0, 34, 178, 1, 0, 0, 0, 36, 180, 1, 0, 0,
+		0, 38, 193, 1, 0, 0, 0, 40, 215, 1, 0, 0, 0, 42, 229, 1, 0, 0, 0, 44, 240,
+		1, 0, 0, 0, 46, 256, 1, 0, 0, 0, 48, 258, 1, 0, 0, 0, 50, 269, 1, 0, 0,
+		0, 52, 271, 1, 0, 0, 0, 54, 275, 1, 0, 0, 0, 56, 280, 1, 0, 0, 0, 58, 296,
+		1, 0, 0, 0, 60, 315, 1, 0, 0, 0, 62, 318, 1, 0, 0, 0, 64, 322, 1, 0, 0,
+		0, 66, 324, 1, 0, 0, 0, 68, 77, 3, 12, 6, 0, 69, 77, 3, 14, 7, 0, 70, 77,
+		3, 10, 5, 0, 71, 77, 3, 8, 4, 0, 72, 77, 3, 16, 8, 0, 73, 77, 3, 6, 3,
+		0, 74, 77, 3, 4, 2, 0, 75, 77, 3, 2, 1, 0, 76, 68, 1, 0, 0, 0, 76, 69,
+		1, 0, 0, 0, 76, 70, 1, 0, 0, 0, 76, 71, 1, 0, 0, 0, 76, 72, 1, 0, 0, 0,
+		76, 73, 1, 0, 0, 0, 76, 74, 1, 0, 0, 0, 76, 75, 1, 0, 0, 0, 77, 78, 1,
+		0, 0, 0, 78, 76, 1, 0, 0, 0, 78, 79, 1, 0, 0, 0, 79, 80, 1, 0, 0, 0, 80,
+		81, 5, 0, 0, 1, 81, 1, 1, 0, 0, 0, 82, 83, 5, 1, 0, 0, 83, 84, 3, 28, 14,
+		0, 84, 3, 1, 0, 0, 0, 85, 86, 5, 2, 0, 0, 86, 87, 3, 22, 11, 0, 87, 88,
+		3, 24, 12, 0, 88, 89, 3, 28, 14, 0, 89, 5, 1, 0, 0, 0, 90, 91, 5, 3, 0,
+		0, 91, 92, 3, 22, 11, 0, 92, 93, 3, 24, 12, 0, 93, 94, 3, 28, 14, 0, 94,
+		7, 1, 0, 0, 0, 95, 96, 5, 33, 0, 0, 96, 97, 3, 22, 11, 0, 97, 98, 3, 28,
+		14, 0, 98, 9, 1, 0, 0, 0, 99, 100, 5, 4, 0, 0, 100, 101, 3, 24, 12, 0,
+		101, 102, 3, 28, 14, 0, 102, 11, 1, 0, 0, 0, 103, 104, 5, 5, 0, 0, 104,
+		105, 3, 28, 14, 0, 105, 13, 1, 0, 0, 0, 106, 107, 5, 6, 0, 0, 107, 108,
+		3, 24, 12, 0, 108, 109, 3, 28, 14, 0, 109, 15, 1, 0, 0, 0, 110, 111, 5,
+		32, 0, 0, 111, 112, 3, 24, 12, 0, 112, 113, 3, 28, 14, 0, 113, 17, 1, 0,
+		0, 0, 114, 118, 3, 20, 10, 0, 115, 117, 3, 26, 13, 0, 116, 115, 1, 0, 0,
+		0, 117, 120, 1, 0, 0, 0, 118, 116, 1, 0, 0, 0, 118, 119, 1, 0, 0, 0, 119,
+		121, 1, 0, 0, 0, 120, 118, 1, 0, 0, 0, 121, 122, 3, 28, 14, 0, 122, 19,
+		1, 0, 0, 0, 123, 124, 5, 48, 0, 0, 124, 21, 1, 0, 0, 0, 125, 126, 5, 47,
+		0, 0, 126, 23, 1, 0, 0, 0, 127, 128, 5, 47, 0, 0, 128, 25, 1, 0, 0, 0,
+		129, 130, 5, 47, 0, 0, 130, 27, 1, 0, 0, 0, 131, 136, 5, 37, 0, 0, 132,
+		135, 3, 30, 15, 0, 133, 135, 3, 18, 9, 0, 134, 132, 1, 0, 0, 0, 134, 133,
+		1, 0, 0, 0, 135, 138, 1, 0, 0, 0, 136, 134, 1, 0, 0, 0, 136, 137, 1, 0,
+		0, 0, 137, 139, 1, 0, 0, 0, 138, 136, 1, 0, 0, 0, 139, 140, 5, 38, 0, 0,
+		140, 29, 1, 0, 0, 0, 141, 142, 3, 32, 16, 0, 142, 143, 5, 7, 0, 0, 143,
+		144, 3, 38, 19, 0, 144, 31, 1, 0, 0, 0, 145, 146, 7, 0, 0, 0, 146, 148,
+		5, 36, 0, 0, 147, 145, 1, 0, 0, 0, 147, 148, 1, 0, 0, 0, 148, 149, 1, 0,
+		0, 0, 149, 150, 3, 34, 17, 0, 150, 33, 1, 0, 0, 0, 151, 153, 7, 1, 0, 0,
+		152, 154, 3, 52, 26, 0, 153, 152, 1, 0, 0, 0, 153, 154, 1, 0, 0, 0, 154,
+		159, 1, 0, 0, 0, 155, 156, 5, 36, 0, 0, 156, 158, 3, 34, 17, 0, 157, 155,
+		1, 0, 0, 0, 158, 161, 1, 0, 0, 0, 159, 157, 1, 0, 0, 0, 159, 160, 1, 0,
+		0, 0, 160, 179, 1, 0, 0, 0, 161, 159, 1, 0, 0, 0, 162, 167, 5, 35, 0, 0,
+		163, 164, 5, 36, 0, 0, 164, 166, 3, 34, 17, 0, 165, 163, 1, 0, 0, 0, 166,
+		169, 1, 0, 0, 0, 167, 165, 1, 0, 0, 0, 167, 168, 1, 0, 0, 0, 168, 179,
+		1, 0, 0, 0, 169, 167, 1, 0, 0, 0, 170, 175, 3, 36, 18, 0, 171, 172, 5,
+		36, 0, 0, 172, 174, 3, 34, 17, 0, 173, 171, 1, 0, 0, 0, 174, 177, 1, 0,
+		0, 0, 175, 173, 1, 0, 0, 0, 175, 176, 1, 0, 0, 0, 176, 179, 1, 0, 0, 0,
+		177, 175, 1, 0, 0, 0, 178, 151, 1, 0, 0, 0, 178, 162, 1, 0, 0, 0, 178,
+		170, 1, 0, 0, 0, 179, 35, 1, 0, 0, 0, 180, 181, 5, 43, 0, 0, 181, 37, 1,
+		0, 0, 0, 182, 183, 6, 19, -1, 0, 183, 194, 3, 42, 21, 0, 184, 185, 5, 39,
+		0, 0, 185, 186, 3, 38, 19, 0, 186, 187, 5, 40, 0, 0, 187, 194, 1, 0, 0,
+		0, 188, 194, 3, 40, 20, 0, 189, 190, 5, 12, 0, 0, 190, 194, 3, 38, 19,
+		3, 191, 192, 5, 13, 0, 0, 192, 194, 3, 38, 19, 2, 193, 182, 1, 0, 0, 0,
+		193, 184, 1, 0, 0, 0, 193, 188, 1, 0, 0, 0, 193, 189, 1, 0, 0, 0, 193,
+		191, 1, 0, 0, 0, 194, 212, 1, 0, 0, 0, 195, 196, 10, 7, 0, 0, 196, 197,
+		3, 64, 32, 0, 197, 198, 3, 38, 19, 8, 198, 211, 1, 0, 0, 0, 199, 200, 10,
+		5, 0, 0, 200, 201, 5, 10, 0, 0, 201, 202, 3, 38, 19, 0, 202, 203, 5, 11,
+		0, 0, 203, 204, 3, 38, 19, 6, 204, 211, 1, 0, 0, 0, 205, 206, 10, 1, 0,
+		0, 206, 207, 5, 14, 0, 0, 207, 208, 3, 38, 19, 0, 208, 209, 5, 15, 0, 0,
+		209, 211, 1, 0, 0, 0, 210, 195, 1, 0, 0, 0, 210, 199, 1, 0, 0, 0, 210,
+		205, 1, 0, 0, 0, 211, 214, 1, 0, 0, 0, 212, 210, 1, 0, 0, 0, 212, 213,
+		1, 0, 0, 0, 213, 39, 1, 0, 0, 0, 214, 212, 1, 0, 0, 0, 215, 216, 5, 16,
+		0, 0, 216, 219, 3, 32, 16, 0, 217, 218, 5, 17, 0, 0, 218, 220, 3, 32, 16,
+		0, 219, 217, 1, 0, 0, 0, 219, 220, 1, 0, 0, 0, 220, 221, 1, 0, 0, 0, 221,
+		222, 5, 34, 0, 0, 222, 223, 3, 38, 19, 0, 223, 224, 5, 11, 0, 0, 224, 225,
+		3, 38, 19, 0, 225, 41, 1, 0, 0, 0, 226, 230, 3, 56, 28, 0, 227, 230, 3,
+		58, 29, 0, 228, 230, 3, 44, 22, 0, 229, 226, 1, 0, 0, 0, 229, 227, 1, 0,
+		0, 0, 229, 228, 1, 0, 0, 0, 230, 43, 1, 0, 0, 0, 231, 241, 5, 42, 0, 0,
+		232, 241, 3, 62, 31, 0, 233, 241, 3, 60, 30, 0, 234, 241, 3, 32, 16, 0,
+		235, 241, 5, 44, 0, 0, 236, 241, 5, 45, 0, 0, 237, 241, 3, 54, 27, 0, 238,
+		241, 3, 46, 23, 0, 239, 241, 5, 41, 0, 0, 240, 231, 1, 0, 0, 0, 240, 232,
+		1, 0, 0, 0, 240, 233, 1, 0, 0, 0, 240, 234, 1, 0, 0, 0, 240, 235, 1, 0,
+		0, 0, 240, 236, 1, 0, 0, 0, 240, 237, 1, 0, 0, 0, 240, 238, 1, 0, 0, 0,
+		240, 239, 1, 0, 0, 0, 241, 45, 1, 0, 0, 0, 242, 243, 3, 48, 24, 0, 243,
+		244, 5, 39, 0, 0, 244, 245, 3, 50, 25, 0, 245, 246, 5, 40, 0, 0, 246, 257,
+		1, 0, 0, 0, 247, 248, 5, 18, 0, 0, 248, 252, 5, 39, 0, 0, 249, 251, 9,
+		0, 0, 0, 250, 249, 1, 0, 0, 0, 251, 254, 1, 0, 0, 0, 252, 253, 1, 0, 0,
+		0, 252, 250, 1, 0, 0, 0, 253, 255, 1, 0, 0, 0, 254, 252, 1, 0, 0, 0, 255,
+		257, 5, 40, 0, 0, 256, 242, 1, 0, 0, 0, 256, 247, 1, 0, 0, 0, 257, 47,
+		1, 0, 0, 0, 258, 259, 5, 48, 0, 0, 259, 49, 1, 0, 0, 0, 260, 270, 1, 0,
+		0, 0, 261, 266, 3, 38, 19, 0, 262, 263, 5, 17, 0, 0, 263, 265, 3, 38, 19,
+		0, 264, 262, 1, 0, 0, 0, 265, 268, 1, 0, 0, 0, 266, 264, 1, 0, 0, 0, 266,
+		267, 1, 0, 0, 0, 267, 270, 1, 0, 0, 0, 268, 266, 1, 0, 0, 0, 269, 260,
+		1, 0, 0, 0, 269, 261, 1, 0, 0, 0, 270, 51, 1, 0, 0, 0, 271, 272, 5, 14,
+		0, 0, 272, 273, 3, 38, 19, 0, 273, 274, 5, 15, 0, 0, 274, 53, 1, 0, 0,
+		0, 275, 276, 5, 19, 0, 0, 276, 277, 5, 39, 0, 0, 277, 278, 3, 38, 19, 0,
+		278, 279, 5, 40, 0, 0, 279, 55, 1, 0, 0, 0, 280, 292, 5, 14, 0, 0, 281,
+		286, 3, 38, 19, 0, 282, 283, 5, 17, 0, 0, 283, 285, 3, 38, 19, 0, 284,
+		282, 1, 0, 0, 0, 285, 288, 1, 0, 0, 0, 286, 284, 1, 0, 0, 0, 286, 287,
+		1, 0, 0, 0, 287, 290, 1, 0, 0, 0, 288, 286, 1, 0, 0, 0, 289, 291, 5, 17,
+		0, 0, 290, 289, 1, 0, 0, 0, 290, 291, 1, 0, 0, 0, 291, 293, 1, 0, 0, 0,
+		292, 281, 1, 0, 0, 0, 292, 293, 1, 0, 0, 0, 293, 294, 1, 0, 0, 0, 294,
+		295, 5, 15, 0, 0, 295, 57, 1, 0, 0, 0, 296, 311, 5, 37, 0, 0, 297, 312,
+		3, 40, 20, 0, 298, 305, 3, 30, 15, 0, 299, 301, 5, 17, 0, 0, 300, 299,
+		1, 0, 0, 0, 300, 301, 1, 0, 0, 0, 301, 302, 1, 0, 0, 0, 302, 304, 3, 30,
+		15, 0, 303, 300, 1, 0, 0, 0, 304, 307, 1, 0, 0, 0, 305, 303, 1, 0, 0, 0,
+		305, 306, 1, 0, 0, 0, 306, 309, 1, 0, 0, 0, 307, 305, 1, 0, 0, 0, 308,
+		310, 5, 17, 0, 0, 309, 308, 1, 0, 0, 0, 309, 310, 1, 0, 0, 0, 310, 312,
+		1, 0, 0, 0, 311, 297, 1, 0, 0, 0, 311, 298, 1, 0, 0, 0, 311, 312, 1, 0,
+		0, 0, 312, 313, 1, 0, 0, 0, 313, 314, 5, 38, 0, 0, 314, 59, 1, 0, 0, 0,
+		315, 316, 7, 2, 0, 0, 316, 61, 1, 0, 0, 0, 317, 319, 7, 3, 0, 0, 318, 317,
+		1, 0, 0, 0, 318, 319, 1, 0, 0, 0, 319, 320, 1, 0, 0, 0, 320, 321, 3, 66,
+		33, 0, 321, 63, 1, 0, 0, 0, 322, 323, 7, 4, 0, 0, 323, 65, 1, 0, 0, 0,
+		324, 327, 5, 43, 0, 0, 325, 326, 5, 36, 0, 0, 326, 328, 5, 43, 0, 0, 327,
+		325, 1, 0, 0, 0, 327, 328, 1, 0, 0, 0, 328, 67, 1, 0, 0, 0, 30, 76, 78,
+		118, 134, 136, 147, 153, 159, 167, 175, 178, 193, 210, 212, 219, 229, 240,
+		252, 256, 266, 269, 286, 290, 292, 300, 305, 309, 311, 318, 327,
 	}
 	deserializer := antlr.NewATNDeserializer(nil)
 	staticData.atn = deserializer.Deserialize(staticData.serializedATN)
@@ -205,7 +217,7 @@ func terraformParserInit() {
 // NewTerraformParser(). You can call this function if you wish to initialize the static state ahead
 // of time.
 func TerraformParserInit() {
-	staticData := &terraformParserStaticData
+	staticData := &TerraformParserStaticData
 	staticData.once.Do(terraformParserInit)
 }
 
@@ -214,12 +226,12 @@ func NewTerraformParser(input antlr.TokenStream) *TerraformParser {
 	TerraformParserInit()
 	this := new(TerraformParser)
 	this.BaseParser = antlr.NewBaseParser(input)
-	staticData := &terraformParserStaticData
-	this.Interpreter = antlr.NewParserATNSimulator(this, staticData.atn, staticData.decisionToDFA, staticData.predictionContextCache)
-	this.RuleNames = staticData.ruleNames
-	this.LiteralNames = staticData.literalNames
-	this.SymbolicNames = staticData.symbolicNames
-	this.GrammarFileName = "java-escape"
+	staticData := &TerraformParserStaticData
+	this.Interpreter = antlr.NewParserATNSimulator(this, staticData.atn, staticData.decisionToDFA, staticData.PredictionContextCache)
+	this.RuleNames = staticData.RuleNames
+	this.LiteralNames = staticData.LiteralNames
+	this.SymbolicNames = staticData.SymbolicNames
+	this.GrammarFileName = "Terraform.g4"
 
 	return this
 }
@@ -256,26 +268,28 @@ const (
 	TerraformParserT__26           = 27
 	TerraformParserT__27           = 28
 	TerraformParserT__28           = 29
-	TerraformParserVARIABLE        = 30
-	TerraformParserPROVIDER        = 31
-	TerraformParserIN              = 32
-	TerraformParserSTAR            = 33
-	TerraformParserDOT             = 34
-	TerraformParserLCURL           = 35
-	TerraformParserRCURL           = 36
-	TerraformParserLPAREN          = 37
-	TerraformParserRPAREN          = 38
-	TerraformParserEOF_            = 39
-	TerraformParserNULL_           = 40
-	TerraformParserNATURAL_NUMBER  = 41
-	TerraformParserBOOL            = 42
-	TerraformParserDESCRIPTION     = 43
-	TerraformParserMULTILINESTRING = 44
-	TerraformParserSTRING          = 45
-	TerraformParserIDENTIFIER      = 46
-	TerraformParserCOMMENT         = 47
-	TerraformParserBLOCKCOMMENT    = 48
-	TerraformParserWS              = 49
+	TerraformParserT__29           = 30
+	TerraformParserT__30           = 31
+	TerraformParserVARIABLE        = 32
+	TerraformParserPROVIDER        = 33
+	TerraformParserIN              = 34
+	TerraformParserSTAR            = 35
+	TerraformParserDOT             = 36
+	TerraformParserLCURL           = 37
+	TerraformParserRCURL           = 38
+	TerraformParserLPAREN          = 39
+	TerraformParserRPAREN          = 40
+	TerraformParserEOF_            = 41
+	TerraformParserNULL_           = 42
+	TerraformParserNATURAL_NUMBER  = 43
+	TerraformParserBOOL            = 44
+	TerraformParserDESCRIPTION     = 45
+	TerraformParserMULTILINESTRING = 46
+	TerraformParserSTRING          = 47
+	TerraformParserIDENTIFIER      = 48
+	TerraformParserCOMMENT         = 49
+	TerraformParserBLOCKCOMMENT    = 50
+	TerraformParserWS              = 51
 )
 
 // TerraformParser rules.
@@ -323,20 +337,44 @@ type IFile_Context interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// Getter signatures
+	EOF() antlr.TerminalNode
+	AllLocal() []ILocalContext
+	Local(i int) ILocalContext
+	AllModule() []IModuleContext
+	Module(i int) IModuleContext
+	AllOutput() []IOutputContext
+	Output(i int) IOutputContext
+	AllProvider() []IProviderContext
+	Provider(i int) IProviderContext
+	AllVariable() []IVariableContext
+	Variable(i int) IVariableContext
+	AllData() []IDataContext
+	Data(i int) IDataContext
+	AllResource() []IResourceContext
+	Resource(i int) IResourceContext
+	AllTerraform() []ITerraformContext
+	Terraform(i int) ITerraformContext
+
 	// IsFile_Context differentiates from other interfaces.
 	IsFile_Context()
 }
 
 type File_Context struct {
-	*antlr.BaseParserRuleContext
+	antlr.BaseParserRuleContext
 	parser antlr.Parser
 }
 
 func NewEmptyFile_Context() *File_Context {
 	var p = new(File_Context)
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
 	p.RuleIndex = TerraformParserRULE_file_
 	return p
+}
+
+func InitEmptyFile_Context(p *File_Context) {
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = TerraformParserRULE_file_
 }
 
 func (*File_Context) IsFile_Context() {}
@@ -344,7 +382,7 @@ func (*File_Context) IsFile_Context() {}
 func NewFile_Context(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *File_Context {
 	var p = new(File_Context)
 
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
 
 	p.parser = parser
 	p.RuleIndex = TerraformParserRULE_file_
@@ -707,36 +745,24 @@ func (s *File_Context) ExitRule(listener antlr.ParseTreeListener) {
 }
 
 func (p *TerraformParser) File_() (localctx IFile_Context) {
-	this := p
-	_ = this
-
 	localctx = NewFile_Context(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 0, TerraformParserRULE_file_)
 	var _la int
 
-	defer func() {
-		p.ExitRule()
-	}()
-
-	defer func() {
-		if err := recover(); err != nil {
-			if v, ok := err.(antlr.RecognitionException); ok {
-				localctx.SetException(v)
-				p.GetErrorHandler().ReportError(p, v)
-				p.GetErrorHandler().Recover(p, v)
-			} else {
-				panic(err)
-			}
-		}
-	}()
-
 	p.EnterOuterAlt(localctx, 1)
 	p.SetState(76)
 	p.GetErrorHandler().Sync(p)
+	if p.HasError() {
+		goto errorExit
+	}
+	_la = p.GetTokenStream().LA(1)
 
-	for ok := true; ok; ok = (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&3221225598) != 0 {
+	for ok := true; ok; ok = ((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&12884902014) != 0) {
 		p.SetState(76)
 		p.GetErrorHandler().Sync(p)
+		if p.HasError() {
+			goto errorExit
+		}
 
 		switch p.GetTokenStream().LA(1) {
 		case TerraformParserT__4:
@@ -788,19 +814,37 @@ func (p *TerraformParser) File_() (localctx IFile_Context) {
 			}
 
 		default:
-			panic(antlr.NewNoViableAltException(p, nil, nil, nil, nil, nil))
+			p.SetError(antlr.NewNoViableAltException(p, nil, nil, nil, nil, nil))
+			goto errorExit
 		}
 
 		p.SetState(78)
 		p.GetErrorHandler().Sync(p)
+		if p.HasError() {
+			goto errorExit
+		}
 		_la = p.GetTokenStream().LA(1)
 	}
 	{
 		p.SetState(80)
 		p.Match(TerraformParserEOF)
+		if p.HasError() {
+			// Recognition error - abort rule
+			goto errorExit
+		}
 	}
 
+errorExit:
+	if p.HasError() {
+		v := p.GetError()
+		localctx.SetException(v)
+		p.GetErrorHandler().ReportError(p, v)
+		p.GetErrorHandler().Recover(p, v)
+		p.SetError(nil)
+	}
+	p.ExitRule()
 	return localctx
+	goto errorExit // Trick to prevent compiler error if the label is not used
 }
 
 // ITerraformContext is an interface to support dynamic dispatch.
@@ -810,20 +854,28 @@ type ITerraformContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// Getter signatures
+	Blockbody() IBlockbodyContext
+
 	// IsTerraformContext differentiates from other interfaces.
 	IsTerraformContext()
 }
 
 type TerraformContext struct {
-	*antlr.BaseParserRuleContext
+	antlr.BaseParserRuleContext
 	parser antlr.Parser
 }
 
 func NewEmptyTerraformContext() *TerraformContext {
 	var p = new(TerraformContext)
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
 	p.RuleIndex = TerraformParserRULE_terraform
 	return p
+}
+
+func InitEmptyTerraformContext(p *TerraformContext) {
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = TerraformParserRULE_terraform
 }
 
 func (*TerraformContext) IsTerraformContext() {}
@@ -831,7 +883,7 @@ func (*TerraformContext) IsTerraformContext() {}
 func NewTerraformContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *TerraformContext {
 	var p = new(TerraformContext)
 
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
 
 	p.parser = parser
 	p.RuleIndex = TerraformParserRULE_terraform
@@ -878,39 +930,33 @@ func (s *TerraformContext) ExitRule(listener antlr.ParseTreeListener) {
 }
 
 func (p *TerraformParser) Terraform() (localctx ITerraformContext) {
-	this := p
-	_ = this
-
 	localctx = NewTerraformContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 2, TerraformParserRULE_terraform)
-
-	defer func() {
-		p.ExitRule()
-	}()
-
-	defer func() {
-		if err := recover(); err != nil {
-			if v, ok := err.(antlr.RecognitionException); ok {
-				localctx.SetException(v)
-				p.GetErrorHandler().ReportError(p, v)
-				p.GetErrorHandler().Recover(p, v)
-			} else {
-				panic(err)
-			}
-		}
-	}()
-
 	p.EnterOuterAlt(localctx, 1)
 	{
 		p.SetState(82)
 		p.Match(TerraformParserT__0)
+		if p.HasError() {
+			// Recognition error - abort rule
+			goto errorExit
+		}
 	}
 	{
 		p.SetState(83)
 		p.Blockbody()
 	}
 
+errorExit:
+	if p.HasError() {
+		v := p.GetError()
+		localctx.SetException(v)
+		p.GetErrorHandler().ReportError(p, v)
+		p.GetErrorHandler().Recover(p, v)
+		p.SetError(nil)
+	}
+	p.ExitRule()
 	return localctx
+	goto errorExit // Trick to prevent compiler error if the label is not used
 }
 
 // IResourceContext is an interface to support dynamic dispatch.
@@ -920,20 +966,30 @@ type IResourceContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// Getter signatures
+	Resourcetype() IResourcetypeContext
+	Name() INameContext
+	Blockbody() IBlockbodyContext
+
 	// IsResourceContext differentiates from other interfaces.
 	IsResourceContext()
 }
 
 type ResourceContext struct {
-	*antlr.BaseParserRuleContext
+	antlr.BaseParserRuleContext
 	parser antlr.Parser
 }
 
 func NewEmptyResourceContext() *ResourceContext {
 	var p = new(ResourceContext)
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
 	p.RuleIndex = TerraformParserRULE_resource
 	return p
+}
+
+func InitEmptyResourceContext(p *ResourceContext) {
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = TerraformParserRULE_resource
 }
 
 func (*ResourceContext) IsResourceContext() {}
@@ -941,7 +997,7 @@ func (*ResourceContext) IsResourceContext() {}
 func NewResourceContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *ResourceContext {
 	var p = new(ResourceContext)
 
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
 
 	p.parser = parser
 	p.RuleIndex = TerraformParserRULE_resource
@@ -1020,32 +1076,16 @@ func (s *ResourceContext) ExitRule(listener antlr.ParseTreeListener) {
 }
 
 func (p *TerraformParser) Resource() (localctx IResourceContext) {
-	this := p
-	_ = this
-
 	localctx = NewResourceContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 4, TerraformParserRULE_resource)
-
-	defer func() {
-		p.ExitRule()
-	}()
-
-	defer func() {
-		if err := recover(); err != nil {
-			if v, ok := err.(antlr.RecognitionException); ok {
-				localctx.SetException(v)
-				p.GetErrorHandler().ReportError(p, v)
-				p.GetErrorHandler().Recover(p, v)
-			} else {
-				panic(err)
-			}
-		}
-	}()
-
 	p.EnterOuterAlt(localctx, 1)
 	{
 		p.SetState(85)
 		p.Match(TerraformParserT__1)
+		if p.HasError() {
+			// Recognition error - abort rule
+			goto errorExit
+		}
 	}
 	{
 		p.SetState(86)
@@ -1060,7 +1100,17 @@ func (p *TerraformParser) Resource() (localctx IResourceContext) {
 		p.Blockbody()
 	}
 
+errorExit:
+	if p.HasError() {
+		v := p.GetError()
+		localctx.SetException(v)
+		p.GetErrorHandler().ReportError(p, v)
+		p.GetErrorHandler().Recover(p, v)
+		p.SetError(nil)
+	}
+	p.ExitRule()
 	return localctx
+	goto errorExit // Trick to prevent compiler error if the label is not used
 }
 
 // IDataContext is an interface to support dynamic dispatch.
@@ -1070,20 +1120,30 @@ type IDataContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// Getter signatures
+	Resourcetype() IResourcetypeContext
+	Name() INameContext
+	Blockbody() IBlockbodyContext
+
 	// IsDataContext differentiates from other interfaces.
 	IsDataContext()
 }
 
 type DataContext struct {
-	*antlr.BaseParserRuleContext
+	antlr.BaseParserRuleContext
 	parser antlr.Parser
 }
 
 func NewEmptyDataContext() *DataContext {
 	var p = new(DataContext)
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
 	p.RuleIndex = TerraformParserRULE_data
 	return p
+}
+
+func InitEmptyDataContext(p *DataContext) {
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = TerraformParserRULE_data
 }
 
 func (*DataContext) IsDataContext() {}
@@ -1091,7 +1151,7 @@ func (*DataContext) IsDataContext() {}
 func NewDataContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *DataContext {
 	var p = new(DataContext)
 
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
 
 	p.parser = parser
 	p.RuleIndex = TerraformParserRULE_data
@@ -1170,32 +1230,16 @@ func (s *DataContext) ExitRule(listener antlr.ParseTreeListener) {
 }
 
 func (p *TerraformParser) Data() (localctx IDataContext) {
-	this := p
-	_ = this
-
 	localctx = NewDataContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 6, TerraformParserRULE_data)
-
-	defer func() {
-		p.ExitRule()
-	}()
-
-	defer func() {
-		if err := recover(); err != nil {
-			if v, ok := err.(antlr.RecognitionException); ok {
-				localctx.SetException(v)
-				p.GetErrorHandler().ReportError(p, v)
-				p.GetErrorHandler().Recover(p, v)
-			} else {
-				panic(err)
-			}
-		}
-	}()
-
 	p.EnterOuterAlt(localctx, 1)
 	{
 		p.SetState(90)
 		p.Match(TerraformParserT__2)
+		if p.HasError() {
+			// Recognition error - abort rule
+			goto errorExit
+		}
 	}
 	{
 		p.SetState(91)
@@ -1210,7 +1254,17 @@ func (p *TerraformParser) Data() (localctx IDataContext) {
 		p.Blockbody()
 	}
 
+errorExit:
+	if p.HasError() {
+		v := p.GetError()
+		localctx.SetException(v)
+		p.GetErrorHandler().ReportError(p, v)
+		p.GetErrorHandler().Recover(p, v)
+		p.SetError(nil)
+	}
+	p.ExitRule()
 	return localctx
+	goto errorExit // Trick to prevent compiler error if the label is not used
 }
 
 // IProviderContext is an interface to support dynamic dispatch.
@@ -1220,20 +1274,30 @@ type IProviderContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// Getter signatures
+	PROVIDER() antlr.TerminalNode
+	Resourcetype() IResourcetypeContext
+	Blockbody() IBlockbodyContext
+
 	// IsProviderContext differentiates from other interfaces.
 	IsProviderContext()
 }
 
 type ProviderContext struct {
-	*antlr.BaseParserRuleContext
+	antlr.BaseParserRuleContext
 	parser antlr.Parser
 }
 
 func NewEmptyProviderContext() *ProviderContext {
 	var p = new(ProviderContext)
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
 	p.RuleIndex = TerraformParserRULE_provider
 	return p
+}
+
+func InitEmptyProviderContext(p *ProviderContext) {
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = TerraformParserRULE_provider
 }
 
 func (*ProviderContext) IsProviderContext() {}
@@ -1241,7 +1305,7 @@ func (*ProviderContext) IsProviderContext() {}
 func NewProviderContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *ProviderContext {
 	var p = new(ProviderContext)
 
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
 
 	p.parser = parser
 	p.RuleIndex = TerraformParserRULE_provider
@@ -1308,32 +1372,16 @@ func (s *ProviderContext) ExitRule(listener antlr.ParseTreeListener) {
 }
 
 func (p *TerraformParser) Provider() (localctx IProviderContext) {
-	this := p
-	_ = this
-
 	localctx = NewProviderContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 8, TerraformParserRULE_provider)
-
-	defer func() {
-		p.ExitRule()
-	}()
-
-	defer func() {
-		if err := recover(); err != nil {
-			if v, ok := err.(antlr.RecognitionException); ok {
-				localctx.SetException(v)
-				p.GetErrorHandler().ReportError(p, v)
-				p.GetErrorHandler().Recover(p, v)
-			} else {
-				panic(err)
-			}
-		}
-	}()
-
 	p.EnterOuterAlt(localctx, 1)
 	{
 		p.SetState(95)
 		p.Match(TerraformParserPROVIDER)
+		if p.HasError() {
+			// Recognition error - abort rule
+			goto errorExit
+		}
 	}
 	{
 		p.SetState(96)
@@ -1344,7 +1392,17 @@ func (p *TerraformParser) Provider() (localctx IProviderContext) {
 		p.Blockbody()
 	}
 
+errorExit:
+	if p.HasError() {
+		v := p.GetError()
+		localctx.SetException(v)
+		p.GetErrorHandler().ReportError(p, v)
+		p.GetErrorHandler().Recover(p, v)
+		p.SetError(nil)
+	}
+	p.ExitRule()
 	return localctx
+	goto errorExit // Trick to prevent compiler error if the label is not used
 }
 
 // IOutputContext is an interface to support dynamic dispatch.
@@ -1354,20 +1412,29 @@ type IOutputContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// Getter signatures
+	Name() INameContext
+	Blockbody() IBlockbodyContext
+
 	// IsOutputContext differentiates from other interfaces.
 	IsOutputContext()
 }
 
 type OutputContext struct {
-	*antlr.BaseParserRuleContext
+	antlr.BaseParserRuleContext
 	parser antlr.Parser
 }
 
 func NewEmptyOutputContext() *OutputContext {
 	var p = new(OutputContext)
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
 	p.RuleIndex = TerraformParserRULE_output
 	return p
+}
+
+func InitEmptyOutputContext(p *OutputContext) {
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = TerraformParserRULE_output
 }
 
 func (*OutputContext) IsOutputContext() {}
@@ -1375,7 +1442,7 @@ func (*OutputContext) IsOutputContext() {}
 func NewOutputContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *OutputContext {
 	var p = new(OutputContext)
 
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
 
 	p.parser = parser
 	p.RuleIndex = TerraformParserRULE_output
@@ -1438,32 +1505,16 @@ func (s *OutputContext) ExitRule(listener antlr.ParseTreeListener) {
 }
 
 func (p *TerraformParser) Output() (localctx IOutputContext) {
-	this := p
-	_ = this
-
 	localctx = NewOutputContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 10, TerraformParserRULE_output)
-
-	defer func() {
-		p.ExitRule()
-	}()
-
-	defer func() {
-		if err := recover(); err != nil {
-			if v, ok := err.(antlr.RecognitionException); ok {
-				localctx.SetException(v)
-				p.GetErrorHandler().ReportError(p, v)
-				p.GetErrorHandler().Recover(p, v)
-			} else {
-				panic(err)
-			}
-		}
-	}()
-
 	p.EnterOuterAlt(localctx, 1)
 	{
 		p.SetState(99)
 		p.Match(TerraformParserT__3)
+		if p.HasError() {
+			// Recognition error - abort rule
+			goto errorExit
+		}
 	}
 	{
 		p.SetState(100)
@@ -1474,7 +1525,17 @@ func (p *TerraformParser) Output() (localctx IOutputContext) {
 		p.Blockbody()
 	}
 
+errorExit:
+	if p.HasError() {
+		v := p.GetError()
+		localctx.SetException(v)
+		p.GetErrorHandler().ReportError(p, v)
+		p.GetErrorHandler().Recover(p, v)
+		p.SetError(nil)
+	}
+	p.ExitRule()
 	return localctx
+	goto errorExit // Trick to prevent compiler error if the label is not used
 }
 
 // ILocalContext is an interface to support dynamic dispatch.
@@ -1484,20 +1545,28 @@ type ILocalContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// Getter signatures
+	Blockbody() IBlockbodyContext
+
 	// IsLocalContext differentiates from other interfaces.
 	IsLocalContext()
 }
 
 type LocalContext struct {
-	*antlr.BaseParserRuleContext
+	antlr.BaseParserRuleContext
 	parser antlr.Parser
 }
 
 func NewEmptyLocalContext() *LocalContext {
 	var p = new(LocalContext)
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
 	p.RuleIndex = TerraformParserRULE_local
 	return p
+}
+
+func InitEmptyLocalContext(p *LocalContext) {
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = TerraformParserRULE_local
 }
 
 func (*LocalContext) IsLocalContext() {}
@@ -1505,7 +1574,7 @@ func (*LocalContext) IsLocalContext() {}
 func NewLocalContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *LocalContext {
 	var p = new(LocalContext)
 
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
 
 	p.parser = parser
 	p.RuleIndex = TerraformParserRULE_local
@@ -1552,39 +1621,33 @@ func (s *LocalContext) ExitRule(listener antlr.ParseTreeListener) {
 }
 
 func (p *TerraformParser) Local() (localctx ILocalContext) {
-	this := p
-	_ = this
-
 	localctx = NewLocalContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 12, TerraformParserRULE_local)
-
-	defer func() {
-		p.ExitRule()
-	}()
-
-	defer func() {
-		if err := recover(); err != nil {
-			if v, ok := err.(antlr.RecognitionException); ok {
-				localctx.SetException(v)
-				p.GetErrorHandler().ReportError(p, v)
-				p.GetErrorHandler().Recover(p, v)
-			} else {
-				panic(err)
-			}
-		}
-	}()
-
 	p.EnterOuterAlt(localctx, 1)
 	{
 		p.SetState(103)
 		p.Match(TerraformParserT__4)
+		if p.HasError() {
+			// Recognition error - abort rule
+			goto errorExit
+		}
 	}
 	{
 		p.SetState(104)
 		p.Blockbody()
 	}
 
+errorExit:
+	if p.HasError() {
+		v := p.GetError()
+		localctx.SetException(v)
+		p.GetErrorHandler().ReportError(p, v)
+		p.GetErrorHandler().Recover(p, v)
+		p.SetError(nil)
+	}
+	p.ExitRule()
 	return localctx
+	goto errorExit // Trick to prevent compiler error if the label is not used
 }
 
 // IModuleContext is an interface to support dynamic dispatch.
@@ -1594,20 +1657,29 @@ type IModuleContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// Getter signatures
+	Name() INameContext
+	Blockbody() IBlockbodyContext
+
 	// IsModuleContext differentiates from other interfaces.
 	IsModuleContext()
 }
 
 type ModuleContext struct {
-	*antlr.BaseParserRuleContext
+	antlr.BaseParserRuleContext
 	parser antlr.Parser
 }
 
 func NewEmptyModuleContext() *ModuleContext {
 	var p = new(ModuleContext)
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
 	p.RuleIndex = TerraformParserRULE_module
 	return p
+}
+
+func InitEmptyModuleContext(p *ModuleContext) {
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = TerraformParserRULE_module
 }
 
 func (*ModuleContext) IsModuleContext() {}
@@ -1615,7 +1687,7 @@ func (*ModuleContext) IsModuleContext() {}
 func NewModuleContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *ModuleContext {
 	var p = new(ModuleContext)
 
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
 
 	p.parser = parser
 	p.RuleIndex = TerraformParserRULE_module
@@ -1678,32 +1750,16 @@ func (s *ModuleContext) ExitRule(listener antlr.ParseTreeListener) {
 }
 
 func (p *TerraformParser) Module() (localctx IModuleContext) {
-	this := p
-	_ = this
-
 	localctx = NewModuleContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 14, TerraformParserRULE_module)
-
-	defer func() {
-		p.ExitRule()
-	}()
-
-	defer func() {
-		if err := recover(); err != nil {
-			if v, ok := err.(antlr.RecognitionException); ok {
-				localctx.SetException(v)
-				p.GetErrorHandler().ReportError(p, v)
-				p.GetErrorHandler().Recover(p, v)
-			} else {
-				panic(err)
-			}
-		}
-	}()
-
 	p.EnterOuterAlt(localctx, 1)
 	{
 		p.SetState(106)
 		p.Match(TerraformParserT__5)
+		if p.HasError() {
+			// Recognition error - abort rule
+			goto errorExit
+		}
 	}
 	{
 		p.SetState(107)
@@ -1714,7 +1770,17 @@ func (p *TerraformParser) Module() (localctx IModuleContext) {
 		p.Blockbody()
 	}
 
+errorExit:
+	if p.HasError() {
+		v := p.GetError()
+		localctx.SetException(v)
+		p.GetErrorHandler().ReportError(p, v)
+		p.GetErrorHandler().Recover(p, v)
+		p.SetError(nil)
+	}
+	p.ExitRule()
 	return localctx
+	goto errorExit // Trick to prevent compiler error if the label is not used
 }
 
 // IVariableContext is an interface to support dynamic dispatch.
@@ -1724,20 +1790,30 @@ type IVariableContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// Getter signatures
+	VARIABLE() antlr.TerminalNode
+	Name() INameContext
+	Blockbody() IBlockbodyContext
+
 	// IsVariableContext differentiates from other interfaces.
 	IsVariableContext()
 }
 
 type VariableContext struct {
-	*antlr.BaseParserRuleContext
+	antlr.BaseParserRuleContext
 	parser antlr.Parser
 }
 
 func NewEmptyVariableContext() *VariableContext {
 	var p = new(VariableContext)
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
 	p.RuleIndex = TerraformParserRULE_variable
 	return p
+}
+
+func InitEmptyVariableContext(p *VariableContext) {
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = TerraformParserRULE_variable
 }
 
 func (*VariableContext) IsVariableContext() {}
@@ -1745,7 +1821,7 @@ func (*VariableContext) IsVariableContext() {}
 func NewVariableContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *VariableContext {
 	var p = new(VariableContext)
 
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
 
 	p.parser = parser
 	p.RuleIndex = TerraformParserRULE_variable
@@ -1812,32 +1888,16 @@ func (s *VariableContext) ExitRule(listener antlr.ParseTreeListener) {
 }
 
 func (p *TerraformParser) Variable() (localctx IVariableContext) {
-	this := p
-	_ = this
-
 	localctx = NewVariableContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 16, TerraformParserRULE_variable)
-
-	defer func() {
-		p.ExitRule()
-	}()
-
-	defer func() {
-		if err := recover(); err != nil {
-			if v, ok := err.(antlr.RecognitionException); ok {
-				localctx.SetException(v)
-				p.GetErrorHandler().ReportError(p, v)
-				p.GetErrorHandler().Recover(p, v)
-			} else {
-				panic(err)
-			}
-		}
-	}()
-
 	p.EnterOuterAlt(localctx, 1)
 	{
 		p.SetState(110)
 		p.Match(TerraformParserVARIABLE)
+		if p.HasError() {
+			// Recognition error - abort rule
+			goto errorExit
+		}
 	}
 	{
 		p.SetState(111)
@@ -1848,7 +1908,17 @@ func (p *TerraformParser) Variable() (localctx IVariableContext) {
 		p.Blockbody()
 	}
 
+errorExit:
+	if p.HasError() {
+		v := p.GetError()
+		localctx.SetException(v)
+		p.GetErrorHandler().ReportError(p, v)
+		p.GetErrorHandler().Recover(p, v)
+		p.SetError(nil)
+	}
+	p.ExitRule()
 	return localctx
+	goto errorExit // Trick to prevent compiler error if the label is not used
 }
 
 // IBlockContext is an interface to support dynamic dispatch.
@@ -1858,20 +1928,31 @@ type IBlockContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// Getter signatures
+	Blocktype() IBlocktypeContext
+	Blockbody() IBlockbodyContext
+	AllLabel() []ILabelContext
+	Label(i int) ILabelContext
+
 	// IsBlockContext differentiates from other interfaces.
 	IsBlockContext()
 }
 
 type BlockContext struct {
-	*antlr.BaseParserRuleContext
+	antlr.BaseParserRuleContext
 	parser antlr.Parser
 }
 
 func NewEmptyBlockContext() *BlockContext {
 	var p = new(BlockContext)
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
 	p.RuleIndex = TerraformParserRULE_block
 	return p
+}
+
+func InitEmptyBlockContext(p *BlockContext) {
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = TerraformParserRULE_block
 }
 
 func (*BlockContext) IsBlockContext() {}
@@ -1879,7 +1960,7 @@ func (*BlockContext) IsBlockContext() {}
 func NewBlockContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *BlockContext {
 	var p = new(BlockContext)
 
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
 
 	p.parser = parser
 	p.RuleIndex = TerraformParserRULE_block
@@ -1983,28 +2064,9 @@ func (s *BlockContext) ExitRule(listener antlr.ParseTreeListener) {
 }
 
 func (p *TerraformParser) Block() (localctx IBlockContext) {
-	this := p
-	_ = this
-
 	localctx = NewBlockContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 18, TerraformParserRULE_block)
 	var _la int
-
-	defer func() {
-		p.ExitRule()
-	}()
-
-	defer func() {
-		if err := recover(); err != nil {
-			if v, ok := err.(antlr.RecognitionException); ok {
-				localctx.SetException(v)
-				p.GetErrorHandler().ReportError(p, v)
-				p.GetErrorHandler().Recover(p, v)
-			} else {
-				panic(err)
-			}
-		}
-	}()
 
 	p.EnterOuterAlt(localctx, 1)
 	{
@@ -2013,6 +2075,9 @@ func (p *TerraformParser) Block() (localctx IBlockContext) {
 	}
 	p.SetState(118)
 	p.GetErrorHandler().Sync(p)
+	if p.HasError() {
+		goto errorExit
+	}
 	_la = p.GetTokenStream().LA(1)
 
 	for _la == TerraformParserSTRING {
@@ -2023,6 +2088,9 @@ func (p *TerraformParser) Block() (localctx IBlockContext) {
 
 		p.SetState(120)
 		p.GetErrorHandler().Sync(p)
+		if p.HasError() {
+			goto errorExit
+		}
 		_la = p.GetTokenStream().LA(1)
 	}
 	{
@@ -2030,7 +2098,17 @@ func (p *TerraformParser) Block() (localctx IBlockContext) {
 		p.Blockbody()
 	}
 
+errorExit:
+	if p.HasError() {
+		v := p.GetError()
+		localctx.SetException(v)
+		p.GetErrorHandler().ReportError(p, v)
+		p.GetErrorHandler().Recover(p, v)
+		p.SetError(nil)
+	}
+	p.ExitRule()
 	return localctx
+	goto errorExit // Trick to prevent compiler error if the label is not used
 }
 
 // IBlocktypeContext is an interface to support dynamic dispatch.
@@ -2040,20 +2118,28 @@ type IBlocktypeContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// Getter signatures
+	IDENTIFIER() antlr.TerminalNode
+
 	// IsBlocktypeContext differentiates from other interfaces.
 	IsBlocktypeContext()
 }
 
 type BlocktypeContext struct {
-	*antlr.BaseParserRuleContext
+	antlr.BaseParserRuleContext
 	parser antlr.Parser
 }
 
 func NewEmptyBlocktypeContext() *BlocktypeContext {
 	var p = new(BlocktypeContext)
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
 	p.RuleIndex = TerraformParserRULE_blocktype
 	return p
+}
+
+func InitEmptyBlocktypeContext(p *BlocktypeContext) {
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = TerraformParserRULE_blocktype
 }
 
 func (*BlocktypeContext) IsBlocktypeContext() {}
@@ -2061,7 +2147,7 @@ func (*BlocktypeContext) IsBlocktypeContext() {}
 func NewBlocktypeContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *BlocktypeContext {
 	var p = new(BlocktypeContext)
 
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
 
 	p.parser = parser
 	p.RuleIndex = TerraformParserRULE_blocktype
@@ -2096,35 +2182,29 @@ func (s *BlocktypeContext) ExitRule(listener antlr.ParseTreeListener) {
 }
 
 func (p *TerraformParser) Blocktype() (localctx IBlocktypeContext) {
-	this := p
-	_ = this
-
 	localctx = NewBlocktypeContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 20, TerraformParserRULE_blocktype)
-
-	defer func() {
-		p.ExitRule()
-	}()
-
-	defer func() {
-		if err := recover(); err != nil {
-			if v, ok := err.(antlr.RecognitionException); ok {
-				localctx.SetException(v)
-				p.GetErrorHandler().ReportError(p, v)
-				p.GetErrorHandler().Recover(p, v)
-			} else {
-				panic(err)
-			}
-		}
-	}()
-
 	p.EnterOuterAlt(localctx, 1)
 	{
 		p.SetState(123)
 		p.Match(TerraformParserIDENTIFIER)
+		if p.HasError() {
+			// Recognition error - abort rule
+			goto errorExit
+		}
 	}
 
+errorExit:
+	if p.HasError() {
+		v := p.GetError()
+		localctx.SetException(v)
+		p.GetErrorHandler().ReportError(p, v)
+		p.GetErrorHandler().Recover(p, v)
+		p.SetError(nil)
+	}
+	p.ExitRule()
 	return localctx
+	goto errorExit // Trick to prevent compiler error if the label is not used
 }
 
 // IResourcetypeContext is an interface to support dynamic dispatch.
@@ -2134,20 +2214,28 @@ type IResourcetypeContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// Getter signatures
+	STRING() antlr.TerminalNode
+
 	// IsResourcetypeContext differentiates from other interfaces.
 	IsResourcetypeContext()
 }
 
 type ResourcetypeContext struct {
-	*antlr.BaseParserRuleContext
+	antlr.BaseParserRuleContext
 	parser antlr.Parser
 }
 
 func NewEmptyResourcetypeContext() *ResourcetypeContext {
 	var p = new(ResourcetypeContext)
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
 	p.RuleIndex = TerraformParserRULE_resourcetype
 	return p
+}
+
+func InitEmptyResourcetypeContext(p *ResourcetypeContext) {
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = TerraformParserRULE_resourcetype
 }
 
 func (*ResourcetypeContext) IsResourcetypeContext() {}
@@ -2155,7 +2243,7 @@ func (*ResourcetypeContext) IsResourcetypeContext() {}
 func NewResourcetypeContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *ResourcetypeContext {
 	var p = new(ResourcetypeContext)
 
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
 
 	p.parser = parser
 	p.RuleIndex = TerraformParserRULE_resourcetype
@@ -2190,35 +2278,29 @@ func (s *ResourcetypeContext) ExitRule(listener antlr.ParseTreeListener) {
 }
 
 func (p *TerraformParser) Resourcetype() (localctx IResourcetypeContext) {
-	this := p
-	_ = this
-
 	localctx = NewResourcetypeContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 22, TerraformParserRULE_resourcetype)
-
-	defer func() {
-		p.ExitRule()
-	}()
-
-	defer func() {
-		if err := recover(); err != nil {
-			if v, ok := err.(antlr.RecognitionException); ok {
-				localctx.SetException(v)
-				p.GetErrorHandler().ReportError(p, v)
-				p.GetErrorHandler().Recover(p, v)
-			} else {
-				panic(err)
-			}
-		}
-	}()
-
 	p.EnterOuterAlt(localctx, 1)
 	{
 		p.SetState(125)
 		p.Match(TerraformParserSTRING)
+		if p.HasError() {
+			// Recognition error - abort rule
+			goto errorExit
+		}
 	}
 
+errorExit:
+	if p.HasError() {
+		v := p.GetError()
+		localctx.SetException(v)
+		p.GetErrorHandler().ReportError(p, v)
+		p.GetErrorHandler().Recover(p, v)
+		p.SetError(nil)
+	}
+	p.ExitRule()
 	return localctx
+	goto errorExit // Trick to prevent compiler error if the label is not used
 }
 
 // INameContext is an interface to support dynamic dispatch.
@@ -2228,20 +2310,28 @@ type INameContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// Getter signatures
+	STRING() antlr.TerminalNode
+
 	// IsNameContext differentiates from other interfaces.
 	IsNameContext()
 }
 
 type NameContext struct {
-	*antlr.BaseParserRuleContext
+	antlr.BaseParserRuleContext
 	parser antlr.Parser
 }
 
 func NewEmptyNameContext() *NameContext {
 	var p = new(NameContext)
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
 	p.RuleIndex = TerraformParserRULE_name
 	return p
+}
+
+func InitEmptyNameContext(p *NameContext) {
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = TerraformParserRULE_name
 }
 
 func (*NameContext) IsNameContext() {}
@@ -2249,7 +2339,7 @@ func (*NameContext) IsNameContext() {}
 func NewNameContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *NameContext {
 	var p = new(NameContext)
 
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
 
 	p.parser = parser
 	p.RuleIndex = TerraformParserRULE_name
@@ -2284,35 +2374,29 @@ func (s *NameContext) ExitRule(listener antlr.ParseTreeListener) {
 }
 
 func (p *TerraformParser) Name() (localctx INameContext) {
-	this := p
-	_ = this
-
 	localctx = NewNameContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 24, TerraformParserRULE_name)
-
-	defer func() {
-		p.ExitRule()
-	}()
-
-	defer func() {
-		if err := recover(); err != nil {
-			if v, ok := err.(antlr.RecognitionException); ok {
-				localctx.SetException(v)
-				p.GetErrorHandler().ReportError(p, v)
-				p.GetErrorHandler().Recover(p, v)
-			} else {
-				panic(err)
-			}
-		}
-	}()
-
 	p.EnterOuterAlt(localctx, 1)
 	{
 		p.SetState(127)
 		p.Match(TerraformParserSTRING)
+		if p.HasError() {
+			// Recognition error - abort rule
+			goto errorExit
+		}
 	}
 
+errorExit:
+	if p.HasError() {
+		v := p.GetError()
+		localctx.SetException(v)
+		p.GetErrorHandler().ReportError(p, v)
+		p.GetErrorHandler().Recover(p, v)
+		p.SetError(nil)
+	}
+	p.ExitRule()
 	return localctx
+	goto errorExit // Trick to prevent compiler error if the label is not used
 }
 
 // ILabelContext is an interface to support dynamic dispatch.
@@ -2322,20 +2406,28 @@ type ILabelContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// Getter signatures
+	STRING() antlr.TerminalNode
+
 	// IsLabelContext differentiates from other interfaces.
 	IsLabelContext()
 }
 
 type LabelContext struct {
-	*antlr.BaseParserRuleContext
+	antlr.BaseParserRuleContext
 	parser antlr.Parser
 }
 
 func NewEmptyLabelContext() *LabelContext {
 	var p = new(LabelContext)
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
 	p.RuleIndex = TerraformParserRULE_label
 	return p
+}
+
+func InitEmptyLabelContext(p *LabelContext) {
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = TerraformParserRULE_label
 }
 
 func (*LabelContext) IsLabelContext() {}
@@ -2343,7 +2435,7 @@ func (*LabelContext) IsLabelContext() {}
 func NewLabelContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *LabelContext {
 	var p = new(LabelContext)
 
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
 
 	p.parser = parser
 	p.RuleIndex = TerraformParserRULE_label
@@ -2378,35 +2470,29 @@ func (s *LabelContext) ExitRule(listener antlr.ParseTreeListener) {
 }
 
 func (p *TerraformParser) Label() (localctx ILabelContext) {
-	this := p
-	_ = this
-
 	localctx = NewLabelContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 26, TerraformParserRULE_label)
-
-	defer func() {
-		p.ExitRule()
-	}()
-
-	defer func() {
-		if err := recover(); err != nil {
-			if v, ok := err.(antlr.RecognitionException); ok {
-				localctx.SetException(v)
-				p.GetErrorHandler().ReportError(p, v)
-				p.GetErrorHandler().Recover(p, v)
-			} else {
-				panic(err)
-			}
-		}
-	}()
-
 	p.EnterOuterAlt(localctx, 1)
 	{
 		p.SetState(129)
 		p.Match(TerraformParserSTRING)
+		if p.HasError() {
+			// Recognition error - abort rule
+			goto errorExit
+		}
 	}
 
+errorExit:
+	if p.HasError() {
+		v := p.GetError()
+		localctx.SetException(v)
+		p.GetErrorHandler().ReportError(p, v)
+		p.GetErrorHandler().Recover(p, v)
+		p.SetError(nil)
+	}
+	p.ExitRule()
 	return localctx
+	goto errorExit // Trick to prevent compiler error if the label is not used
 }
 
 // IBlockbodyContext is an interface to support dynamic dispatch.
@@ -2416,20 +2502,33 @@ type IBlockbodyContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// Getter signatures
+	LCURL() antlr.TerminalNode
+	RCURL() antlr.TerminalNode
+	AllArgument() []IArgumentContext
+	Argument(i int) IArgumentContext
+	AllBlock() []IBlockContext
+	Block(i int) IBlockContext
+
 	// IsBlockbodyContext differentiates from other interfaces.
 	IsBlockbodyContext()
 }
 
 type BlockbodyContext struct {
-	*antlr.BaseParserRuleContext
+	antlr.BaseParserRuleContext
 	parser antlr.Parser
 }
 
 func NewEmptyBlockbodyContext() *BlockbodyContext {
 	var p = new(BlockbodyContext)
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
 	p.RuleIndex = TerraformParserRULE_blockbody
 	return p
+}
+
+func InitEmptyBlockbodyContext(p *BlockbodyContext) {
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = TerraformParserRULE_blockbody
 }
 
 func (*BlockbodyContext) IsBlockbodyContext() {}
@@ -2437,7 +2536,7 @@ func (*BlockbodyContext) IsBlockbodyContext() {}
 func NewBlockbodyContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *BlockbodyContext {
 	var p = new(BlockbodyContext)
 
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
 
 	p.parser = parser
 	p.RuleIndex = TerraformParserRULE_blockbody
@@ -2558,42 +2657,34 @@ func (s *BlockbodyContext) ExitRule(listener antlr.ParseTreeListener) {
 }
 
 func (p *TerraformParser) Blockbody() (localctx IBlockbodyContext) {
-	this := p
-	_ = this
-
 	localctx = NewBlockbodyContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 28, TerraformParserRULE_blockbody)
 	var _la int
-
-	defer func() {
-		p.ExitRule()
-	}()
-
-	defer func() {
-		if err := recover(); err != nil {
-			if v, ok := err.(antlr.RecognitionException); ok {
-				localctx.SetException(v)
-				p.GetErrorHandler().ReportError(p, v)
-				p.GetErrorHandler().Recover(p, v)
-			} else {
-				panic(err)
-			}
-		}
-	}()
 
 	p.EnterOuterAlt(localctx, 1)
 	{
 		p.SetState(131)
 		p.Match(TerraformParserLCURL)
+		if p.HasError() {
+			// Recognition error - abort rule
+			goto errorExit
+		}
 	}
 	p.SetState(136)
 	p.GetErrorHandler().Sync(p)
+	if p.HasError() {
+		goto errorExit
+	}
 	_la = p.GetTokenStream().LA(1)
 
-	for (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&72583873561416) != 0 {
+	for (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&290335494243144) != 0 {
 		p.SetState(134)
 		p.GetErrorHandler().Sync(p)
-		switch p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 3, p.GetParserRuleContext()) {
+		if p.HasError() {
+			goto errorExit
+		}
+
+		switch p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 3, p.GetParserRuleContext()) {
 		case 1:
 			{
 				p.SetState(132)
@@ -2606,18 +2697,37 @@ func (p *TerraformParser) Blockbody() (localctx IBlockbodyContext) {
 				p.Block()
 			}
 
+		case antlr.ATNInvalidAltNumber:
+			goto errorExit
 		}
 
 		p.SetState(138)
 		p.GetErrorHandler().Sync(p)
+		if p.HasError() {
+			goto errorExit
+		}
 		_la = p.GetTokenStream().LA(1)
 	}
 	{
 		p.SetState(139)
 		p.Match(TerraformParserRCURL)
+		if p.HasError() {
+			// Recognition error - abort rule
+			goto errorExit
+		}
 	}
 
+errorExit:
+	if p.HasError() {
+		v := p.GetError()
+		localctx.SetException(v)
+		p.GetErrorHandler().ReportError(p, v)
+		p.GetErrorHandler().Recover(p, v)
+		p.SetError(nil)
+	}
+	p.ExitRule()
 	return localctx
+	goto errorExit // Trick to prevent compiler error if the label is not used
 }
 
 // IArgumentContext is an interface to support dynamic dispatch.
@@ -2627,20 +2737,29 @@ type IArgumentContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// Getter signatures
+	Identifier() IIdentifierContext
+	Expression() IExpressionContext
+
 	// IsArgumentContext differentiates from other interfaces.
 	IsArgumentContext()
 }
 
 type ArgumentContext struct {
-	*antlr.BaseParserRuleContext
+	antlr.BaseParserRuleContext
 	parser antlr.Parser
 }
 
 func NewEmptyArgumentContext() *ArgumentContext {
 	var p = new(ArgumentContext)
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
 	p.RuleIndex = TerraformParserRULE_argument
 	return p
+}
+
+func InitEmptyArgumentContext(p *ArgumentContext) {
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = TerraformParserRULE_argument
 }
 
 func (*ArgumentContext) IsArgumentContext() {}
@@ -2648,7 +2767,7 @@ func (*ArgumentContext) IsArgumentContext() {}
 func NewArgumentContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *ArgumentContext {
 	var p = new(ArgumentContext)
 
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
 
 	p.parser = parser
 	p.RuleIndex = TerraformParserRULE_argument
@@ -2711,28 +2830,8 @@ func (s *ArgumentContext) ExitRule(listener antlr.ParseTreeListener) {
 }
 
 func (p *TerraformParser) Argument() (localctx IArgumentContext) {
-	this := p
-	_ = this
-
 	localctx = NewArgumentContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 30, TerraformParserRULE_argument)
-
-	defer func() {
-		p.ExitRule()
-	}()
-
-	defer func() {
-		if err := recover(); err != nil {
-			if v, ok := err.(antlr.RecognitionException); ok {
-				localctx.SetException(v)
-				p.GetErrorHandler().ReportError(p, v)
-				p.GetErrorHandler().Recover(p, v)
-			} else {
-				panic(err)
-			}
-		}
-	}()
-
 	p.EnterOuterAlt(localctx, 1)
 	{
 		p.SetState(141)
@@ -2741,13 +2840,27 @@ func (p *TerraformParser) Argument() (localctx IArgumentContext) {
 	{
 		p.SetState(142)
 		p.Match(TerraformParserT__6)
+		if p.HasError() {
+			// Recognition error - abort rule
+			goto errorExit
+		}
 	}
 	{
 		p.SetState(143)
 		p.expression(0)
 	}
 
+errorExit:
+	if p.HasError() {
+		v := p.GetError()
+		localctx.SetException(v)
+		p.GetErrorHandler().ReportError(p, v)
+		p.GetErrorHandler().Recover(p, v)
+		p.SetError(nil)
+	}
+	p.ExitRule()
 	return localctx
+	goto errorExit // Trick to prevent compiler error if the label is not used
 }
 
 // IIdentifierContext is an interface to support dynamic dispatch.
@@ -2757,20 +2870,29 @@ type IIdentifierContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// Getter signatures
+	Identifierchain() IIdentifierchainContext
+	DOT() antlr.TerminalNode
+
 	// IsIdentifierContext differentiates from other interfaces.
 	IsIdentifierContext()
 }
 
 type IdentifierContext struct {
-	*antlr.BaseParserRuleContext
+	antlr.BaseParserRuleContext
 	parser antlr.Parser
 }
 
 func NewEmptyIdentifierContext() *IdentifierContext {
 	var p = new(IdentifierContext)
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
 	p.RuleIndex = TerraformParserRULE_identifier
 	return p
+}
+
+func InitEmptyIdentifierContext(p *IdentifierContext) {
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = TerraformParserRULE_identifier
 }
 
 func (*IdentifierContext) IsIdentifierContext() {}
@@ -2778,7 +2900,7 @@ func (*IdentifierContext) IsIdentifierContext() {}
 func NewIdentifierContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *IdentifierContext {
 	var p = new(IdentifierContext)
 
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
 
 	p.parser = parser
 	p.RuleIndex = TerraformParserRULE_identifier
@@ -2829,32 +2951,16 @@ func (s *IdentifierContext) ExitRule(listener antlr.ParseTreeListener) {
 }
 
 func (p *TerraformParser) Identifier() (localctx IIdentifierContext) {
-	this := p
-	_ = this
-
 	localctx = NewIdentifierContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 32, TerraformParserRULE_identifier)
 	var _la int
 
-	defer func() {
-		p.ExitRule()
-	}()
-
-	defer func() {
-		if err := recover(); err != nil {
-			if v, ok := err.(antlr.RecognitionException); ok {
-				localctx.SetException(v)
-				p.GetErrorHandler().ReportError(p, v)
-				p.GetErrorHandler().Recover(p, v)
-			} else {
-				panic(err)
-			}
-		}
-	}()
-
 	p.EnterOuterAlt(localctx, 1)
 	p.SetState(147)
 	p.GetErrorHandler().Sync(p)
+	if p.HasError() {
+		goto errorExit
+	}
 	_la = p.GetTokenStream().LA(1)
 
 	if (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&840) != 0 {
@@ -2872,6 +2978,10 @@ func (p *TerraformParser) Identifier() (localctx IIdentifierContext) {
 		{
 			p.SetState(146)
 			p.Match(TerraformParserDOT)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
 		}
 
 	}
@@ -2880,7 +2990,17 @@ func (p *TerraformParser) Identifier() (localctx IIdentifierContext) {
 		p.Identifierchain()
 	}
 
+errorExit:
+	if p.HasError() {
+		v := p.GetError()
+		localctx.SetException(v)
+		p.GetErrorHandler().ReportError(p, v)
+		p.GetErrorHandler().Recover(p, v)
+		p.SetError(nil)
+	}
+	p.ExitRule()
 	return localctx
+	goto errorExit // Trick to prevent compiler error if the label is not used
 }
 
 // IIdentifierchainContext is an interface to support dynamic dispatch.
@@ -2890,20 +3010,38 @@ type IIdentifierchainContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// Getter signatures
+	IDENTIFIER() antlr.TerminalNode
+	IN() antlr.TerminalNode
+	VARIABLE() antlr.TerminalNode
+	PROVIDER() antlr.TerminalNode
+	Index() IIndexContext
+	AllDOT() []antlr.TerminalNode
+	DOT(i int) antlr.TerminalNode
+	AllIdentifierchain() []IIdentifierchainContext
+	Identifierchain(i int) IIdentifierchainContext
+	STAR() antlr.TerminalNode
+	Inline_index() IInline_indexContext
+
 	// IsIdentifierchainContext differentiates from other interfaces.
 	IsIdentifierchainContext()
 }
 
 type IdentifierchainContext struct {
-	*antlr.BaseParserRuleContext
+	antlr.BaseParserRuleContext
 	parser antlr.Parser
 }
 
 func NewEmptyIdentifierchainContext() *IdentifierchainContext {
 	var p = new(IdentifierchainContext)
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
 	p.RuleIndex = TerraformParserRULE_identifierchain
 	return p
+}
+
+func InitEmptyIdentifierchainContext(p *IdentifierchainContext) {
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = TerraformParserRULE_identifierchain
 }
 
 func (*IdentifierchainContext) IsIdentifierchainContext() {}
@@ -2911,7 +3049,7 @@ func (*IdentifierchainContext) IsIdentifierchainContext() {}
 func NewIdentifierchainContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *IdentifierchainContext {
 	var p = new(IdentifierchainContext)
 
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
 
 	p.parser = parser
 	p.RuleIndex = TerraformParserRULE_identifierchain
@@ -3043,33 +3181,17 @@ func (s *IdentifierchainContext) ExitRule(listener antlr.ParseTreeListener) {
 }
 
 func (p *TerraformParser) Identifierchain() (localctx IIdentifierchainContext) {
-	this := p
-	_ = this
-
 	localctx = NewIdentifierchainContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 34, TerraformParserRULE_identifierchain)
 	var _la int
-
-	defer func() {
-		p.ExitRule()
-	}()
-
-	defer func() {
-		if err := recover(); err != nil {
-			if v, ok := err.(antlr.RecognitionException); ok {
-				localctx.SetException(v)
-				p.GetErrorHandler().ReportError(p, v)
-				p.GetErrorHandler().Recover(p, v)
-			} else {
-				panic(err)
-			}
-		}
-	}()
 
 	var _alt int
 
 	p.SetState(178)
 	p.GetErrorHandler().Sync(p)
+	if p.HasError() {
+		goto errorExit
+	}
 
 	switch p.GetTokenStream().LA(1) {
 	case TerraformParserVARIABLE, TerraformParserPROVIDER, TerraformParserIN, TerraformParserIDENTIFIER:
@@ -3078,7 +3200,7 @@ func (p *TerraformParser) Identifierchain() (localctx IIdentifierchainContext) {
 			p.SetState(151)
 			_la = p.GetTokenStream().LA(1)
 
-			if !((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&70376260370432) != 0) {
+			if !((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&281505041481728) != 0) {
 				p.GetErrorHandler().RecoverInline(p)
 			} else {
 				p.GetErrorHandler().ReportMatch(p)
@@ -3088,22 +3210,33 @@ func (p *TerraformParser) Identifierchain() (localctx IIdentifierchainContext) {
 		p.SetState(153)
 		p.GetErrorHandler().Sync(p)
 
-		if p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 6, p.GetParserRuleContext()) == 1 {
+		if p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 6, p.GetParserRuleContext()) == 1 {
 			{
 				p.SetState(152)
 				p.Index()
 			}
 
+		} else if p.HasError() { // JIM
+			goto errorExit
 		}
 		p.SetState(159)
 		p.GetErrorHandler().Sync(p)
-		_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 7, p.GetParserRuleContext())
-
+		if p.HasError() {
+			goto errorExit
+		}
+		_alt = p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 7, p.GetParserRuleContext())
+		if p.HasError() {
+			goto errorExit
+		}
 		for _alt != 2 && _alt != antlr.ATNInvalidAltNumber {
 			if _alt == 1 {
 				{
 					p.SetState(155)
 					p.Match(TerraformParserDOT)
+					if p.HasError() {
+						// Recognition error - abort rule
+						goto errorExit
+					}
 				}
 				{
 					p.SetState(156)
@@ -3113,7 +3246,13 @@ func (p *TerraformParser) Identifierchain() (localctx IIdentifierchainContext) {
 			}
 			p.SetState(161)
 			p.GetErrorHandler().Sync(p)
-			_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 7, p.GetParserRuleContext())
+			if p.HasError() {
+				goto errorExit
+			}
+			_alt = p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 7, p.GetParserRuleContext())
+			if p.HasError() {
+				goto errorExit
+			}
 		}
 
 	case TerraformParserSTAR:
@@ -3121,16 +3260,29 @@ func (p *TerraformParser) Identifierchain() (localctx IIdentifierchainContext) {
 		{
 			p.SetState(162)
 			p.Match(TerraformParserSTAR)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
 		}
 		p.SetState(167)
 		p.GetErrorHandler().Sync(p)
-		_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 8, p.GetParserRuleContext())
-
+		if p.HasError() {
+			goto errorExit
+		}
+		_alt = p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 8, p.GetParserRuleContext())
+		if p.HasError() {
+			goto errorExit
+		}
 		for _alt != 2 && _alt != antlr.ATNInvalidAltNumber {
 			if _alt == 1 {
 				{
 					p.SetState(163)
 					p.Match(TerraformParserDOT)
+					if p.HasError() {
+						// Recognition error - abort rule
+						goto errorExit
+					}
 				}
 				{
 					p.SetState(164)
@@ -3140,7 +3292,13 @@ func (p *TerraformParser) Identifierchain() (localctx IIdentifierchainContext) {
 			}
 			p.SetState(169)
 			p.GetErrorHandler().Sync(p)
-			_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 8, p.GetParserRuleContext())
+			if p.HasError() {
+				goto errorExit
+			}
+			_alt = p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 8, p.GetParserRuleContext())
+			if p.HasError() {
+				goto errorExit
+			}
 		}
 
 	case TerraformParserNATURAL_NUMBER:
@@ -3151,13 +3309,22 @@ func (p *TerraformParser) Identifierchain() (localctx IIdentifierchainContext) {
 		}
 		p.SetState(175)
 		p.GetErrorHandler().Sync(p)
-		_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 9, p.GetParserRuleContext())
-
+		if p.HasError() {
+			goto errorExit
+		}
+		_alt = p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 9, p.GetParserRuleContext())
+		if p.HasError() {
+			goto errorExit
+		}
 		for _alt != 2 && _alt != antlr.ATNInvalidAltNumber {
 			if _alt == 1 {
 				{
 					p.SetState(171)
 					p.Match(TerraformParserDOT)
+					if p.HasError() {
+						// Recognition error - abort rule
+						goto errorExit
+					}
 				}
 				{
 					p.SetState(172)
@@ -3167,14 +3334,31 @@ func (p *TerraformParser) Identifierchain() (localctx IIdentifierchainContext) {
 			}
 			p.SetState(177)
 			p.GetErrorHandler().Sync(p)
-			_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 9, p.GetParserRuleContext())
+			if p.HasError() {
+				goto errorExit
+			}
+			_alt = p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 9, p.GetParserRuleContext())
+			if p.HasError() {
+				goto errorExit
+			}
 		}
 
 	default:
-		panic(antlr.NewNoViableAltException(p, nil, nil, nil, nil, nil))
+		p.SetError(antlr.NewNoViableAltException(p, nil, nil, nil, nil, nil))
+		goto errorExit
 	}
 
+errorExit:
+	if p.HasError() {
+		v := p.GetError()
+		localctx.SetException(v)
+		p.GetErrorHandler().ReportError(p, v)
+		p.GetErrorHandler().Recover(p, v)
+		p.SetError(nil)
+	}
+	p.ExitRule()
 	return localctx
+	goto errorExit // Trick to prevent compiler error if the label is not used
 }
 
 // IInline_indexContext is an interface to support dynamic dispatch.
@@ -3184,20 +3368,28 @@ type IInline_indexContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// Getter signatures
+	NATURAL_NUMBER() antlr.TerminalNode
+
 	// IsInline_indexContext differentiates from other interfaces.
 	IsInline_indexContext()
 }
 
 type Inline_indexContext struct {
-	*antlr.BaseParserRuleContext
+	antlr.BaseParserRuleContext
 	parser antlr.Parser
 }
 
 func NewEmptyInline_indexContext() *Inline_indexContext {
 	var p = new(Inline_indexContext)
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
 	p.RuleIndex = TerraformParserRULE_inline_index
 	return p
+}
+
+func InitEmptyInline_indexContext(p *Inline_indexContext) {
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = TerraformParserRULE_inline_index
 }
 
 func (*Inline_indexContext) IsInline_indexContext() {}
@@ -3205,7 +3397,7 @@ func (*Inline_indexContext) IsInline_indexContext() {}
 func NewInline_indexContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *Inline_indexContext {
 	var p = new(Inline_indexContext)
 
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
 
 	p.parser = parser
 	p.RuleIndex = TerraformParserRULE_inline_index
@@ -3240,35 +3432,29 @@ func (s *Inline_indexContext) ExitRule(listener antlr.ParseTreeListener) {
 }
 
 func (p *TerraformParser) Inline_index() (localctx IInline_indexContext) {
-	this := p
-	_ = this
-
 	localctx = NewInline_indexContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 36, TerraformParserRULE_inline_index)
-
-	defer func() {
-		p.ExitRule()
-	}()
-
-	defer func() {
-		if err := recover(); err != nil {
-			if v, ok := err.(antlr.RecognitionException); ok {
-				localctx.SetException(v)
-				p.GetErrorHandler().ReportError(p, v)
-				p.GetErrorHandler().Recover(p, v)
-			} else {
-				panic(err)
-			}
-		}
-	}()
-
 	p.EnterOuterAlt(localctx, 1)
 	{
 		p.SetState(180)
 		p.Match(TerraformParserNATURAL_NUMBER)
+		if p.HasError() {
+			// Recognition error - abort rule
+			goto errorExit
+		}
 	}
 
+errorExit:
+	if p.HasError() {
+		v := p.GetError()
+		localctx.SetException(v)
+		p.GetErrorHandler().ReportError(p, v)
+		p.GetErrorHandler().Recover(p, v)
+		p.SetError(nil)
+	}
+	p.ExitRule()
 	return localctx
+	goto errorExit // Trick to prevent compiler error if the label is not used
 }
 
 // IExpressionContext is an interface to support dynamic dispatch.
@@ -3278,20 +3464,34 @@ type IExpressionContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// Getter signatures
+	Section() ISectionContext
+	LPAREN() antlr.TerminalNode
+	AllExpression() []IExpressionContext
+	Expression(i int) IExpressionContext
+	RPAREN() antlr.TerminalNode
+	Forloop() IForloopContext
+	Operator_() IOperator_Context
+
 	// IsExpressionContext differentiates from other interfaces.
 	IsExpressionContext()
 }
 
 type ExpressionContext struct {
-	*antlr.BaseParserRuleContext
+	antlr.BaseParserRuleContext
 	parser antlr.Parser
 }
 
 func NewEmptyExpressionContext() *ExpressionContext {
 	var p = new(ExpressionContext)
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
 	p.RuleIndex = TerraformParserRULE_expression
 	return p
+}
+
+func InitEmptyExpressionContext(p *ExpressionContext) {
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = TerraformParserRULE_expression
 }
 
 func (*ExpressionContext) IsExpressionContext() {}
@@ -3299,7 +3499,7 @@ func (*ExpressionContext) IsExpressionContext() {}
 func NewExpressionContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *ExpressionContext {
 	var p = new(ExpressionContext)
 
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
 
 	p.parser = parser
 	p.RuleIndex = TerraformParserRULE_expression
@@ -3431,50 +3631,38 @@ func (p *TerraformParser) Expression() (localctx IExpressionContext) {
 }
 
 func (p *TerraformParser) expression(_p int) (localctx IExpressionContext) {
-	this := p
-	_ = this
-
 	var _parentctx antlr.ParserRuleContext = p.GetParserRuleContext()
+
 	_parentState := p.GetState()
 	localctx = NewExpressionContext(p, p.GetParserRuleContext(), _parentState)
 	var _prevctx IExpressionContext = localctx
 	var _ antlr.ParserRuleContext = _prevctx // TODO: To prevent unused variable warning.
 	_startState := 38
 	p.EnterRecursionRule(localctx, 38, TerraformParserRULE_expression, _p)
-
-	defer func() {
-		p.UnrollRecursionContexts(_parentctx)
-	}()
-
-	defer func() {
-		if err := recover(); err != nil {
-			if v, ok := err.(antlr.RecognitionException); ok {
-				localctx.SetException(v)
-				p.GetErrorHandler().ReportError(p, v)
-				p.GetErrorHandler().Recover(p, v)
-			} else {
-				panic(err)
-			}
-		}
-	}()
-
 	var _alt int
 
 	p.EnterOuterAlt(localctx, 1)
-	p.SetState(189)
+	p.SetState(193)
 	p.GetErrorHandler().Sync(p)
+	if p.HasError() {
+		goto errorExit
+	}
 
-	switch p.GetTokenStream().LA(1) {
-	case TerraformParserT__2, TerraformParserT__5, TerraformParserT__7, TerraformParserT__8, TerraformParserT__12, TerraformParserT__14, TerraformParserT__16, TerraformParserT__17, TerraformParserT__18, TerraformParserVARIABLE, TerraformParserPROVIDER, TerraformParserIN, TerraformParserSTAR, TerraformParserLCURL, TerraformParserEOF_, TerraformParserNULL_, TerraformParserNATURAL_NUMBER, TerraformParserBOOL, TerraformParserDESCRIPTION, TerraformParserMULTILINESTRING, TerraformParserSTRING, TerraformParserIDENTIFIER:
+	switch p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 11, p.GetParserRuleContext()) {
+	case 1:
 		{
 			p.SetState(183)
 			p.Section()
 		}
 
-	case TerraformParserLPAREN:
+	case 2:
 		{
 			p.SetState(184)
 			p.Match(TerraformParserLPAREN)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
 		}
 		{
 			p.SetState(185)
@@ -3483,81 +3671,181 @@ func (p *TerraformParser) expression(_p int) (localctx IExpressionContext) {
 		{
 			p.SetState(186)
 			p.Match(TerraformParserRPAREN)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
 		}
 
-	case TerraformParserT__11:
+	case 3:
 		{
 			p.SetState(188)
 			p.Forloop()
 		}
 
-	default:
-		panic(antlr.NewNoViableAltException(p, nil, nil, nil, nil, nil))
+	case 4:
+		{
+			p.SetState(189)
+			p.Match(TerraformParserT__11)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		{
+			p.SetState(190)
+			p.expression(3)
+		}
+
+	case 5:
+		{
+			p.SetState(191)
+			p.Match(TerraformParserT__12)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		{
+			p.SetState(192)
+			p.expression(2)
+		}
+
+	case antlr.ATNInvalidAltNumber:
+		goto errorExit
 	}
 	p.GetParserRuleContext().SetStop(p.GetTokenStream().LT(-1))
-	p.SetState(203)
+	p.SetState(212)
 	p.GetErrorHandler().Sync(p)
-	_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 13, p.GetParserRuleContext())
-
+	if p.HasError() {
+		goto errorExit
+	}
+	_alt = p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 13, p.GetParserRuleContext())
+	if p.HasError() {
+		goto errorExit
+	}
 	for _alt != 2 && _alt != antlr.ATNInvalidAltNumber {
 		if _alt == 1 {
 			if p.GetParseListeners() != nil {
 				p.TriggerExitRuleEvent()
 			}
-			p.SetState(201)
+			_prevctx = localctx
+			p.SetState(210)
 			p.GetErrorHandler().Sync(p)
-			switch p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 12, p.GetParserRuleContext()) {
+			if p.HasError() {
+				goto errorExit
+			}
+
+			switch p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 12, p.GetParserRuleContext()) {
 			case 1:
 				localctx = NewExpressionContext(p, _parentctx, _parentState)
 				p.PushNewRecursionContext(localctx, _startState, TerraformParserRULE_expression)
-				p.SetState(191)
+				p.SetState(195)
 
-				if !(p.Precpred(p.GetParserRuleContext(), 4)) {
-					panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 4)", ""))
+				if !(p.Precpred(p.GetParserRuleContext(), 7)) {
+					p.SetError(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 7)", ""))
+					goto errorExit
 				}
 				{
-					p.SetState(192)
+					p.SetState(196)
 					p.Operator_()
 				}
 				{
-					p.SetState(193)
-					p.expression(5)
+					p.SetState(197)
+					p.expression(8)
 				}
 
 			case 2:
 				localctx = NewExpressionContext(p, _parentctx, _parentState)
 				p.PushNewRecursionContext(localctx, _startState, TerraformParserRULE_expression)
-				p.SetState(195)
+				p.SetState(199)
 
-				if !(p.Precpred(p.GetParserRuleContext(), 2)) {
-					panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 2)", ""))
+				if !(p.Precpred(p.GetParserRuleContext(), 5)) {
+					p.SetError(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 5)", ""))
+					goto errorExit
 				}
 				{
-					p.SetState(196)
+					p.SetState(200)
 					p.Match(TerraformParserT__9)
+					if p.HasError() {
+						// Recognition error - abort rule
+						goto errorExit
+					}
 				}
 				{
-					p.SetState(197)
+					p.SetState(201)
 					p.expression(0)
 				}
 				{
-					p.SetState(198)
+					p.SetState(202)
 					p.Match(TerraformParserT__10)
+					if p.HasError() {
+						// Recognition error - abort rule
+						goto errorExit
+					}
 				}
 				{
-					p.SetState(199)
-					p.expression(3)
+					p.SetState(203)
+					p.expression(6)
 				}
 
+			case 3:
+				localctx = NewExpressionContext(p, _parentctx, _parentState)
+				p.PushNewRecursionContext(localctx, _startState, TerraformParserRULE_expression)
+				p.SetState(205)
+
+				if !(p.Precpred(p.GetParserRuleContext(), 1)) {
+					p.SetError(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 1)", ""))
+					goto errorExit
+				}
+				{
+					p.SetState(206)
+					p.Match(TerraformParserT__13)
+					if p.HasError() {
+						// Recognition error - abort rule
+						goto errorExit
+					}
+				}
+				{
+					p.SetState(207)
+					p.expression(0)
+				}
+				{
+					p.SetState(208)
+					p.Match(TerraformParserT__14)
+					if p.HasError() {
+						// Recognition error - abort rule
+						goto errorExit
+					}
+				}
+
+			case antlr.ATNInvalidAltNumber:
+				goto errorExit
 			}
 
 		}
-		p.SetState(205)
+		p.SetState(214)
 		p.GetErrorHandler().Sync(p)
-		_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 13, p.GetParserRuleContext())
+		if p.HasError() {
+			goto errorExit
+		}
+		_alt = p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 13, p.GetParserRuleContext())
+		if p.HasError() {
+			goto errorExit
+		}
 	}
 
+errorExit:
+	if p.HasError() {
+		v := p.GetError()
+		localctx.SetException(v)
+		p.GetErrorHandler().ReportError(p, v)
+		p.GetErrorHandler().Recover(p, v)
+		p.SetError(nil)
+	}
+	p.UnrollRecursionContexts(_parentctx)
 	return localctx
+	goto errorExit // Trick to prevent compiler error if the label is not used
 }
 
 // IForloopContext is an interface to support dynamic dispatch.
@@ -3567,20 +3855,32 @@ type IForloopContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// Getter signatures
+	AllIdentifier() []IIdentifierContext
+	Identifier(i int) IIdentifierContext
+	IN() antlr.TerminalNode
+	AllExpression() []IExpressionContext
+	Expression(i int) IExpressionContext
+
 	// IsForloopContext differentiates from other interfaces.
 	IsForloopContext()
 }
 
 type ForloopContext struct {
-	*antlr.BaseParserRuleContext
+	antlr.BaseParserRuleContext
 	parser antlr.Parser
 }
 
 func NewEmptyForloopContext() *ForloopContext {
 	var p = new(ForloopContext)
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
 	p.RuleIndex = TerraformParserRULE_forloop
 	return p
+}
+
+func InitEmptyForloopContext(p *ForloopContext) {
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = TerraformParserRULE_forloop
 }
 
 func (*ForloopContext) IsForloopContext() {}
@@ -3588,7 +3888,7 @@ func (*ForloopContext) IsForloopContext() {}
 func NewForloopContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *ForloopContext {
 	var p = new(ForloopContext)
 
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
 
 	p.parser = parser
 	p.RuleIndex = TerraformParserRULE_forloop
@@ -3598,12 +3898,37 @@ func NewForloopContext(parser antlr.Parser, parent antlr.ParserRuleContext, invo
 
 func (s *ForloopContext) GetParser() antlr.Parser { return s.parser }
 
-func (s *ForloopContext) Identifier() IIdentifierContext {
+func (s *ForloopContext) AllIdentifier() []IIdentifierContext {
+	children := s.GetChildren()
+	len := 0
+	for _, ctx := range children {
+		if _, ok := ctx.(IIdentifierContext); ok {
+			len++
+		}
+	}
+
+	tst := make([]IIdentifierContext, len)
+	i := 0
+	for _, ctx := range children {
+		if t, ok := ctx.(IIdentifierContext); ok {
+			tst[i] = t.(IIdentifierContext)
+			i++
+		}
+	}
+
+	return tst
+}
+
+func (s *ForloopContext) Identifier(i int) IIdentifierContext {
 	var t antlr.RuleContext
+	j := 0
 	for _, ctx := range s.GetChildren() {
 		if _, ok := ctx.(IIdentifierContext); ok {
-			t = ctx.(antlr.RuleContext)
-			break
+			if j == i {
+				t = ctx.(antlr.RuleContext)
+				break
+			}
+			j++
 		}
 	}
 
@@ -3680,55 +4005,81 @@ func (s *ForloopContext) ExitRule(listener antlr.ParseTreeListener) {
 }
 
 func (p *TerraformParser) Forloop() (localctx IForloopContext) {
-	this := p
-	_ = this
-
 	localctx = NewForloopContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 40, TerraformParserRULE_forloop)
-
-	defer func() {
-		p.ExitRule()
-	}()
-
-	defer func() {
-		if err := recover(); err != nil {
-			if v, ok := err.(antlr.RecognitionException); ok {
-				localctx.SetException(v)
-				p.GetErrorHandler().ReportError(p, v)
-				p.GetErrorHandler().Recover(p, v)
-			} else {
-				panic(err)
-			}
-		}
-	}()
+	var _la int
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(206)
-		p.Match(TerraformParserT__11)
+		p.SetState(215)
+		p.Match(TerraformParserT__15)
+		if p.HasError() {
+			// Recognition error - abort rule
+			goto errorExit
+		}
 	}
 	{
-		p.SetState(207)
+		p.SetState(216)
 		p.Identifier()
 	}
-	{
-		p.SetState(208)
-		p.Match(TerraformParserIN)
+	p.SetState(219)
+	p.GetErrorHandler().Sync(p)
+	if p.HasError() {
+		goto errorExit
+	}
+	_la = p.GetTokenStream().LA(1)
+
+	if _la == TerraformParserT__16 {
+		{
+			p.SetState(217)
+			p.Match(TerraformParserT__16)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		{
+			p.SetState(218)
+			p.Identifier()
+		}
+
 	}
 	{
-		p.SetState(209)
+		p.SetState(221)
+		p.Match(TerraformParserIN)
+		if p.HasError() {
+			// Recognition error - abort rule
+			goto errorExit
+		}
+	}
+	{
+		p.SetState(222)
 		p.expression(0)
 	}
 	{
-		p.SetState(210)
+		p.SetState(223)
 		p.Match(TerraformParserT__10)
+		if p.HasError() {
+			// Recognition error - abort rule
+			goto errorExit
+		}
 	}
 	{
-		p.SetState(211)
+		p.SetState(224)
 		p.expression(0)
 	}
 
+errorExit:
+	if p.HasError() {
+		v := p.GetError()
+		localctx.SetException(v)
+		p.GetErrorHandler().ReportError(p, v)
+		p.GetErrorHandler().Recover(p, v)
+		p.SetError(nil)
+	}
+	p.ExitRule()
 	return localctx
+	goto errorExit // Trick to prevent compiler error if the label is not used
 }
 
 // ISectionContext is an interface to support dynamic dispatch.
@@ -3738,20 +4089,30 @@ type ISectionContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// Getter signatures
+	List_() IList_Context
+	Map_() IMap_Context
+	Val() IValContext
+
 	// IsSectionContext differentiates from other interfaces.
 	IsSectionContext()
 }
 
 type SectionContext struct {
-	*antlr.BaseParserRuleContext
+	antlr.BaseParserRuleContext
 	parser antlr.Parser
 }
 
 func NewEmptySectionContext() *SectionContext {
 	var p = new(SectionContext)
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
 	p.RuleIndex = TerraformParserRULE_section
 	return p
+}
+
+func InitEmptySectionContext(p *SectionContext) {
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = TerraformParserRULE_section
 }
 
 func (*SectionContext) IsSectionContext() {}
@@ -3759,7 +4120,7 @@ func (*SectionContext) IsSectionContext() {}
 func NewSectionContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *SectionContext {
 	var p = new(SectionContext)
 
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
 
 	p.parser = parser
 	p.RuleIndex = TerraformParserRULE_section
@@ -3838,58 +4199,52 @@ func (s *SectionContext) ExitRule(listener antlr.ParseTreeListener) {
 }
 
 func (p *TerraformParser) Section() (localctx ISectionContext) {
-	this := p
-	_ = this
-
 	localctx = NewSectionContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 42, TerraformParserRULE_section)
-
-	defer func() {
-		p.ExitRule()
-	}()
-
-	defer func() {
-		if err := recover(); err != nil {
-			if v, ok := err.(antlr.RecognitionException); ok {
-				localctx.SetException(v)
-				p.GetErrorHandler().ReportError(p, v)
-				p.GetErrorHandler().Recover(p, v)
-			} else {
-				panic(err)
-			}
-		}
-	}()
-
-	p.SetState(216)
+	p.SetState(229)
 	p.GetErrorHandler().Sync(p)
+	if p.HasError() {
+		goto errorExit
+	}
 
 	switch p.GetTokenStream().LA(1) {
-	case TerraformParserT__14:
+	case TerraformParserT__13:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(213)
+			p.SetState(226)
 			p.List_()
 		}
 
 	case TerraformParserLCURL:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(214)
+			p.SetState(227)
 			p.Map_()
 		}
 
-	case TerraformParserT__2, TerraformParserT__5, TerraformParserT__7, TerraformParserT__8, TerraformParserT__12, TerraformParserT__16, TerraformParserT__17, TerraformParserT__18, TerraformParserVARIABLE, TerraformParserPROVIDER, TerraformParserIN, TerraformParserSTAR, TerraformParserEOF_, TerraformParserNULL_, TerraformParserNATURAL_NUMBER, TerraformParserBOOL, TerraformParserDESCRIPTION, TerraformParserMULTILINESTRING, TerraformParserSTRING, TerraformParserIDENTIFIER:
+	case TerraformParserT__2, TerraformParserT__5, TerraformParserT__7, TerraformParserT__8, TerraformParserT__11, TerraformParserT__17, TerraformParserT__18, TerraformParserT__19, TerraformParserVARIABLE, TerraformParserPROVIDER, TerraformParserIN, TerraformParserSTAR, TerraformParserEOF_, TerraformParserNULL_, TerraformParserNATURAL_NUMBER, TerraformParserBOOL, TerraformParserDESCRIPTION, TerraformParserMULTILINESTRING, TerraformParserSTRING, TerraformParserIDENTIFIER:
 		p.EnterOuterAlt(localctx, 3)
 		{
-			p.SetState(215)
+			p.SetState(228)
 			p.Val()
 		}
 
 	default:
-		panic(antlr.NewNoViableAltException(p, nil, nil, nil, nil, nil))
+		p.SetError(antlr.NewNoViableAltException(p, nil, nil, nil, nil, nil))
+		goto errorExit
 	}
 
+errorExit:
+	if p.HasError() {
+		v := p.GetError()
+		localctx.SetException(v)
+		p.GetErrorHandler().ReportError(p, v)
+		p.GetErrorHandler().Recover(p, v)
+		p.SetError(nil)
+	}
+	p.ExitRule()
 	return localctx
+	goto errorExit // Trick to prevent compiler error if the label is not used
 }
 
 // IValContext is an interface to support dynamic dispatch.
@@ -3899,20 +4254,36 @@ type IValContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// Getter signatures
+	NULL_() antlr.TerminalNode
+	Signed_number() ISigned_numberContext
+	String_() IStringContext
+	Identifier() IIdentifierContext
+	BOOL() antlr.TerminalNode
+	DESCRIPTION() antlr.TerminalNode
+	Filedecl() IFiledeclContext
+	Functioncall() IFunctioncallContext
+	EOF_() antlr.TerminalNode
+
 	// IsValContext differentiates from other interfaces.
 	IsValContext()
 }
 
 type ValContext struct {
-	*antlr.BaseParserRuleContext
+	antlr.BaseParserRuleContext
 	parser antlr.Parser
 }
 
 func NewEmptyValContext() *ValContext {
 	var p = new(ValContext)
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
 	p.RuleIndex = TerraformParserRULE_val
 	return p
+}
+
+func InitEmptyValContext(p *ValContext) {
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = TerraformParserRULE_val
 }
 
 func (*ValContext) IsValContext() {}
@@ -3920,7 +4291,7 @@ func (*ValContext) IsValContext() {}
 func NewValContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *ValContext {
 	var p = new(ValContext)
 
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
 
 	p.parser = parser
 	p.RuleIndex = TerraformParserRULE_val
@@ -4047,97 +4418,109 @@ func (s *ValContext) ExitRule(listener antlr.ParseTreeListener) {
 }
 
 func (p *TerraformParser) Val() (localctx IValContext) {
-	this := p
-	_ = this
-
 	localctx = NewValContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 44, TerraformParserRULE_val)
-
-	defer func() {
-		p.ExitRule()
-	}()
-
-	defer func() {
-		if err := recover(); err != nil {
-			if v, ok := err.(antlr.RecognitionException); ok {
-				localctx.SetException(v)
-				p.GetErrorHandler().ReportError(p, v)
-				p.GetErrorHandler().Recover(p, v)
-			} else {
-				panic(err)
-			}
-		}
-	}()
-
-	p.SetState(227)
+	p.SetState(240)
 	p.GetErrorHandler().Sync(p)
-	switch p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 15, p.GetParserRuleContext()) {
+	if p.HasError() {
+		goto errorExit
+	}
+
+	switch p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 16, p.GetParserRuleContext()) {
 	case 1:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(218)
+			p.SetState(231)
 			p.Match(TerraformParserNULL_)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
 		}
 
 	case 2:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(219)
+			p.SetState(232)
 			p.Signed_number()
 		}
 
 	case 3:
 		p.EnterOuterAlt(localctx, 3)
 		{
-			p.SetState(220)
+			p.SetState(233)
 			p.String_()
 		}
 
 	case 4:
 		p.EnterOuterAlt(localctx, 4)
 		{
-			p.SetState(221)
+			p.SetState(234)
 			p.Identifier()
 		}
 
 	case 5:
 		p.EnterOuterAlt(localctx, 5)
 		{
-			p.SetState(222)
+			p.SetState(235)
 			p.Match(TerraformParserBOOL)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
 		}
 
 	case 6:
 		p.EnterOuterAlt(localctx, 6)
 		{
-			p.SetState(223)
+			p.SetState(236)
 			p.Match(TerraformParserDESCRIPTION)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
 		}
 
 	case 7:
 		p.EnterOuterAlt(localctx, 7)
 		{
-			p.SetState(224)
+			p.SetState(237)
 			p.Filedecl()
 		}
 
 	case 8:
 		p.EnterOuterAlt(localctx, 8)
 		{
-			p.SetState(225)
+			p.SetState(238)
 			p.Functioncall()
 		}
 
 	case 9:
 		p.EnterOuterAlt(localctx, 9)
 		{
-			p.SetState(226)
+			p.SetState(239)
 			p.Match(TerraformParserEOF_)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
 		}
 
+	case antlr.ATNInvalidAltNumber:
+		goto errorExit
 	}
 
+errorExit:
+	if p.HasError() {
+		v := p.GetError()
+		localctx.SetException(v)
+		p.GetErrorHandler().ReportError(p, v)
+		p.GetErrorHandler().Recover(p, v)
+		p.SetError(nil)
+	}
+	p.ExitRule()
 	return localctx
+	goto errorExit // Trick to prevent compiler error if the label is not used
 }
 
 // IFunctioncallContext is an interface to support dynamic dispatch.
@@ -4147,20 +4530,31 @@ type IFunctioncallContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// Getter signatures
+	Functionname() IFunctionnameContext
+	LPAREN() antlr.TerminalNode
+	Functionarguments() IFunctionargumentsContext
+	RPAREN() antlr.TerminalNode
+
 	// IsFunctioncallContext differentiates from other interfaces.
 	IsFunctioncallContext()
 }
 
 type FunctioncallContext struct {
-	*antlr.BaseParserRuleContext
+	antlr.BaseParserRuleContext
 	parser antlr.Parser
 }
 
 func NewEmptyFunctioncallContext() *FunctioncallContext {
 	var p = new(FunctioncallContext)
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
 	p.RuleIndex = TerraformParserRULE_functioncall
 	return p
+}
+
+func InitEmptyFunctioncallContext(p *FunctioncallContext) {
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = TerraformParserRULE_functioncall
 }
 
 func (*FunctioncallContext) IsFunctioncallContext() {}
@@ -4168,7 +4562,7 @@ func (*FunctioncallContext) IsFunctioncallContext() {}
 func NewFunctioncallContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *FunctioncallContext {
 	var p = new(FunctioncallContext)
 
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
 
 	p.parser = parser
 	p.RuleIndex = TerraformParserRULE_functioncall
@@ -4239,87 +4633,112 @@ func (s *FunctioncallContext) ExitRule(listener antlr.ParseTreeListener) {
 }
 
 func (p *TerraformParser) Functioncall() (localctx IFunctioncallContext) {
-	this := p
-	_ = this
-
 	localctx = NewFunctioncallContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 46, TerraformParserRULE_functioncall)
-
-	defer func() {
-		p.ExitRule()
-	}()
-
-	defer func() {
-		if err := recover(); err != nil {
-			if v, ok := err.(antlr.RecognitionException); ok {
-				localctx.SetException(v)
-				p.GetErrorHandler().ReportError(p, v)
-				p.GetErrorHandler().Recover(p, v)
-			} else {
-				panic(err)
-			}
-		}
-	}()
-
 	var _alt int
 
-	p.SetState(243)
+	p.SetState(256)
 	p.GetErrorHandler().Sync(p)
+	if p.HasError() {
+		goto errorExit
+	}
 
 	switch p.GetTokenStream().LA(1) {
 	case TerraformParserIDENTIFIER:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(229)
+			p.SetState(242)
 			p.Functionname()
 		}
 		{
-			p.SetState(230)
+			p.SetState(243)
 			p.Match(TerraformParserLPAREN)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
 		}
 		{
-			p.SetState(231)
+			p.SetState(244)
 			p.Functionarguments()
 		}
 		{
-			p.SetState(232)
+			p.SetState(245)
 			p.Match(TerraformParserRPAREN)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
 		}
 
-	case TerraformParserT__12:
+	case TerraformParserT__17:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(234)
-			p.Match(TerraformParserT__12)
+			p.SetState(247)
+			p.Match(TerraformParserT__17)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
 		}
 		{
-			p.SetState(235)
+			p.SetState(248)
 			p.Match(TerraformParserLPAREN)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
 		}
-		p.SetState(239)
+		p.SetState(252)
 		p.GetErrorHandler().Sync(p)
-		_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 16, p.GetParserRuleContext())
-
+		if p.HasError() {
+			goto errorExit
+		}
+		_alt = p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 17, p.GetParserRuleContext())
+		if p.HasError() {
+			goto errorExit
+		}
 		for _alt != 1 && _alt != antlr.ATNInvalidAltNumber {
 			if _alt == 1+1 {
-				p.SetState(236)
+				p.SetState(249)
 				p.MatchWildcard()
 
 			}
-			p.SetState(241)
+			p.SetState(254)
 			p.GetErrorHandler().Sync(p)
-			_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 16, p.GetParserRuleContext())
+			if p.HasError() {
+				goto errorExit
+			}
+			_alt = p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 17, p.GetParserRuleContext())
+			if p.HasError() {
+				goto errorExit
+			}
 		}
 		{
-			p.SetState(242)
+			p.SetState(255)
 			p.Match(TerraformParserRPAREN)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
 		}
 
 	default:
-		panic(antlr.NewNoViableAltException(p, nil, nil, nil, nil, nil))
+		p.SetError(antlr.NewNoViableAltException(p, nil, nil, nil, nil, nil))
+		goto errorExit
 	}
 
+errorExit:
+	if p.HasError() {
+		v := p.GetError()
+		localctx.SetException(v)
+		p.GetErrorHandler().ReportError(p, v)
+		p.GetErrorHandler().Recover(p, v)
+		p.SetError(nil)
+	}
+	p.ExitRule()
 	return localctx
+	goto errorExit // Trick to prevent compiler error if the label is not used
 }
 
 // IFunctionnameContext is an interface to support dynamic dispatch.
@@ -4329,20 +4748,28 @@ type IFunctionnameContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// Getter signatures
+	IDENTIFIER() antlr.TerminalNode
+
 	// IsFunctionnameContext differentiates from other interfaces.
 	IsFunctionnameContext()
 }
 
 type FunctionnameContext struct {
-	*antlr.BaseParserRuleContext
+	antlr.BaseParserRuleContext
 	parser antlr.Parser
 }
 
 func NewEmptyFunctionnameContext() *FunctionnameContext {
 	var p = new(FunctionnameContext)
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
 	p.RuleIndex = TerraformParserRULE_functionname
 	return p
+}
+
+func InitEmptyFunctionnameContext(p *FunctionnameContext) {
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = TerraformParserRULE_functionname
 }
 
 func (*FunctionnameContext) IsFunctionnameContext() {}
@@ -4350,7 +4777,7 @@ func (*FunctionnameContext) IsFunctionnameContext() {}
 func NewFunctionnameContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *FunctionnameContext {
 	var p = new(FunctionnameContext)
 
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
 
 	p.parser = parser
 	p.RuleIndex = TerraformParserRULE_functionname
@@ -4385,35 +4812,29 @@ func (s *FunctionnameContext) ExitRule(listener antlr.ParseTreeListener) {
 }
 
 func (p *TerraformParser) Functionname() (localctx IFunctionnameContext) {
-	this := p
-	_ = this
-
 	localctx = NewFunctionnameContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 48, TerraformParserRULE_functionname)
-
-	defer func() {
-		p.ExitRule()
-	}()
-
-	defer func() {
-		if err := recover(); err != nil {
-			if v, ok := err.(antlr.RecognitionException); ok {
-				localctx.SetException(v)
-				p.GetErrorHandler().ReportError(p, v)
-				p.GetErrorHandler().Recover(p, v)
-			} else {
-				panic(err)
-			}
-		}
-	}()
-
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(245)
+		p.SetState(258)
 		p.Match(TerraformParserIDENTIFIER)
+		if p.HasError() {
+			// Recognition error - abort rule
+			goto errorExit
+		}
 	}
 
+errorExit:
+	if p.HasError() {
+		v := p.GetError()
+		localctx.SetException(v)
+		p.GetErrorHandler().ReportError(p, v)
+		p.GetErrorHandler().Recover(p, v)
+		p.SetError(nil)
+	}
+	p.ExitRule()
 	return localctx
+	goto errorExit // Trick to prevent compiler error if the label is not used
 }
 
 // IFunctionargumentsContext is an interface to support dynamic dispatch.
@@ -4423,20 +4844,29 @@ type IFunctionargumentsContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// Getter signatures
+	AllExpression() []IExpressionContext
+	Expression(i int) IExpressionContext
+
 	// IsFunctionargumentsContext differentiates from other interfaces.
 	IsFunctionargumentsContext()
 }
 
 type FunctionargumentsContext struct {
-	*antlr.BaseParserRuleContext
+	antlr.BaseParserRuleContext
 	parser antlr.Parser
 }
 
 func NewEmptyFunctionargumentsContext() *FunctionargumentsContext {
 	var p = new(FunctionargumentsContext)
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
 	p.RuleIndex = TerraformParserRULE_functionarguments
 	return p
+}
+
+func InitEmptyFunctionargumentsContext(p *FunctionargumentsContext) {
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = TerraformParserRULE_functionarguments
 }
 
 func (*FunctionargumentsContext) IsFunctionargumentsContext() {}
@@ -4444,7 +4874,7 @@ func (*FunctionargumentsContext) IsFunctionargumentsContext() {}
 func NewFunctionargumentsContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *FunctionargumentsContext {
 	var p = new(FunctionargumentsContext)
 
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
 
 	p.parser = parser
 	p.RuleIndex = TerraformParserRULE_functionarguments
@@ -4516,66 +4946,71 @@ func (s *FunctionargumentsContext) ExitRule(listener antlr.ParseTreeListener) {
 }
 
 func (p *TerraformParser) Functionarguments() (localctx IFunctionargumentsContext) {
-	this := p
-	_ = this
-
 	localctx = NewFunctionargumentsContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 50, TerraformParserRULE_functionarguments)
 	var _la int
 
-	defer func() {
-		p.ExitRule()
-	}()
-
-	defer func() {
-		if err := recover(); err != nil {
-			if v, ok := err.(antlr.RecognitionException); ok {
-				localctx.SetException(v)
-				p.GetErrorHandler().ReportError(p, v)
-				p.GetErrorHandler().Recover(p, v)
-			} else {
-				panic(err)
-			}
-		}
-	}()
-
-	p.SetState(256)
+	p.SetState(269)
 	p.GetErrorHandler().Sync(p)
+	if p.HasError() {
+		goto errorExit
+	}
 
 	switch p.GetTokenStream().LA(1) {
 	case TerraformParserRPAREN:
 		p.EnterOuterAlt(localctx, 1)
 
-	case TerraformParserT__2, TerraformParserT__5, TerraformParserT__7, TerraformParserT__8, TerraformParserT__11, TerraformParserT__12, TerraformParserT__14, TerraformParserT__16, TerraformParserT__17, TerraformParserT__18, TerraformParserVARIABLE, TerraformParserPROVIDER, TerraformParserIN, TerraformParserSTAR, TerraformParserLCURL, TerraformParserLPAREN, TerraformParserEOF_, TerraformParserNULL_, TerraformParserNATURAL_NUMBER, TerraformParserBOOL, TerraformParserDESCRIPTION, TerraformParserMULTILINESTRING, TerraformParserSTRING, TerraformParserIDENTIFIER:
+	case TerraformParserT__2, TerraformParserT__5, TerraformParserT__7, TerraformParserT__8, TerraformParserT__11, TerraformParserT__12, TerraformParserT__13, TerraformParserT__15, TerraformParserT__17, TerraformParserT__18, TerraformParserT__19, TerraformParserVARIABLE, TerraformParserPROVIDER, TerraformParserIN, TerraformParserSTAR, TerraformParserLCURL, TerraformParserLPAREN, TerraformParserEOF_, TerraformParserNULL_, TerraformParserNATURAL_NUMBER, TerraformParserBOOL, TerraformParserDESCRIPTION, TerraformParserMULTILINESTRING, TerraformParserSTRING, TerraformParserIDENTIFIER:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(248)
+			p.SetState(261)
 			p.expression(0)
 		}
-		p.SetState(253)
+		p.SetState(266)
 		p.GetErrorHandler().Sync(p)
+		if p.HasError() {
+			goto errorExit
+		}
 		_la = p.GetTokenStream().LA(1)
 
-		for _la == TerraformParserT__13 {
+		for _la == TerraformParserT__16 {
 			{
-				p.SetState(249)
-				p.Match(TerraformParserT__13)
+				p.SetState(262)
+				p.Match(TerraformParserT__16)
+				if p.HasError() {
+					// Recognition error - abort rule
+					goto errorExit
+				}
 			}
 			{
-				p.SetState(250)
+				p.SetState(263)
 				p.expression(0)
 			}
 
-			p.SetState(255)
+			p.SetState(268)
 			p.GetErrorHandler().Sync(p)
+			if p.HasError() {
+				goto errorExit
+			}
 			_la = p.GetTokenStream().LA(1)
 		}
 
 	default:
-		panic(antlr.NewNoViableAltException(p, nil, nil, nil, nil, nil))
+		p.SetError(antlr.NewNoViableAltException(p, nil, nil, nil, nil, nil))
+		goto errorExit
 	}
 
+errorExit:
+	if p.HasError() {
+		v := p.GetError()
+		localctx.SetException(v)
+		p.GetErrorHandler().ReportError(p, v)
+		p.GetErrorHandler().Recover(p, v)
+		p.SetError(nil)
+	}
+	p.ExitRule()
 	return localctx
+	goto errorExit // Trick to prevent compiler error if the label is not used
 }
 
 // IIndexContext is an interface to support dynamic dispatch.
@@ -4585,20 +5020,28 @@ type IIndexContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// Getter signatures
+	Expression() IExpressionContext
+
 	// IsIndexContext differentiates from other interfaces.
 	IsIndexContext()
 }
 
 type IndexContext struct {
-	*antlr.BaseParserRuleContext
+	antlr.BaseParserRuleContext
 	parser antlr.Parser
 }
 
 func NewEmptyIndexContext() *IndexContext {
 	var p = new(IndexContext)
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
 	p.RuleIndex = TerraformParserRULE_index
 	return p
+}
+
+func InitEmptyIndexContext(p *IndexContext) {
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = TerraformParserRULE_index
 }
 
 func (*IndexContext) IsIndexContext() {}
@@ -4606,7 +5049,7 @@ func (*IndexContext) IsIndexContext() {}
 func NewIndexContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *IndexContext {
 	var p = new(IndexContext)
 
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
 
 	p.parser = parser
 	p.RuleIndex = TerraformParserRULE_index
@@ -4653,43 +5096,41 @@ func (s *IndexContext) ExitRule(listener antlr.ParseTreeListener) {
 }
 
 func (p *TerraformParser) Index() (localctx IIndexContext) {
-	this := p
-	_ = this
-
 	localctx = NewIndexContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 52, TerraformParserRULE_index)
-
-	defer func() {
-		p.ExitRule()
-	}()
-
-	defer func() {
-		if err := recover(); err != nil {
-			if v, ok := err.(antlr.RecognitionException); ok {
-				localctx.SetException(v)
-				p.GetErrorHandler().ReportError(p, v)
-				p.GetErrorHandler().Recover(p, v)
-			} else {
-				panic(err)
-			}
-		}
-	}()
-
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(258)
-		p.Match(TerraformParserT__14)
+		p.SetState(271)
+		p.Match(TerraformParserT__13)
+		if p.HasError() {
+			// Recognition error - abort rule
+			goto errorExit
+		}
 	}
 	{
-		p.SetState(259)
+		p.SetState(272)
 		p.expression(0)
 	}
 	{
-		p.SetState(260)
-		p.Match(TerraformParserT__15)
+		p.SetState(273)
+		p.Match(TerraformParserT__14)
+		if p.HasError() {
+			// Recognition error - abort rule
+			goto errorExit
+		}
 	}
 
+errorExit:
+	if p.HasError() {
+		v := p.GetError()
+		localctx.SetException(v)
+		p.GetErrorHandler().ReportError(p, v)
+		p.GetErrorHandler().Recover(p, v)
+		p.SetError(nil)
+	}
+	p.ExitRule()
 	return localctx
+	goto errorExit // Trick to prevent compiler error if the label is not used
 }
 
 // IFiledeclContext is an interface to support dynamic dispatch.
@@ -4699,20 +5140,30 @@ type IFiledeclContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// Getter signatures
+	LPAREN() antlr.TerminalNode
+	Expression() IExpressionContext
+	RPAREN() antlr.TerminalNode
+
 	// IsFiledeclContext differentiates from other interfaces.
 	IsFiledeclContext()
 }
 
 type FiledeclContext struct {
-	*antlr.BaseParserRuleContext
+	antlr.BaseParserRuleContext
 	parser antlr.Parser
 }
 
 func NewEmptyFiledeclContext() *FiledeclContext {
 	var p = new(FiledeclContext)
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
 	p.RuleIndex = TerraformParserRULE_filedecl
 	return p
+}
+
+func InitEmptyFiledeclContext(p *FiledeclContext) {
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = TerraformParserRULE_filedecl
 }
 
 func (*FiledeclContext) IsFiledeclContext() {}
@@ -4720,7 +5171,7 @@ func (*FiledeclContext) IsFiledeclContext() {}
 func NewFiledeclContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *FiledeclContext {
 	var p = new(FiledeclContext)
 
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
 
 	p.parser = parser
 	p.RuleIndex = TerraformParserRULE_filedecl
@@ -4775,47 +5226,49 @@ func (s *FiledeclContext) ExitRule(listener antlr.ParseTreeListener) {
 }
 
 func (p *TerraformParser) Filedecl() (localctx IFiledeclContext) {
-	this := p
-	_ = this
-
 	localctx = NewFiledeclContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 54, TerraformParserRULE_filedecl)
-
-	defer func() {
-		p.ExitRule()
-	}()
-
-	defer func() {
-		if err := recover(); err != nil {
-			if v, ok := err.(antlr.RecognitionException); ok {
-				localctx.SetException(v)
-				p.GetErrorHandler().ReportError(p, v)
-				p.GetErrorHandler().Recover(p, v)
-			} else {
-				panic(err)
-			}
-		}
-	}()
-
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(262)
-		p.Match(TerraformParserT__16)
+		p.SetState(275)
+		p.Match(TerraformParserT__18)
+		if p.HasError() {
+			// Recognition error - abort rule
+			goto errorExit
+		}
 	}
 	{
-		p.SetState(263)
+		p.SetState(276)
 		p.Match(TerraformParserLPAREN)
+		if p.HasError() {
+			// Recognition error - abort rule
+			goto errorExit
+		}
 	}
 	{
-		p.SetState(264)
+		p.SetState(277)
 		p.expression(0)
 	}
 	{
-		p.SetState(265)
+		p.SetState(278)
 		p.Match(TerraformParserRPAREN)
+		if p.HasError() {
+			// Recognition error - abort rule
+			goto errorExit
+		}
 	}
 
+errorExit:
+	if p.HasError() {
+		v := p.GetError()
+		localctx.SetException(v)
+		p.GetErrorHandler().ReportError(p, v)
+		p.GetErrorHandler().Recover(p, v)
+		p.SetError(nil)
+	}
+	p.ExitRule()
 	return localctx
+	goto errorExit // Trick to prevent compiler error if the label is not used
 }
 
 // IList_Context is an interface to support dynamic dispatch.
@@ -4825,20 +5278,29 @@ type IList_Context interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// Getter signatures
+	AllExpression() []IExpressionContext
+	Expression(i int) IExpressionContext
+
 	// IsList_Context differentiates from other interfaces.
 	IsList_Context()
 }
 
 type List_Context struct {
-	*antlr.BaseParserRuleContext
+	antlr.BaseParserRuleContext
 	parser antlr.Parser
 }
 
 func NewEmptyList_Context() *List_Context {
 	var p = new(List_Context)
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
 	p.RuleIndex = TerraformParserRULE_list_
 	return p
+}
+
+func InitEmptyList_Context(p *List_Context) {
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = TerraformParserRULE_list_
 }
 
 func (*List_Context) IsList_Context() {}
@@ -4846,7 +5308,7 @@ func (*List_Context) IsList_Context() {}
 func NewList_Context(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *List_Context {
 	var p = new(List_Context)
 
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
 
 	p.parser = parser
 	p.RuleIndex = TerraformParserRULE_list_
@@ -4918,84 +5380,108 @@ func (s *List_Context) ExitRule(listener antlr.ParseTreeListener) {
 }
 
 func (p *TerraformParser) List_() (localctx IList_Context) {
-	this := p
-	_ = this
-
 	localctx = NewList_Context(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 56, TerraformParserRULE_list_)
 	var _la int
-
-	defer func() {
-		p.ExitRule()
-	}()
-
-	defer func() {
-		if err := recover(); err != nil {
-			if v, ok := err.(antlr.RecognitionException); ok {
-				localctx.SetException(v)
-				p.GetErrorHandler().ReportError(p, v)
-				p.GetErrorHandler().Recover(p, v)
-			} else {
-				panic(err)
-			}
-		}
-	}()
 
 	var _alt int
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(267)
-		p.Match(TerraformParserT__14)
+		p.SetState(280)
+		p.Match(TerraformParserT__13)
+		if p.HasError() {
+			// Recognition error - abort rule
+			goto errorExit
+		}
 	}
-	p.SetState(279)
+	p.SetState(292)
 	p.GetErrorHandler().Sync(p)
+	if p.HasError() {
+		goto errorExit
+	}
 	_la = p.GetTokenStream().LA(1)
 
-	if (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&140375638324040) != 0 {
+	if (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&561502551372616) != 0 {
 		{
-			p.SetState(268)
+			p.SetState(281)
 			p.expression(0)
 		}
-		p.SetState(273)
+		p.SetState(286)
 		p.GetErrorHandler().Sync(p)
-		_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 20, p.GetParserRuleContext())
-
+		if p.HasError() {
+			goto errorExit
+		}
+		_alt = p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 21, p.GetParserRuleContext())
+		if p.HasError() {
+			goto errorExit
+		}
 		for _alt != 2 && _alt != antlr.ATNInvalidAltNumber {
 			if _alt == 1 {
 				{
-					p.SetState(269)
-					p.Match(TerraformParserT__13)
+					p.SetState(282)
+					p.Match(TerraformParserT__16)
+					if p.HasError() {
+						// Recognition error - abort rule
+						goto errorExit
+					}
 				}
 				{
-					p.SetState(270)
+					p.SetState(283)
 					p.expression(0)
 				}
 
 			}
-			p.SetState(275)
+			p.SetState(288)
 			p.GetErrorHandler().Sync(p)
-			_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 20, p.GetParserRuleContext())
+			if p.HasError() {
+				goto errorExit
+			}
+			_alt = p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 21, p.GetParserRuleContext())
+			if p.HasError() {
+				goto errorExit
+			}
 		}
-		p.SetState(277)
+		p.SetState(290)
 		p.GetErrorHandler().Sync(p)
+		if p.HasError() {
+			goto errorExit
+		}
 		_la = p.GetTokenStream().LA(1)
 
-		if _la == TerraformParserT__13 {
+		if _la == TerraformParserT__16 {
 			{
-				p.SetState(276)
-				p.Match(TerraformParserT__13)
+				p.SetState(289)
+				p.Match(TerraformParserT__16)
+				if p.HasError() {
+					// Recognition error - abort rule
+					goto errorExit
+				}
 			}
 
 		}
 
 	}
 	{
-		p.SetState(281)
-		p.Match(TerraformParserT__15)
+		p.SetState(294)
+		p.Match(TerraformParserT__14)
+		if p.HasError() {
+			// Recognition error - abort rule
+			goto errorExit
+		}
 	}
 
+errorExit:
+	if p.HasError() {
+		v := p.GetError()
+		localctx.SetException(v)
+		p.GetErrorHandler().ReportError(p, v)
+		p.GetErrorHandler().Recover(p, v)
+		p.SetError(nil)
+	}
+	p.ExitRule()
 	return localctx
+	goto errorExit // Trick to prevent compiler error if the label is not used
 }
 
 // IMap_Context is an interface to support dynamic dispatch.
@@ -5005,20 +5491,32 @@ type IMap_Context interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// Getter signatures
+	LCURL() antlr.TerminalNode
+	RCURL() antlr.TerminalNode
+	Forloop() IForloopContext
+	AllArgument() []IArgumentContext
+	Argument(i int) IArgumentContext
+
 	// IsMap_Context differentiates from other interfaces.
 	IsMap_Context()
 }
 
 type Map_Context struct {
-	*antlr.BaseParserRuleContext
+	antlr.BaseParserRuleContext
 	parser antlr.Parser
 }
 
 func NewEmptyMap_Context() *Map_Context {
 	var p = new(Map_Context)
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
 	p.RuleIndex = TerraformParserRULE_map_
 	return p
+}
+
+func InitEmptyMap_Context(p *Map_Context) {
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = TerraformParserRULE_map_
 }
 
 func (*Map_Context) IsMap_Context() {}
@@ -5026,7 +5524,7 @@ func (*Map_Context) IsMap_Context() {}
 func NewMap_Context(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *Map_Context {
 	var p = new(Map_Context)
 
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
 
 	p.parser = parser
 	p.RuleIndex = TerraformParserRULE_map_
@@ -5042,6 +5540,22 @@ func (s *Map_Context) LCURL() antlr.TerminalNode {
 
 func (s *Map_Context) RCURL() antlr.TerminalNode {
 	return s.GetToken(TerraformParserRCURL, 0)
+}
+
+func (s *Map_Context) Forloop() IForloopContext {
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(IForloopContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(IForloopContext)
 }
 
 func (s *Map_Context) AllArgument() []IArgumentContext {
@@ -5106,65 +5620,126 @@ func (s *Map_Context) ExitRule(listener antlr.ParseTreeListener) {
 }
 
 func (p *TerraformParser) Map_() (localctx IMap_Context) {
-	this := p
-	_ = this
-
 	localctx = NewMap_Context(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 58, TerraformParserRULE_map_)
 	var _la int
 
-	defer func() {
-		p.ExitRule()
-	}()
-
-	defer func() {
-		if err := recover(); err != nil {
-			if v, ok := err.(antlr.RecognitionException); ok {
-				localctx.SetException(v)
-				p.GetErrorHandler().ReportError(p, v)
-				p.GetErrorHandler().Recover(p, v)
-			} else {
-				panic(err)
-			}
-		}
-	}()
+	var _alt int
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(283)
+		p.SetState(296)
 		p.Match(TerraformParserLCURL)
+		if p.HasError() {
+			// Recognition error - abort rule
+			goto errorExit
+		}
 	}
-	p.SetState(290)
+	p.SetState(311)
 	p.GetErrorHandler().Sync(p)
-	_la = p.GetTokenStream().LA(1)
-
-	for (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&72583873561416) != 0 {
+	if p.HasError() {
+		goto errorExit
+	}
+	switch p.GetTokenStream().LA(1) {
+	case TerraformParserT__15:
 		{
-			p.SetState(284)
+			p.SetState(297)
+			p.Forloop()
+		}
+
+	case TerraformParserT__2, TerraformParserT__5, TerraformParserT__7, TerraformParserT__8, TerraformParserVARIABLE, TerraformParserPROVIDER, TerraformParserIN, TerraformParserSTAR, TerraformParserNATURAL_NUMBER, TerraformParserIDENTIFIER:
+		{
+			p.SetState(298)
 			p.Argument()
 		}
-		p.SetState(286)
+		p.SetState(305)
 		p.GetErrorHandler().Sync(p)
+		if p.HasError() {
+			goto errorExit
+		}
+		_alt = p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 25, p.GetParserRuleContext())
+		if p.HasError() {
+			goto errorExit
+		}
+		for _alt != 2 && _alt != antlr.ATNInvalidAltNumber {
+			if _alt == 1 {
+				p.SetState(300)
+				p.GetErrorHandler().Sync(p)
+				if p.HasError() {
+					goto errorExit
+				}
+				_la = p.GetTokenStream().LA(1)
+
+				if _la == TerraformParserT__16 {
+					{
+						p.SetState(299)
+						p.Match(TerraformParserT__16)
+						if p.HasError() {
+							// Recognition error - abort rule
+							goto errorExit
+						}
+					}
+
+				}
+				{
+					p.SetState(302)
+					p.Argument()
+				}
+
+			}
+			p.SetState(307)
+			p.GetErrorHandler().Sync(p)
+			if p.HasError() {
+				goto errorExit
+			}
+			_alt = p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 25, p.GetParserRuleContext())
+			if p.HasError() {
+				goto errorExit
+			}
+		}
+		p.SetState(309)
+		p.GetErrorHandler().Sync(p)
+		if p.HasError() {
+			goto errorExit
+		}
 		_la = p.GetTokenStream().LA(1)
 
-		if _la == TerraformParserT__13 {
+		if _la == TerraformParserT__16 {
 			{
-				p.SetState(285)
-				p.Match(TerraformParserT__13)
+				p.SetState(308)
+				p.Match(TerraformParserT__16)
+				if p.HasError() {
+					// Recognition error - abort rule
+					goto errorExit
+				}
 			}
 
 		}
 
-		p.SetState(292)
-		p.GetErrorHandler().Sync(p)
-		_la = p.GetTokenStream().LA(1)
+	case TerraformParserRCURL:
+
+	default:
 	}
 	{
-		p.SetState(293)
+		p.SetState(313)
 		p.Match(TerraformParserRCURL)
+		if p.HasError() {
+			// Recognition error - abort rule
+			goto errorExit
+		}
 	}
 
+errorExit:
+	if p.HasError() {
+		v := p.GetError()
+		localctx.SetException(v)
+		p.GetErrorHandler().ReportError(p, v)
+		p.GetErrorHandler().Recover(p, v)
+		p.SetError(nil)
+	}
+	p.ExitRule()
 	return localctx
+	goto errorExit // Trick to prevent compiler error if the label is not used
 }
 
 // IStringContext is an interface to support dynamic dispatch.
@@ -5174,20 +5749,29 @@ type IStringContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// Getter signatures
+	STRING() antlr.TerminalNode
+	MULTILINESTRING() antlr.TerminalNode
+
 	// IsStringContext differentiates from other interfaces.
 	IsStringContext()
 }
 
 type StringContext struct {
-	*antlr.BaseParserRuleContext
+	antlr.BaseParserRuleContext
 	parser antlr.Parser
 }
 
 func NewEmptyStringContext() *StringContext {
 	var p = new(StringContext)
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
 	p.RuleIndex = TerraformParserRULE_string
 	return p
+}
+
+func InitEmptyStringContext(p *StringContext) {
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = TerraformParserRULE_string
 }
 
 func (*StringContext) IsStringContext() {}
@@ -5195,7 +5779,7 @@ func (*StringContext) IsStringContext() {}
 func NewStringContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *StringContext {
 	var p = new(StringContext)
 
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
 
 	p.parser = parser
 	p.RuleIndex = TerraformParserRULE_string
@@ -5234,32 +5818,13 @@ func (s *StringContext) ExitRule(listener antlr.ParseTreeListener) {
 }
 
 func (p *TerraformParser) String_() (localctx IStringContext) {
-	this := p
-	_ = this
-
 	localctx = NewStringContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 60, TerraformParserRULE_string)
 	var _la int
 
-	defer func() {
-		p.ExitRule()
-	}()
-
-	defer func() {
-		if err := recover(); err != nil {
-			if v, ok := err.(antlr.RecognitionException); ok {
-				localctx.SetException(v)
-				p.GetErrorHandler().ReportError(p, v)
-				p.GetErrorHandler().Recover(p, v)
-			} else {
-				panic(err)
-			}
-		}
-	}()
-
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(295)
+		p.SetState(315)
 		_la = p.GetTokenStream().LA(1)
 
 		if !(_la == TerraformParserMULTILINESTRING || _la == TerraformParserSTRING) {
@@ -5270,7 +5835,17 @@ func (p *TerraformParser) String_() (localctx IStringContext) {
 		}
 	}
 
+errorExit:
+	if p.HasError() {
+		v := p.GetError()
+		localctx.SetException(v)
+		p.GetErrorHandler().ReportError(p, v)
+		p.GetErrorHandler().Recover(p, v)
+		p.SetError(nil)
+	}
+	p.ExitRule()
 	return localctx
+	goto errorExit // Trick to prevent compiler error if the label is not used
 }
 
 // ISigned_numberContext is an interface to support dynamic dispatch.
@@ -5280,20 +5855,28 @@ type ISigned_numberContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// Getter signatures
+	Number() INumberContext
+
 	// IsSigned_numberContext differentiates from other interfaces.
 	IsSigned_numberContext()
 }
 
 type Signed_numberContext struct {
-	*antlr.BaseParserRuleContext
+	antlr.BaseParserRuleContext
 	parser antlr.Parser
 }
 
 func NewEmptySigned_numberContext() *Signed_numberContext {
 	var p = new(Signed_numberContext)
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
 	p.RuleIndex = TerraformParserRULE_signed_number
 	return p
+}
+
+func InitEmptySigned_numberContext(p *Signed_numberContext) {
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = TerraformParserRULE_signed_number
 }
 
 func (*Signed_numberContext) IsSigned_numberContext() {}
@@ -5301,7 +5884,7 @@ func (*Signed_numberContext) IsSigned_numberContext() {}
 func NewSigned_numberContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *Signed_numberContext {
 	var p = new(Signed_numberContext)
 
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
 
 	p.parser = parser
 	p.RuleIndex = TerraformParserRULE_signed_number
@@ -5348,40 +5931,24 @@ func (s *Signed_numberContext) ExitRule(listener antlr.ParseTreeListener) {
 }
 
 func (p *TerraformParser) Signed_number() (localctx ISigned_numberContext) {
-	this := p
-	_ = this
-
 	localctx = NewSigned_numberContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 62, TerraformParserRULE_signed_number)
 	var _la int
 
-	defer func() {
-		p.ExitRule()
-	}()
-
-	defer func() {
-		if err := recover(); err != nil {
-			if v, ok := err.(antlr.RecognitionException); ok {
-				localctx.SetException(v)
-				p.GetErrorHandler().ReportError(p, v)
-				p.GetErrorHandler().Recover(p, v)
-			} else {
-				panic(err)
-			}
-		}
-	}()
-
 	p.EnterOuterAlt(localctx, 1)
-	p.SetState(298)
+	p.SetState(318)
 	p.GetErrorHandler().Sync(p)
+	if p.HasError() {
+		goto errorExit
+	}
 	_la = p.GetTokenStream().LA(1)
 
-	if _la == TerraformParserT__17 || _la == TerraformParserT__18 {
+	if _la == TerraformParserT__11 || _la == TerraformParserT__19 {
 		{
-			p.SetState(297)
+			p.SetState(317)
 			_la = p.GetTokenStream().LA(1)
 
-			if !(_la == TerraformParserT__17 || _la == TerraformParserT__18) {
+			if !(_la == TerraformParserT__11 || _la == TerraformParserT__19) {
 				p.GetErrorHandler().RecoverInline(p)
 			} else {
 				p.GetErrorHandler().ReportMatch(p)
@@ -5391,11 +5958,21 @@ func (p *TerraformParser) Signed_number() (localctx ISigned_numberContext) {
 
 	}
 	{
-		p.SetState(300)
+		p.SetState(320)
 		p.Number()
 	}
 
+errorExit:
+	if p.HasError() {
+		v := p.GetError()
+		localctx.SetException(v)
+		p.GetErrorHandler().ReportError(p, v)
+		p.GetErrorHandler().Recover(p, v)
+		p.SetError(nil)
+	}
+	p.ExitRule()
 	return localctx
+	goto errorExit // Trick to prevent compiler error if the label is not used
 }
 
 // IOperator_Context is an interface to support dynamic dispatch.
@@ -5405,20 +5982,28 @@ type IOperator_Context interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// Getter signatures
+	STAR() antlr.TerminalNode
+
 	// IsOperator_Context differentiates from other interfaces.
 	IsOperator_Context()
 }
 
 type Operator_Context struct {
-	*antlr.BaseParserRuleContext
+	antlr.BaseParserRuleContext
 	parser antlr.Parser
 }
 
 func NewEmptyOperator_Context() *Operator_Context {
 	var p = new(Operator_Context)
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
 	p.RuleIndex = TerraformParserRULE_operator_
 	return p
+}
+
+func InitEmptyOperator_Context(p *Operator_Context) {
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = TerraformParserRULE_operator_
 }
 
 func (*Operator_Context) IsOperator_Context() {}
@@ -5426,7 +6011,7 @@ func (*Operator_Context) IsOperator_Context() {}
 func NewOperator_Context(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *Operator_Context {
 	var p = new(Operator_Context)
 
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
 
 	p.parser = parser
 	p.RuleIndex = TerraformParserRULE_operator_
@@ -5461,35 +6046,16 @@ func (s *Operator_Context) ExitRule(listener antlr.ParseTreeListener) {
 }
 
 func (p *TerraformParser) Operator_() (localctx IOperator_Context) {
-	this := p
-	_ = this
-
 	localctx = NewOperator_Context(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 64, TerraformParserRULE_operator_)
 	var _la int
 
-	defer func() {
-		p.ExitRule()
-	}()
-
-	defer func() {
-		if err := recover(); err != nil {
-			if v, ok := err.(antlr.RecognitionException); ok {
-				localctx.SetException(v)
-				p.GetErrorHandler().ReportError(p, v)
-				p.GetErrorHandler().Recover(p, v)
-			} else {
-				panic(err)
-			}
-		}
-	}()
-
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(302)
+		p.SetState(322)
 		_la = p.GetTokenStream().LA(1)
 
-		if !((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&9663414272) != 0) {
+		if !((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&38653661184) != 0) {
 			p.GetErrorHandler().RecoverInline(p)
 		} else {
 			p.GetErrorHandler().ReportMatch(p)
@@ -5497,7 +6063,17 @@ func (p *TerraformParser) Operator_() (localctx IOperator_Context) {
 		}
 	}
 
+errorExit:
+	if p.HasError() {
+		v := p.GetError()
+		localctx.SetException(v)
+		p.GetErrorHandler().ReportError(p, v)
+		p.GetErrorHandler().Recover(p, v)
+		p.SetError(nil)
+	}
+	p.ExitRule()
 	return localctx
+	goto errorExit // Trick to prevent compiler error if the label is not used
 }
 
 // INumberContext is an interface to support dynamic dispatch.
@@ -5507,20 +6083,30 @@ type INumberContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// Getter signatures
+	AllNATURAL_NUMBER() []antlr.TerminalNode
+	NATURAL_NUMBER(i int) antlr.TerminalNode
+	DOT() antlr.TerminalNode
+
 	// IsNumberContext differentiates from other interfaces.
 	IsNumberContext()
 }
 
 type NumberContext struct {
-	*antlr.BaseParserRuleContext
+	antlr.BaseParserRuleContext
 	parser antlr.Parser
 }
 
 func NewEmptyNumberContext() *NumberContext {
 	var p = new(NumberContext)
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
 	p.RuleIndex = TerraformParserRULE_number
 	return p
+}
+
+func InitEmptyNumberContext(p *NumberContext) {
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = TerraformParserRULE_number
 }
 
 func (*NumberContext) IsNumberContext() {}
@@ -5528,7 +6114,7 @@ func (*NumberContext) IsNumberContext() {}
 func NewNumberContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *NumberContext {
 	var p = new(NumberContext)
 
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
 
 	p.parser = parser
 	p.RuleIndex = TerraformParserRULE_number
@@ -5571,49 +6157,53 @@ func (s *NumberContext) ExitRule(listener antlr.ParseTreeListener) {
 }
 
 func (p *TerraformParser) Number() (localctx INumberContext) {
-	this := p
-	_ = this
-
 	localctx = NewNumberContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 66, TerraformParserRULE_number)
-
-	defer func() {
-		p.ExitRule()
-	}()
-
-	defer func() {
-		if err := recover(); err != nil {
-			if v, ok := err.(antlr.RecognitionException); ok {
-				localctx.SetException(v)
-				p.GetErrorHandler().ReportError(p, v)
-				p.GetErrorHandler().Recover(p, v)
-			} else {
-				panic(err)
-			}
-		}
-	}()
-
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(304)
+		p.SetState(324)
 		p.Match(TerraformParserNATURAL_NUMBER)
+		if p.HasError() {
+			// Recognition error - abort rule
+			goto errorExit
+		}
 	}
-	p.SetState(307)
+	p.SetState(327)
 	p.GetErrorHandler().Sync(p)
 
-	if p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 26, p.GetParserRuleContext()) == 1 {
+	if p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 29, p.GetParserRuleContext()) == 1 {
 		{
-			p.SetState(305)
+			p.SetState(325)
 			p.Match(TerraformParserDOT)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
 		}
 		{
-			p.SetState(306)
+			p.SetState(326)
 			p.Match(TerraformParserNATURAL_NUMBER)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
 		}
 
+	} else if p.HasError() { // JIM
+		goto errorExit
 	}
 
+errorExit:
+	if p.HasError() {
+		v := p.GetError()
+		localctx.SetException(v)
+		p.GetErrorHandler().ReportError(p, v)
+		p.GetErrorHandler().Recover(p, v)
+		p.SetError(nil)
+	}
+	p.ExitRule()
 	return localctx
+	goto errorExit // Trick to prevent compiler error if the label is not used
 }
 
 func (p *TerraformParser) Sempred(localctx antlr.RuleContext, ruleIndex, predIndex int) bool {
@@ -5631,15 +6221,15 @@ func (p *TerraformParser) Sempred(localctx antlr.RuleContext, ruleIndex, predInd
 }
 
 func (p *TerraformParser) Expression_Sempred(localctx antlr.RuleContext, predIndex int) bool {
-	this := p
-	_ = this
-
 	switch predIndex {
 	case 0:
-		return p.Precpred(p.GetParserRuleContext(), 4)
+		return p.Precpred(p.GetParserRuleContext(), 7)
 
 	case 1:
-		return p.Precpred(p.GetParserRuleContext(), 2)
+		return p.Precpred(p.GetParserRuleContext(), 5)
+
+	case 2:
+		return p.Precpred(p.GetParserRuleContext(), 1)
 
 	default:
 		panic("No predicate with index: " + fmt.Sprint(predIndex))

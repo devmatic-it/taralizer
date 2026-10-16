@@ -22,7 +22,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/antlr/antlr4/runtime/Go/antlr/v4"
+	"github.com/antlr4-go/antlr/v4"
 
 	"github.com/devmatic-it/taralizer/pkg/taralizer"
 )
@@ -145,7 +145,12 @@ func parseResourceBlocks(path string) ([]resourceRef, error) {
 		return nil, fmt.Errorf("read: %w", err)
 	}
 
-	input := antlr.NewInputStream(string(content))
+	// Normalize heredocs with arbitrary delimiters (<<SCRIPT, ...) to string
+	// literals; the ANTLR grammar only knows the fixed <<EOF / <<-EOF /
+	// <<DESCRIPTION tags.
+	src := normalizeHeredocs(string(content))
+
+	input := antlr.NewInputStream(src)
 	lexer := NewTerraformLexer(input)
 	stream := antlr.NewCommonTokenStream(lexer, 0)
 	parser := NewTerraformParser(stream)

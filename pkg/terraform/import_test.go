@@ -58,12 +58,12 @@ func writeImportFixture(t *testing.T, files map[string]string) (string, string) 
 
 func TestImportFromDir(t *testing.T) {
 	cases := []struct {
-		name        string
-		files       map[string]string
-		wantAssets  int
-		wantBounds  int
+		name         string
+		files        map[string]string
+		wantAssets   int
+		wantBounds   int
 		wantWarnings []string
-		wantErr     string
+		wantErr      string
 	}{
 		{
 			name: "mapped_resources_become_assets_and_boundaries",
@@ -138,7 +138,7 @@ resource "google_compute_network" "vpc" { name = "vpc" }
 			wantErr: "syntax error",
 		},
 		{
-			name: "empty_dir_yields_empty_report",
+			name:  "empty_dir_yields_empty_report",
 			files: map[string]string{},
 		},
 	}

@@ -17,7 +17,7 @@ package terraform
 import (
 	"testing"
 
-	"github.com/antlr/antlr4/runtime/Go/antlr/v4"
+	"github.com/antlr4-go/antlr/v4"
 )
 
 // syntaxErrorCounter counts parse errors reported through the ANTLR error

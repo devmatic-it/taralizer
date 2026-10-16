@@ -1,0 +1,4 @@
+google_compute_instance.deep
+google_sql_database_instance.nested_db
+google_compute_network.vpc
+google_compute_subnetwork.subnet_a

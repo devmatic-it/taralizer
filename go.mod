@@ -3,7 +3,7 @@ module github.com/devmatic-it/taralizer
 go 1.27
 
 require (
-	github.com/antlr/antlr4/runtime/Go/antlr/v4 v4.0.0-20221202181307-76fa05c21b12
+	github.com/antlr4-go/antlr/v4 v4.13.1
 	github.com/charmbracelet/glamour v1.0.0
 	github.com/chromedp/chromedp v0.19.1
 	github.com/hashicorp/hcl/v2 v2.25.0

@@ -91,6 +91,10 @@ blockbody
    : LCURL (argument | block)* RCURL
    ;
 
+// A dynamic block is a labeled block (dynamic "label" { ... }) whose body
+// holds a for_each argument and a content block. No special grammar support
+// is needed: it parses as an ordinary labeled block.
+
 argument
    : identifier '=' expression
    ;
@@ -115,10 +119,18 @@ expression
    | LPAREN expression RPAREN
    | expression '?' expression ':' expression
    | forloop
+   // Unary minus and logical NOT apply to any expression (e.g. abs(-x), !ok).
+   // These are primaries, not continuations, so they never conflict with the
+   // binary '-' operator.
+   | '-' expression
+   | '!' expression
+   // Indexing is a general postfix in HCL2: it applies to list literals,
+   // function calls, and any other expression (e.g. [10, 20][2], f(x)[0]).
+   | expression '[' expression ']'
    ;
 
 forloop
-   : 'for' identifier IN expression ':' expression
+   : 'for' identifier (',' identifier)? IN expression ':' expression
    ;
 
 section
@@ -166,7 +178,7 @@ list_
    ;
 
 map_
-   : LCURL (argument ','?)* RCURL
+   : LCURL (forloop | argument (','? argument)* ','?)? RCURL
    ;
 
 string
@@ -216,6 +228,8 @@ operator_
    | '!='
    | '&&'
    | '||'
+   // Object-constructor for-expressions use key => value pairs.
+   | '=>'
    ;
 
 LCURL

@@ -1,0 +1,6 @@
+google_compute_network.vpc
+google_compute_subnetwork.app_subnet
+google_compute_instance.app
+google_sql_database_instance.app_db
+google_sql_database.app
+google_storage_bucket.assets
