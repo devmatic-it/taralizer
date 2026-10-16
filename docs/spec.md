@@ -229,7 +229,16 @@ Guards: the directory must exist and be a directory; duplicate HCL addresses war
 
 ### 3. CLI (`cmd/terraform.go`)
 
-The legacy single-file `import <file>` (which printed to stdout and discarded its report) is replaced by directory-based import: `taralizer terraform import <dir> -o model.yaml [--profile p]`. Warnings go to stderr; the exit code reflects import success. The legacy `Terraform.ImportFromFile` remains in `pkg/terraform/terraform.go` (still tested) until a later deprecation task.
+The legacy single-file `import <file>` (which printed to stdout and discarded its report) is replaced by directory-based import: `taralizer terraform import <dir> -o model.yaml [--profile p]`. Warnings go to stderr; the exit code reflects import success. The legacy `Terraform.ImportFromFile` and its `TreeShapeListener` were removed in Phase A2.3: the single-file path was fully superseded by `ImportFromDir` and strictly inferior (debug output on stdout, a per-resource-type profile lookup that could not resolve, and a nil dereference on unmapped types instead of a warning), so no deprecation shim was kept (KISS).
+
+### 4. Parser Robustness (Phase A2.2)
+
+Import parses real-world HCL2, not just the minimal scaffold subset. Two mechanisms cover constructs the ANTLR grammar does not model natively:
+
+- **Heredoc normalization** (`pkg/terraform/heredoc.go`): before ANTLR parsing, `normalizeHeredocs` rewrites arbitrary-tag HCL2 heredocs (`<<TAG`, `<<-TAG`) into a placeholder string literal, preserving the dropped body's newlines so parse-error line numbers stay accurate. Unterminated heredocs are left untouched so the parser reports its normal syntax error. This keeps the grammar minimal (no per-tag lexer rules) while accepting `metadata_startup_script = <<SCRIPT ...` and friends.
+- **Corpus** (`pkg/terraform/testdata/corpus/*.tf` + `TestParserCorpus`): nine fixtures covering comments, heredocs, dynamic blocks, nested blocks, functions/operators, collections, identifiers, all declaration types, and a real-world GCP configuration. Each fixture must parse with zero syntax errors; fixtures with resource blocks carry a `.expected` sidecar listing the exact `type.name` addresses in file order (fixtures without one must contain no resources). The corpus is what drove the grammar extensions for object-constructor for-expressions (`{ for k, v in m : k => v }`), unary minus / logical NOT, general postfix indexing (`[10, 20][2]`, `f(x)[0]`), and the `=>` operator.
+
+Dynamic blocks need no special grammar support: in HCL2 they are ordinary labeled blocks (`dynamic "label" { for_each = ... content { ... } }`) and parse as such.
 
 ---
 

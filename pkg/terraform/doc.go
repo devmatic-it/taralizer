@@ -1,5 +1,9 @@
-// Package terraform Debian CVE Tracker Analyzer
-// Copyright 2019 debcvescan authors
+// Package terraform imports and exports Terraform configurations as
+// taralizer models. ImportFromDir parses a directory of .tf files with the
+// ANTLR-based parser and maps resource blocks to technical assets and trust
+// boundaries via a technology profile; ExportToTerraform renders a taralizer
+// model back into Terraform scaffolds with traceability markers.
+// Copyright 2021 taralizer authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,16 +17,3 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 package terraform
-
-import (
-	"testing"
-
-	"github.com/stretchr/testify/assert"
-)
-
-func TestTerraformImport(t *testing.T) {
-	tf := NewTerraform()
-	report := tf.ImportFromFile("../../examples/gcp/terraform/main.tf")
-	assert.Greater(t, len(report.TechnicalAssets), 0)
-	assert.Greater(t, len(report.TrustBoundaries), 0)
-}
