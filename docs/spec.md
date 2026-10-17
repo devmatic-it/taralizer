@@ -83,6 +83,7 @@ type GCPResource struct {
 ### 2. Parser Functions
 
 #### ParseTerraformDir Function
+
 - Located in `pkg/terraform/parser.go`
 - Takes a directory path as input
 - Parses all Terraform files in the directory
@@ -97,6 +98,7 @@ type GCPResource struct {
 ### 3. CLI Interface
 
 The main application is structured using Cobra for command-line interface management:
+
 - `main.go` - Entry point
 - `cmd/root.go` - Root command with Execute function
 - Commands are registered in the root command
@@ -266,6 +268,7 @@ tf_dir/*.tf (walked in lexical order)     │
 | `StaleMarkers` | Terraform | export marker (`# taralizer:asset=<id>` / `# taralizer:boundary=<id>`) whose id no longer exists in the model (assets or boundaries) |
 
 Design decisions:
+
 - **`terraform_ref` is the sole model↔Terraform linkage** for `Unmodeled`. Markers only feed `StaleMarkers`; a resource with a marker but no model ref is still unmodeled. This keeps the two signals independent and the rule trivially explainable.
 - Model entries **without** a `terraform_ref` have no Terraform linkage and are not checked (they are not drift).
 - Duplicate HCL addresses across files warn (`duplicate resource address … using the first occurrence`); for `MissingAssets`/ref-owner counting the first occurrence wins, while an unmodeled duplicate address reports **each** occurrence with its own `file:line`.
@@ -405,6 +408,7 @@ structural categories; warnings (including non-determinable attribute values) go
 Phase A2 introduced the ANTLR-based Terraform parser, but the original `hashicorp/hcl/v2` parse path was left in place alongside it. Phase A5 removes that duplication so there is exactly **one** Terraform parser (ANTLR) and **one** import path (`taralizer terraform import`). KISS: delete the superseded code rather than maintain two parallel implementations.
 
 ### Removed
+
 | Item | Location (before removal) | Reason |
 | --- | --- | --- |
 | `ParseTerraform` (HCL v2 directory parser) | `pkg/terraform/parser.go` (file deleted) | superseded by the ANTLR parser (`parseResourceBlocks`) |
@@ -415,6 +419,7 @@ Phase A2 introduced the ANTLR-based Terraform parser, but the original `hashicor
 | `hashicorp/hcl/v2` dependency | `go.mod` / `go.sum` | no longer imported anywhere (dropped via `go mod tidy`) |
 
 ### Consequences
+
 - The ANTLR parser is now the sole Terraform parser; `terraform import` (Phase A2) and `terraform drift` (Phases A3–A4) are the only Terraform-facing commands.
 - The `examples/gcp` fixtures are retained (shared by other tests); the removed code's own tests (`parser_test.go`, `template_generator_test.go`) were deleted with it.
 - Coverage moved from 86.4% to 85.7% (generated code excluded) — the removed dead code and its tests no longer count; still above the 65% threshold.

@@ -68,8 +68,8 @@
     },
     "pkg/terraform/mapping.go": {
       "latest": {
-        "commit": "b7dae36",
-        "timestamp": "2026-10-15T18:46:17.795Z",
+        "commit": "514a766",
+        "timestamp": "2026-10-16T22:37:14.881Z",
         "mi": 68.6,
         "cognitive": 28,
         "nesting": 4,
@@ -111,6 +111,16 @@
         {
           "commit": "b7dae36",
           "timestamp": "2026-10-15T18:46:17.795Z",
+          "mi": 68.6,
+          "cognitive": 28,
+          "nesting": 4,
+          "lines": 76,
+          "maxCyclomatic": 4,
+          "entropy": 5.7
+        },
+        {
+          "commit": "514a766",
+          "timestamp": "2026-10-16T22:37:14.881Z",
           "mi": 68.6,
           "cognitive": 28,
           "nesting": 4,
@@ -313,8 +323,8 @@
     },
     "pkg/terraform/parser.go": {
       "latest": {
-        "commit": "0568808",
-        "timestamp": "2026-10-15T22:00:04.853Z",
+        "commit": "514a766",
+        "timestamp": "2026-10-16T22:39:08.338Z",
         "mi": 75.2,
         "cognitive": 14,
         "nesting": 3,
@@ -372,14 +382,24 @@
           "lines": 36,
           "maxCyclomatic": 6,
           "entropy": 4.62
+        },
+        {
+          "commit": "514a766",
+          "timestamp": "2026-10-16T22:39:08.338Z",
+          "mi": 75.2,
+          "cognitive": 14,
+          "nesting": 3,
+          "lines": 36,
+          "maxCyclomatic": 6,
+          "entropy": 4.62
         }
       ],
       "trend": "stable"
     },
     "pkg/taralizer/model.go": {
       "latest": {
-        "commit": "0568808",
-        "timestamp": "2026-10-15T22:01:36.781Z",
+        "commit": "514a766",
+        "timestamp": "2026-10-16T22:38:07.357Z",
         "mi": 55.4,
         "cognitive": 43,
         "nesting": 4,
@@ -431,6 +451,16 @@
         {
           "commit": "0568808",
           "timestamp": "2026-10-15T22:01:36.781Z",
+          "mi": 55.4,
+          "cognitive": 43,
+          "nesting": 4,
+          "lines": 226,
+          "maxCyclomatic": 8,
+          "entropy": 6.41
+        },
+        {
+          "commit": "514a766",
+          "timestamp": "2026-10-16T22:38:07.357Z",
           "mi": 55.4,
           "cognitive": 43,
           "nesting": 4,
@@ -588,14 +618,14 @@
     },
     "pkg/terraform/mapping_test.go": {
       "latest": {
-        "commit": "4841203",
-        "timestamp": "2026-10-14T20:47:16.258Z",
-        "mi": 67.9,
+        "commit": "514a766",
+        "timestamp": "2026-10-16T23:33:40.548Z",
+        "mi": 63.5,
         "cognitive": 36,
         "nesting": 3,
-        "lines": 75,
+        "lines": 115,
         "maxCyclomatic": 8,
-        "entropy": 5.24
+        "entropy": 5.43
       },
       "history": [
         {
@@ -617,9 +647,19 @@
           "lines": 75,
           "maxCyclomatic": 8,
           "entropy": 5.24
+        },
+        {
+          "commit": "514a766",
+          "timestamp": "2026-10-16T23:33:40.548Z",
+          "mi": 63.5,
+          "cognitive": 36,
+          "nesting": 3,
+          "lines": 115,
+          "maxCyclomatic": 8,
+          "entropy": 5.43
         }
       ],
-      "trend": "stable"
+      "trend": "regressing"
     },
     "pkg/terraform/terraform_parser.go": {
       "latest": {
@@ -693,8 +733,8 @@
     },
     "pkg/terraform/export.go": {
       "latest": {
-        "commit": "0568808",
-        "timestamp": "2026-10-15T22:01:09.406Z",
+        "commit": "943e638",
+        "timestamp": "2026-10-17T05:48:02.943Z",
         "mi": 55.1,
         "cognitive": 134,
         "nesting": 4,
@@ -716,6 +756,16 @@
         {
           "commit": "0568808",
           "timestamp": "2026-10-15T22:01:09.406Z",
+          "mi": 55.1,
+          "cognitive": 134,
+          "nesting": 4,
+          "lines": 302,
+          "maxCyclomatic": 15,
+          "entropy": 6.41
+        },
+        {
+          "commit": "943e638",
+          "timestamp": "2026-10-17T05:48:02.943Z",
           "mi": 55.1,
           "cognitive": 134,
           "nesting": 4,
@@ -1103,8 +1153,8 @@
     },
     "pkg/taralizer/taralizer.go": {
       "latest": {
-        "commit": "4841203",
-        "timestamp": "2026-10-14T20:55:43.447Z",
+        "commit": "e9f0857",
+        "timestamp": "2026-10-17T12:40:24.194Z",
         "mi": 51.5,
         "cognitive": 213,
         "nesting": 6,
@@ -1116,6 +1166,16 @@
         {
           "commit": "4841203",
           "timestamp": "2026-10-14T20:55:43.447Z",
+          "mi": 51.5,
+          "cognitive": 213,
+          "nesting": 6,
+          "lines": 305,
+          "maxCyclomatic": 31,
+          "entropy": 6.24
+        },
+        {
+          "commit": "e9f0857",
+          "timestamp": "2026-10-17T12:40:24.194Z",
           "mi": 51.5,
           "cognitive": 213,
           "nesting": 6,
@@ -1308,8 +1368,8 @@
     },
     "pkg/terraform/heredoc.go": {
       "latest": {
-        "commit": "0568808",
-        "timestamp": "2026-10-16T02:07:14.672Z",
+        "commit": "514a766",
+        "timestamp": "2026-10-17T00:36:45.414Z",
         "mi": 63.7,
         "cognitive": 108,
         "nesting": 6,
@@ -1321,6 +1381,16 @@
         {
           "commit": "0568808",
           "timestamp": "2026-10-16T02:07:14.672Z",
+          "mi": 63.7,
+          "cognitive": 108,
+          "nesting": 6,
+          "lines": 113,
+          "maxCyclomatic": 30,
+          "entropy": 4.68
+        },
+        {
+          "commit": "514a766",
+          "timestamp": "2026-10-17T00:36:45.414Z",
           "mi": 63.7,
           "cognitive": 108,
           "nesting": 6,
@@ -1400,7 +1470,32 @@
         }
       ],
       "trend": "stable"
+    },
+    "pkg/terraform/drift_attributes_test.go": {
+      "latest": {
+        "commit": "514a766",
+        "timestamp": "2026-10-17T01:34:14.178Z",
+        "mi": 61.2,
+        "cognitive": 5,
+        "nesting": 3,
+        "lines": 123,
+        "maxCyclomatic": 2,
+        "entropy": 4.93
+      },
+      "history": [
+        {
+          "commit": "514a766",
+          "timestamp": "2026-10-17T01:34:14.178Z",
+          "mi": 61.2,
+          "cognitive": 5,
+          "nesting": 3,
+          "lines": 123,
+          "maxCyclomatic": 2,
+          "entropy": 4.93
+        }
+      ],
+      "trend": "stable"
     }
   },
-  "capturedAt": "2026-10-16T19:26:12.995Z"
+  "capturedAt": "2026-10-17T12:40:29.195Z"
 }
