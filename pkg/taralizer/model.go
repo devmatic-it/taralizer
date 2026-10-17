@@ -96,6 +96,11 @@ type TechnicalAsset struct {
 	DataAssetsStored    []string            `yaml:"data_assets_stored,omitempty"`
 	DataAssetsProcessed []string            `yaml:"data_assets_processed,omitempty"`
 	CommunicationLinks  []CommunicationLink `yaml:"communication_links,omitempty"`
+	// Attributes holds model-declared values for the security-relevant
+	// attributes of this asset's technology (Phase A4). Keys are the attribute
+	// names declared in the mapping profile; values are compared against the
+	// static Terraform literals at each attribute's path during drift.
+	Attributes map[string]string `yaml:"attributes,omitempty"`
 }
 
 type TrustBoundary struct {
@@ -154,6 +159,14 @@ type RuleSet struct {
 	Rules       []Rule `yaml:"rules,omitempty"`
 }
 
+// TechnologyAttribute is one security-relevant attribute of a technology
+// (Phase A4): the model key (Name) and the Terraform argument path (Path)
+// compared during attribute-level drift detection.
+type TechnologyAttribute struct {
+	Name string `yaml:"name"`
+	Path string `yaml:"path"`
+}
+
 // Technology represents a mapping to cloud technology
 type Technology struct {
 	Id        string `yaml:"id"`
@@ -161,6 +174,10 @@ type Technology struct {
 	Type      string `yaml:"type"`
 	Terraform string `yaml:"terraform"`
 	Scaffold  string `yaml:"scaffold,omitempty"`
+	// Attributes lists the security-relevant attributes compared during
+	// attribute-level drift detection (Phase A4). Mirrors the field in
+	// pkg/terraform's Technology so both profile loaders stay in sync.
+	Attributes []TechnologyAttribute `yaml:"attributes,omitempty"`
 }
 
 // ProfileSet represents a mapping profile to cloud technologies

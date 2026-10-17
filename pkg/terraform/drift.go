@@ -32,6 +32,12 @@ type DriftItem struct {
 	ID       string // model entry id, or the resource address for Unmodeled
 	Ref      string // terraform_ref (model-side findings); empty otherwise
 	Location string // "file:line" for Terraform-side findings; empty otherwise
+
+	// Attribute-level drift (Phase A4), populated only for the AttributeDrift
+	// category: the attribute name and the model-declared vs Terraform values.
+	Attribute  string
+	ModelValue string
+	TFValue    string
 }
 
 // DriftReport categorizes the structural drift between a model and a
@@ -54,12 +60,18 @@ type DriftReport struct {
 	Unmodeled     []DriftItem
 	StaleMarkers  []DriftItem
 
+	// AttributeDrift (Phase A4): model-declared attribute values that differ
+	// from the static Terraform literal at the profile-declared path. Only
+	// populated when a mapping profile with attribute relevance is supplied.
+	AttributeDrift []DriftItem
+
 	Warnings []string
 }
 
 // Count returns the total number of drift findings across all categories.
 func (r DriftReport) Count() int {
-	return len(r.MissingAssets) + len(r.BrokenRefs) + len(r.Unmodeled) + len(r.StaleMarkers)
+	return len(r.MissingAssets) + len(r.BrokenRefs) + len(r.Unmodeled) +
+		len(r.StaleMarkers) + len(r.AttributeDrift)
 }
 
 // markerRef is one taralizer export marker found in a .tf file.
@@ -75,7 +87,12 @@ type markerRef struct {
 // without a terraform_ref have no Terraform linkage and are not checked.
 // Files with syntax errors abort detection with an error, consistent with
 // ImportFromDir.
-func DetectDrift(modelPath, tfDir string) (DriftReport, error) {
+//
+// profile enables attribute-level drift (Phase A4): when non-nil, model
+// attributes declared for a technology are compared against the static
+// Terraform literal at each profile-declared path. When nil, detection is
+// structural only (the Phase A3 behavior).
+func DetectDrift(modelPath, tfDir string, profile *MappingProfile) (DriftReport, error) {
 	report := DriftReport{ModelPath: modelPath, TFDir: tfDir}
 
 	model, err := taralizer.Load(modelPath)
@@ -88,7 +105,9 @@ func DetectDrift(modelPath, tfDir string) (DriftReport, error) {
 		return report, fmt.Errorf("list terraform files: %w", err)
 	}
 
-	tfAddrs := map[string]string{} // HCL address -> file (first occurrence)
+	tfAddrs := map[string]string{}             // HCL address -> file (first occurrence)
+	tfBodies := map[string]*BlockbodyContext{} // HCL address -> body (first occurrence)
+	tfLocations := map[string]string{}         // HCL address -> "file:line" (first occurrence)
 	type fileResources struct {
 		file      string
 		resources []resourceRef
@@ -110,6 +129,8 @@ func DetectDrift(modelPath, tfDir string) (DriftReport, error) {
 				continue
 			}
 			tfAddrs[addr] = file
+			tfBodies[addr] = res.body
+			tfLocations[addr] = fmt.Sprintf("%s:%d", file, res.line)
 		}
 
 		found, err := scanMarkers(file)
@@ -167,6 +188,49 @@ func DetectDrift(modelPath, tfDir string) (DriftReport, error) {
 		}
 	}
 
+	// Attribute-level drift (Phase A4): compare model-declared attribute values
+	// against static Terraform literals, for technologies that declare attribute
+	// relevance in the profile. Only technical assets carry declared attributes.
+	if profile != nil {
+		for _, asset := range model.TechnicalAssets {
+			ref := asset.TerraformRef
+			if ref == "" || !validTerraformRef(ref) {
+				continue // no linkage or broken ref: already reported structurally
+			}
+			body, ok := tfBodies[ref]
+			if !ok {
+				continue // missing resource: already reported as MissingAssets
+			}
+			tech := profile.TechnologyByID(asset.Technology)
+			if tech == nil || len(tech.Attributes) == 0 {
+				continue // no declared attribute relevance for this technology
+			}
+			for _, attr := range tech.Attributes {
+				modelVal, declared := asset.Attributes[attr.Name]
+				if !declared {
+					continue // model does not declare this attribute: nothing to compare
+				}
+				tfVal, litOK := extractAttributeValue(body, attr.Path)
+				if !litOK {
+					report.Warnings = append(report.Warnings, fmt.Sprintf(
+						"attribute %s of %s (ref %s) is not a static Terraform literal at path %q; cannot compare",
+						attr.Name, asset.Id, ref, attr.Path))
+					continue
+				}
+				if tfVal != modelVal {
+					report.AttributeDrift = append(report.AttributeDrift, DriftItem{
+						ID:         asset.Id,
+						Ref:        ref,
+						Attribute:  attr.Name,
+						ModelValue: modelVal,
+						TFValue:    tfVal,
+						Location:   tfLocations[ref],
+					})
+				}
+			}
+		}
+	}
+
 	return report, nil
 }
 
@@ -202,10 +266,10 @@ func validTerraformRef(ref string) bool {
 // Markdown renders the report as a markdown document. The header always
 // shows the model path, Terraform directory and total finding count; each
 // category with at least one finding gets a section with a table, in the
-// order Missing assets, Broken refs, Unmodeled resources, Stale markers.
-// Warnings (e.g. duplicate resource addresses) are listed last when present.
-// A report with zero findings renders the header followed by
-// "No drift detected."
+// order Missing assets, Broken refs, Unmodeled resources, Stale markers,
+// Attribute drift. Warnings (e.g. duplicate resource addresses or
+// non-literal attribute values) are listed last when present. A report with
+// zero findings renders the header followed by "No drift detected."
 func (r DriftReport) Markdown() string {
 	var b strings.Builder
 
@@ -245,10 +309,27 @@ func (r DriftReport) Markdown() string {
 		b.WriteString("\n")
 	}
 
+	// attrTable renders attribute-level drift (Phase A4): the asset, the
+	// attribute name, and the model-declared vs Terraform-observed values.
+	attrTable := func(title string, items []DriftItem) {
+		if len(items) == 0 {
+			return
+		}
+		fmt.Fprintf(&b, "## %s (%d)\n\n", title, len(items))
+		b.WriteString("| ID | Attribute | Model value | Terraform value | Location |\n")
+		b.WriteString("| --- | --- | --- | --- | --- |\n")
+		for _, it := range items {
+			fmt.Fprintf(&b, "| `%s` | %s | `%s` | `%s` | `%s` |\n",
+				it.ID, it.Attribute, it.ModelValue, it.TFValue, it.Location)
+		}
+		b.WriteString("\n")
+	}
+
 	refTable("Missing assets", r.MissingAssets)
 	refTable("Broken refs", r.BrokenRefs)
 	locTable("Unmodeled resources", "Resource", r.Unmodeled)
 	locTable("Stale markers", "Marker ID", r.StaleMarkers)
+	attrTable("Attribute drift", r.AttributeDrift)
 
 	if len(r.Warnings) > 0 {
 		fmt.Fprintf(&b, "## Warnings (%d)\n\n", len(r.Warnings))

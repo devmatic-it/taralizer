@@ -333,6 +333,67 @@ func TestTerraformDriftCommandDetects(t *testing.T) {
 	}
 }
 
+// TestTerraformDriftCommandAttribute verifies that --profile enables
+// attribute-level drift (Phase A4): a model-declared attribute value that
+// differs from the static Terraform literal is reported and makes the gate
+// exit non-zero. Model and TF are written directly (not via export) so the
+// attribute values are fully controlled.
+func TestTerraformDriftCommandAttribute(t *testing.T) {
+	dir := t.TempDir()
+
+	modelPath := filepath.Join(dir, "model.yaml")
+	model := `title: CLI Attr Drift Test
+technical_assets:
+  - id: vm
+    name: VM
+    technology: web-server
+    terraform_ref: google_compute_instance.vm
+    attributes:
+      can_ip_forward: "false"
+`
+	if err := os.WriteFile(modelPath, []byte(model), 0644); err != nil {
+		t.Fatalf("write model: %v", err)
+	}
+
+	tfDir := filepath.Join(dir, "tf")
+	if err := os.MkdirAll(tfDir, 0755); err != nil {
+		t.Fatalf("mkdir tf: %v", err)
+	}
+	vmTF := "resource \"google_compute_instance\" \"vm\" {\n  name           = \"vm\"\n  can_ip_forward = true\n}\n"
+	if err := os.WriteFile(filepath.Join(tfDir, "vm.tf"), []byte(vmTF), 0644); err != nil {
+		t.Fatalf("write vm.tf: %v", err)
+	}
+
+	reportPath := filepath.Join(dir, "report.md")
+	out, err := runRoot(t, "terraform", "drift", modelPath, tfDir, "--profile", cliProfilePath, "-o", reportPath)
+	if err == nil {
+		t.Fatalf("expected non-zero exit on attribute drift, output:\n%s", out)
+	}
+	if !strings.Contains(err.Error(), "drift detected: 1 finding(s)") {
+		t.Errorf("expected attribute drift error, got: %v", err)
+	}
+
+	report, rerr := os.ReadFile(reportPath)
+	if rerr != nil {
+		t.Fatalf("read report: %v", rerr)
+	}
+	for _, want := range []string{
+		"## Attribute drift (1)",
+		"can_ip_forward",
+		"`false`", // model-declared value
+		"`true`",  // Terraform-observed value
+	} {
+		if !strings.Contains(string(report), want) {
+			t.Errorf("report missing %q; got:\n%s", want, report)
+		}
+	}
+
+	// The gate must not print the usage block on an expected failure.
+	if strings.Contains(out, "Usage:") {
+		t.Errorf("drift failure should suppress usage output, got:\n%s", out)
+	}
+}
+
 func TestTerraformDriftCommandWrongArgCount(t *testing.T) {
 	out, err := runRoot(t, "terraform", "drift")
 	if err == nil {

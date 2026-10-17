@@ -206,14 +206,14 @@ graph TD
 ```console
 taralizer terraform export <model.yaml> [-o dir] [--profile p] [--force] [--write-back=false]
 taralizer terraform import <terraform_dir> -o model.yaml [--profile p]
-taralizer terraform drift <model.yaml> <terraform_dir> [-o report.md]
+taralizer terraform drift <model.yaml> <terraform_dir> [--profile p] [-o report.md]
 ```
-The former top-level `terraform` command is now a parent grouping `export`, `import` and `drift`. Import (Phase A2) builds a real taralizer model from every `.tf` file in a directory: each mapped resource becomes an asset or boundary with its HCL address recorded as `terraform_ref`, so export → import round-trips. Drift (Phase A3) compares a model with a Terraform directory and exits non-zero on any structural drift, so it gates CI pipelines.
+The former top-level `terraform` command is now a parent grouping `export`, `import` and `drift`. Import (Phase A2) builds a real taralizer model from every `.tf` file in a directory: each mapped resource becomes an asset or boundary with its HCL address recorded as `terraform_ref`, so export → import round-trips. Drift (Phase A3) compares a model with a Terraform directory and exits non-zero on any structural drift, so it gates CI pipelines. With `--profile` (Phase A4) it also compares model-declared attributes of security-relevant technical assets against the static Terraform literals, so attribute drift gates CI too.
 
 ### 13.3 Roadmap Continuation (Phases A2–A4)
 - **Phase A2**: directory-based import building a real report from Terraform files (drift engine foundation). *Done: `ImportFromDir` + CLI, parser robustness (heredoc normalization + corpus), legacy single-file import removed.*
 - **Phase A3**: structural drift report — missing assets, broken refs, unmodeled resources, stale markers — rendered as markdown via `taralizer terraform drift`; exit code 0 ⇔ in sync, non-zero on any finding (CI gate). *Done: `DetectDrift` + markdown report + CLI, see §14.*
-- **Phase A4** (next): attribute-level drift for security-relevant technical assets — compare model-declared attributes (e.g. encryption, public access, network exposure) against the corresponding Terraform resource arguments; profile-driven attribute relevance per technology. Structural drift (Phase A3) is the prerequisite: an asset must be linked via `terraform_ref` before its attributes can be compared.
+- **Phase A4**: attribute-level drift for security-relevant technical assets — compare model-declared attributes (e.g. encryption, public access, network exposure) against the corresponding Terraform resource arguments; profile-driven attribute relevance per technology. *Done: `DetectDrift` takes an optional mapping profile; non-literal Terraform values warn rather than drift; see §15.*
 
 ## 14. Phase A3: Structural Drift Gate (Model ↔ Infrastructure)
 
@@ -235,6 +235,29 @@ The former top-level `terraform` command is now a parent grouping `export`, `imp
 
 ### 14.2 Out of Scope (deferred to Phase A4)
 Attribute-level drift — comparing model-declared attributes of security-relevant technical assets (encryption, public access, network exposure, …) against Terraform resource arguments — is explicitly out of scope for Phase A3. It requires profile-driven attribute relevance per technology and lands as **Phase A4** (see §13.3).
+
+## 15. Phase A4: Attribute-Level Drift (security-relevant technical assets)
+
+> Phase A4 extends the structural drift gate to the attribute level: it answers "does my Terraform still match the *values* I reviewed for security-relevant assets?" — not just "do the same resources exist?".
+
+### 15.1 Feature: Detect Attribute Drift on Security-Relevant Technical Assets
+**Feature**: For technical assets whose technology declares attribute relevance in the mapping profile, compare each model-declared attribute value against the static Terraform literal at the profile-declared path; report mismatches as drift and exit non-zero.
+
+**Description**: `taralizer terraform drift <model.yaml> <terraform_dir> --profile profiles/google.yaml` adds an **attribute drift** category to the Phase A3 structural report. The mapping profile declares, per technology, which attributes are security-relevant and at which Terraform argument path to read them (e.g. `can_ip_forward` for compute instances, `settings.require_ssl` and `settings.ip_configuration.ipv4_enabled` for Cloud SQL). The model declares the expected value per attribute (`TechnicalAsset.Attributes`). A mismatch is a finding; a Terraform value that cannot be read statically (a `var.x` reference, function call, collection, or heredoc) is a warning, not a finding.
+
+**User Story**: As a security architect, I want my CI pipeline to fail when a security-relevant attribute of an asset (e.g. "requires SSL", "IP forwarding enabled") drifts from the value I reviewed in the model, so that silent weakening of a control is caught before merge.
+
+**Behavioral guarantees**:
+- The Phase A3 exit-code contract holds unchanged: **any** finding — structural or attribute — makes the gate exit non-zero.
+- Attribute drift is only checked when `--profile` is supplied; without it, detection is structural only (backward compatible).
+- Only technical assets whose technology declares `attributes` in the profile are checked; an asset that does not declare a given attribute is simply not compared for it (absence is not drift).
+- A Terraform value that is not a static literal (reference, function call, collection, heredoc) produces a warning — the value cannot be determined statically, so it is never reported as drift.
+- Attribute comparison reuses the Phase A3 linkage: an asset must be linked via a well-formed `terraform_ref` to an existing resource before its attributes are compared (missing/broken refs remain structural findings).
+
+### 15.2 Out of Scope
+- Attribute drift for trust boundaries (only technical assets carry declared attributes, per the PRD scope).
+- Comparison of non-literal (dynamic) Terraform values — these warn rather than drift.
+- Importing attribute values from Terraform into the model (import remains structural; attributes are declared in the model, not inferred).
 
 ---
 

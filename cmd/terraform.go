@@ -161,19 +161,35 @@ Example:
                     entry references via terraform_ref
   stale markers     taralizer export markers (# taralizer:asset= / :boundary=)
                     whose id no longer exists in the model
+  attribute drift   model-declared attribute values that differ from the static
+                    Terraform literal at a profile-declared path (Phase A4)
+
+Attribute drift is only checked when a mapping profile with attribute relevance
+is supplied via --profile; without it, detection is structural only.
 
 The markdown report goes to stdout, or to -o <file> when given. The command
 exits non-zero whenever any drift is found, so it can gate CI pipelines;
 exit code 0 means model and Terraform are in sync.
 
 Example:
-  taralizer terraform drift model.yaml ./tf -o report.md`,
+  taralizer terraform drift model.yaml ./tf -o report.md
+  taralizer terraform drift model.yaml ./tf --profile profiles/google.yaml`,
 		Args: cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			modelPath, tfDir := args[0], args[1]
 			outFile, _ := cmd.Flags().GetString("out")
+			profilePath, _ := cmd.Flags().GetString("profile")
 
-			report, err := terraform.DetectDrift(modelPath, tfDir)
+			var profile *terraform.MappingProfile
+			if profilePath != "" {
+				p, err := terraform.LoadGoogleProfile(profilePath)
+				if err != nil {
+					return fmt.Errorf("load profile %s: %w", profilePath, err)
+				}
+				profile = p
+			}
+
+			report, err := terraform.DetectDrift(modelPath, tfDir, profile)
 			if err != nil {
 				return fmt.Errorf("drift: %w", err)
 			}
@@ -218,6 +234,7 @@ func init() {
 	_ = terraformImportCmd.MarkFlagRequired("out")
 
 	terraformDriftCmd.Flags().StringP("out", "o", "", "write the markdown drift report to this file instead of stdout")
+	terraformDriftCmd.Flags().String("profile", "", "mapping profile for attribute-level drift (empty = structural only)")
 
 	terraformCmd.AddCommand(terraformExportCmd, terraformImportCmd, terraformDriftCmd)
 	rootCmd.AddCommand(terraformCmd)

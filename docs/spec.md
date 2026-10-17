@@ -304,6 +304,100 @@ taralizer terraform drift <model.yaml> <terraform_dir> [-o report.md]
 - **Exit code 0** ⇔ no findings (model and Terraform in sync). **Non-zero exit whenever any drift is found** — the command is a CI gate. On an expected failure (drift detected) the usage block is suppressed; argument and I/O errors behave like every other command.
 - The clean round-trip is the acceptance test: a model exported with `terraform export` (write-back on) drifts clean against its own exported directory.
 
+## Phase A4: Attribute-Level Drift (security-relevant technical assets)
+
+Phase A3 is structural only. Phase A4 adds **attribute-level** drift: for technical assets
+whose technology declares attribute relevance in the mapping profile, each model-declared
+attribute value is compared against the static Terraform literal at the profile-declared
+path. A mismatch is a finding; a value that cannot be determined statically (a reference,
+function call, collection, or heredoc) is a warning.
+
+### 1. Profile Schema: attribute relevance (`pkg/terraform/mapping.go`, `profiles/google.yaml`)
+
+Each technology may declare an optional `attributes` list. Each entry names the model key
+(`name`) and the Terraform argument path (`path`, dot-separated) to compare:
+
+```yaml
+- id: "web-server"
+  name: "web-server"
+  type: "technical_asset"
+  terraform: "google_compute_instance"
+  attributes:
+    - name: "can_ip_forward"        # model key
+      path: "can_ip_forward"        # Terraform argument path
+    - name: "allow_stopped_state"
+      path: "allow_stopped_state"
+
+- id: "database-sql"
+  name: "Cloud SQL"
+  type: "technical_asset"
+  terraform: "google_sql_database_instance"
+  attributes:
+    - name: "require_ssl"
+      path: "settings.require_ssl"                        # nested block path
+    - name: "ipv4_enabled"
+      path: "settings.ip_configuration.ipv4_enabled"      # two levels deep
+```
+
+`Technology.Attributes []TechnologyAttribute` is parsed by `LoadGoogleProfile`; the parallel
+`taralizer.Technology` type carries the same field so both profile loaders stay in sync
+(guarded by `TestGoogleProfileDualLoaderAgreement`). Technologies without an `attributes`
+list have no declared relevance and are never attribute-checked.
+
+### 2. Model-declared attributes (`pkg/taralizer/model.go`)
+
+`TechnicalAsset.Attributes map[string]string` holds the model-declared values, keyed by the
+profile attribute `name`. Only technical assets carry declared attributes (PRD scope:
+"security-relevant technical assets"); `TrustBoundary` is unchanged. An asset that does not
+declare a given attribute is simply not compared for it (absence is not drift).
+
+### 3. Extraction and comparison (`pkg/terraform/drift_attributes.go`, `drift.go`)
+
+`extractAttributeValue(body, path)` walks a dot-separated path through the parsed resource
+body: intermediate segments must be nested blocks (first match wins, consistent with import),
+the final segment must be an argument. `literalValue` reduces the argument's expression to a
+comparable scalar only for string, boolean, number and null literals. Anything else — a
+reference (`var.x`), function call, `file()`, collection, compound expression, or a normalized
+heredoc — is **not statically determinable** and yields `ok=false`.
+
+`DetectDrift(modelPath, tfDir, profile)` takes an optional `*MappingProfile`. When non-nil,
+for each technical asset with a well-formed `terraform_ref` that resolves to an existing
+resource, it looks up the asset's technology and compares each declared attribute:
+
+| Outcome | Condition | Report effect |
+| --- | --- | --- |
+| match | model value == static Terraform literal | none (in sync) |
+| **attribute drift** | model value != static Terraform literal | `AttributeDrift` finding (ID, Ref, Attribute, ModelValue, TFValue, Location) |
+| not determinable | Terraform value is a reference/call/collection/heredoc, or path absent | warning (not counted) |
+| skipped | technology has no declared attributes, or asset does not declare the attribute | none |
+
+`DriftReport.AttributeDrift` is a fifth category; `Count()` includes it, so the Phase A3
+exit-code contract holds unchanged: **any** finding (structural or attribute) makes the gate
+exit non-zero.
+
+### 4. Markdown and CLI (`cmd/terraform.go`)
+
+The report gains an **Attribute drift** section (rendered after Stale markers, only when
+non-empty) with a five-column table:
+
+```markdown
+## Attribute drift (1)
+
+| ID | Attribute | Model value | Terraform value | Location |
+| --- | --- | --- | --- | --- |
+| `vm` | can_ip_forward | `false` | `true` | `tf/vm.tf:1` |
+```
+
+The CLI gains an optional `--profile <path>` flag:
+
+```console
+taralizer terraform drift <model.yaml> <terraform_dir> [--profile profiles/google.yaml] [-o report.md]
+```
+
+Without `--profile`, detection is structural only (the Phase A3 behavior), so existing
+pipelines are unaffected. With `--profile`, attribute drift is checked in addition to the
+structural categories; warnings (including non-determinable attribute values) go to stderr.
+
 ---
 
 This specification outlines the architecture and components of taralizer, providing a clear understanding of how it processes Terraform configurations and generates technical asset inventories.

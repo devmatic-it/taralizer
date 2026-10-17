@@ -128,6 +128,11 @@ technologies:
     name: "Cloud SQL"
     type: "technical_asset"
     terraform: "google_sql_database_instance"
+    attributes:
+      - name: "require_ssl"
+        path: "settings.require_ssl"
+      - name: "ipv4_enabled"
+        path: "settings.ip_configuration.ipv4_enabled"
     scaffold: |
       name             = "{name}"
       database_version = "POSTGRES_16"
@@ -171,6 +176,11 @@ technologies:
     name: "web-server"
     type: "technical_asset"
     terraform: "google_compute_instance"
+    attributes:
+      - name: "can_ip_forward"
+        path: "can_ip_forward"
+      - name: "allow_stopped_state"
+        path: "allow_stopped_state"
     scaffold: |
       name         = "{name}"
       machine_type = "e2-micro"
@@ -191,6 +201,11 @@ technologies:
     name: "web-application"
     type: "technical_asset"
     terraform: "google_compute_instance"
+    attributes:
+      - name: "can_ip_forward"
+        path: "can_ip_forward"
+      - name: "allow_stopped_state"
+        path: "allow_stopped_state"
     scaffold: |
       name         = "{name}"
       machine_type = "e2-micro"
@@ -211,6 +226,11 @@ technologies:
     name: "web-service-rest"
     type: "technical_asset"
     terraform: "google_compute_instance"
+    attributes:
+      - name: "can_ip_forward"
+        path: "can_ip_forward"
+      - name: "allow_stopped_state"
+        path: "allow_stopped_state"
     scaffold: |
       name         = "{name}"
       machine_type = "e2-micro"
@@ -231,6 +251,11 @@ technologies:
     name: "web-service-soap"
     type: "technical_asset"
     terraform: "google_compute_instance"
+    attributes:
+      - name: "can_ip_forward"
+        path: "can_ip_forward"
+      - name: "allow_stopped_state"
+        path: "allow_stopped_state"
     scaffold: |
       name         = "{name}"
       machine_type = "e2-micro"

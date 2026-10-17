@@ -178,7 +178,7 @@ resource "google_compute_network" "vpc" {
 				return out
 			}
 
-			report, err := DetectDrift(modelPath, tfDir)
+			report, err := DetectDrift(modelPath, tfDir, nil)
 			require.NoError(t, err)
 
 			assert.Equal(t, tc.wantMissing, report.MissingAssets)
@@ -196,7 +196,7 @@ func TestDetectDriftErrors(t *testing.T) {
 		tfDir := filepath.Join(dir, "tf")
 		require.NoError(t, os.MkdirAll(tfDir, 0755))
 
-		_, err := DetectDrift(filepath.Join(dir, "nope.yaml"), tfDir)
+		_, err := DetectDrift(filepath.Join(dir, "nope.yaml"), tfDir, nil)
 		require.Error(t, err)
 		assert.Contains(t, err.Error(), "load model")
 	})
@@ -206,7 +206,7 @@ func TestDetectDriftErrors(t *testing.T) {
 		modelPath := filepath.Join(dir, "model.yaml")
 		require.NoError(t, taralizer.Save(taralizer.Report{}, modelPath))
 
-		_, err := DetectDrift(modelPath, filepath.Join(dir, "nope"))
+		_, err := DetectDrift(modelPath, filepath.Join(dir, "nope"), nil)
 		require.Error(t, err)
 		assert.Contains(t, err.Error(), "list terraform files")
 	})
@@ -219,7 +219,7 @@ func TestDetectDriftErrors(t *testing.T) {
 		tfFile := filepath.Join(dir, "main.tf")
 		require.NoError(t, os.WriteFile(tfFile, []byte("resource \"a\" \"b\" {}\n"), 0644))
 
-		_, err := DetectDrift(modelPath, tfFile)
+		_, err := DetectDrift(modelPath, tfFile, nil)
 		require.Error(t, err)
 		assert.Contains(t, err.Error(), "not a directory")
 	})
@@ -233,7 +233,7 @@ func TestDetectDriftErrors(t *testing.T) {
 		require.NoError(t, os.MkdirAll(tfDir, 0755))
 		require.NoError(t, os.WriteFile(filepath.Join(tfDir, "bad.tf"), []byte("resource \"a\" \"b\" { oops\n"), 0644))
 
-		_, err := DetectDrift(modelPath, tfDir)
+		_, err := DetectDrift(modelPath, tfDir, nil)
 		require.Error(t, err)
 		assert.True(t, strings.Contains(err.Error(), "syntax error"), "got: %v", err)
 	})
@@ -303,6 +303,127 @@ No drift detected.
 			assert.NotContains(t, got, absent)
 		}
 	})
+}
+
+// TestDetectDriftAttribute covers attribute-level drift (Phase A4): model
+// attributes declared for a technology are compared against the static
+// Terraform literal at each profile-declared path. It uses the real google
+// profile so attribute relevance comes from profiles/google.yaml.
+func TestDetectDriftAttribute(t *testing.T) {
+	profile, err := LoadGoogleProfile(googleProfilePath)
+	require.NoError(t, err)
+
+	const vmTF = "resource \"google_compute_instance\" \"vm\" {\n  name                = \"vm\"\n  can_ip_forward      = true\n  allow_stopped_state = false\n}\n"
+
+	cases := []struct {
+		name          string
+		model         taralizer.Report
+		tfFiles       map[string]string
+		wantAttrDrift []DriftItem
+		wantWarnings  int
+		wantLoc       string // filename expected in the drift item's Location (Contains)
+	}{
+		{
+			name: "attribute_match_no_drift",
+			model: taralizer.Report{
+				TechnicalAssets: []taralizer.TechnicalAsset{{
+					Id: "vm", Technology: "web-server", TerraformRef: "google_compute_instance.vm",
+					Attributes: map[string]string{"can_ip_forward": "true", "allow_stopped_state": "false"},
+				}},
+			},
+			tfFiles: map[string]string{"vm.tf": vmTF},
+		},
+		{
+			name: "attribute_mismatch_is_drift",
+			model: taralizer.Report{
+				TechnicalAssets: []taralizer.TechnicalAsset{{
+					Id: "vm", Technology: "web-server", TerraformRef: "google_compute_instance.vm",
+					Attributes: map[string]string{"can_ip_forward": "false"}, // TF has true
+				}},
+			},
+			tfFiles: map[string]string{"vm.tf": vmTF},
+			wantAttrDrift: []DriftItem{{
+				ID: "vm", Ref: "google_compute_instance.vm", Attribute: "can_ip_forward",
+				ModelValue: "false", TFValue: "true",
+			}},
+			wantLoc: "vm.tf",
+		},
+		{
+			name: "attribute_non_literal_warns",
+			model: taralizer.Report{
+				TechnicalAssets: []taralizer.TechnicalAsset{{
+					Id: "vm", Technology: "web-server", TerraformRef: "google_compute_instance.vm",
+					Attributes: map[string]string{"can_ip_forward": "true"},
+				}},
+			},
+			tfFiles: map[string]string{
+				"vm.tf": "resource \"google_compute_instance\" \"vm\" {\n  can_ip_forward = var.enable\n}\n",
+			},
+			wantWarnings: 1, // non-literal value: warning, not a drift finding
+		},
+		{
+			name: "undeclared_attribute_skipped",
+			model: taralizer.Report{
+				TechnicalAssets: []taralizer.TechnicalAsset{{
+					Id: "vm", Technology: "web-server", TerraformRef: "google_compute_instance.vm",
+				}}, // no Attributes declared
+			},
+			tfFiles: map[string]string{"vm.tf": vmTF},
+		},
+		{
+			name: "nested_attribute_mismatch",
+			model: taralizer.Report{
+				TechnicalAssets: []taralizer.TechnicalAsset{{
+					Id: "db", Technology: "database-sql", TerraformRef: "google_sql_database_instance.db",
+					Attributes: map[string]string{"require_ssl": "false"}, // TF has true
+				}},
+			},
+			tfFiles: map[string]string{
+				"db.tf": "resource \"google_sql_database_instance\" \"db\" {\n  name = \"db\"\n  settings {\n    require_ssl = true\n  }\n}\n",
+			},
+			wantAttrDrift: []DriftItem{{
+				ID: "db", Ref: "google_sql_database_instance.db", Attribute: "require_ssl",
+				ModelValue: "false", TFValue: "true",
+			}},
+			wantLoc: "db.tf",
+		},
+		{
+			name: "technology_without_attributes_skipped",
+			model: taralizer.Report{
+				TechnicalAssets: []taralizer.TechnicalAsset{{
+					Id: "ds", Technology: "database-nosql", TerraformRef: "google_firestore_database.ds",
+				}},
+			},
+			tfFiles: map[string]string{
+				"ds.tf": "resource \"google_firestore_database\" \"ds\" {\n  name = \"ds\"\n}\n",
+			},
+		},
+	}
+
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			modelPath, tfDir := writeDriftFixture(t, tc.model, tc.tfFiles)
+
+			report, err := DetectDrift(modelPath, tfDir, profile)
+			require.NoError(t, err)
+
+			require.Equal(t, len(tc.wantAttrDrift), len(report.AttributeDrift))
+			for i, want := range tc.wantAttrDrift {
+				got := report.AttributeDrift[i]
+				assert.Equal(t, want.ID, got.ID)
+				assert.Equal(t, want.Ref, got.Ref)
+				assert.Equal(t, want.Attribute, got.Attribute)
+				assert.Equal(t, want.ModelValue, got.ModelValue)
+				assert.Equal(t, want.TFValue, got.TFValue)
+				if tc.wantLoc != "" {
+					assert.Contains(t, got.Location, tc.wantLoc)
+				}
+			}
+			if tc.wantWarnings > 0 {
+				assert.GreaterOrEqual(t, len(report.Warnings), tc.wantWarnings)
+			}
+		})
+	}
 }
 
 func TestValidTerraformRef(t *testing.T) {

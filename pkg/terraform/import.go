@@ -95,11 +95,15 @@ func ImportFromDir(dir, profilePath string) (taralizer.Report, []string, error) 
 	return report, warnings, nil
 }
 
-// resourceRef is one parsed resource block (type + HCL name + line).
+// resourceRef is one parsed resource block (type + HCL name + line + body).
 type resourceRef struct {
 	typ  string
 	name string
 	line int // 1-based line of the `resource` keyword, for drift locations
+	// body is the resource's block body context, retained so attribute-level
+	// drift (Phase A4) can extract argument values without re-parsing. It is
+	// valid only while the owning file's parse tree is alive.
+	body *BlockbodyContext
 }
 
 // listTerraformFiles returns the .tf files under dir in lexical order.
@@ -178,10 +182,12 @@ func parseResourceBlocks(path string) ([]resourceRef, error) {
 		if !ok {
 			return nil, fmt.Errorf("unexpected resource context %T", res)
 		}
+		body, _ := rc.Blockbody().(*BlockbodyContext)
 		refs = append(refs, resourceRef{
 			typ:  unquote(rc.Resourcetype().GetText()),
 			name: unquote(rc.Name().GetText()),
 			line: rc.GetStart().GetLine(),
+			body: body,
 		})
 	}
 	return refs, nil

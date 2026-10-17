@@ -20,13 +20,27 @@ import (
 	"os"
 )
 
+// TechnologyAttribute is one security-relevant attribute of a technology
+// (Phase A4). Name is the key under which a model entry declares its value;
+// Path is the Terraform argument path (dot-separated, e.g.
+// "settings.ip_configuration.ipv4_enabled") whose static literal value is
+// compared against the model-declared one.
+type TechnologyAttribute struct {
+	Name string `yaml:"name"`
+	Path string `yaml:"path"`
+}
+
 // Technology represents a technology mapping in the taralizer model
 type Technology struct {
-	ID        string `yaml:"id"`
-	Name      string `yaml:"name"`
-	Type      string `yaml:"type"`
-	Terraform string `yaml:"terraform"`
-	Scaffold  string `yaml:"scaffold,omitempty"`
+	ID        string                `yaml:"id"`
+	Name      string                `yaml:"name"`
+	Type      string                `yaml:"type"`
+	Terraform string                `yaml:"terraform"`
+	Scaffold  string                `yaml:"scaffold,omitempty"`
+	// Attributes lists the security-relevant attributes compared during
+	// attribute-level drift detection (Phase A4). Empty for technologies with
+	// no declared relevance.
+	Attributes []TechnologyAttribute `yaml:"attributes,omitempty"`
 }
 
 // MappingProfile represents the structure of google.yaml profile
@@ -60,6 +74,18 @@ func (p *MappingProfile) MapResourceToTechnology(resourceType string) *Technolog
 	for _, tech := range p.Technologies {
 		if tech.Terraform == resourceType {
 			return &tech
+		}
+	}
+	return nil
+}
+
+// TechnologyByID returns the profile technology with the given id, or nil if
+// no technology has that id. Used by attribute-level drift (Phase A4) to look
+// up the relevance declared for a model entry's technology.
+func (p *MappingProfile) TechnologyByID(id string) *Technology {
+	for i := range p.Technologies {
+		if p.Technologies[i].ID == id {
+			return &p.Technologies[i]
 		}
 	}
 	return nil
