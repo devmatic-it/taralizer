@@ -16,14 +16,10 @@ package cmd
 
 import (
 	"fmt"
-	"os"
 
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-
-	// Add import for our terraform package
-	"github.com/devmatic-it/taralizer/pkg/terraform"
 )
 
 // config variables
@@ -41,47 +37,9 @@ Taralizer is a Threat and Risk Analysis tool.
 	}
 )
 
-// terraformToYamlCmd represents the terraform-to-yaml command
-var terraformToYamlCmd = &cobra.Command{
-	Use:   "terraform-to-yaml",
-	Short: "Generate taralizer YAML from Google Cloud Terraform files",
-	Long: `Generate a taralizer YAML template by parsing Google Cloud Terraform files
-and mapping the resources to appropriate taralizer assets using the google.yaml profile.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		tfDir, _ := cmd.Flags().GetString("tf-dir")
-		outputFile, _ := cmd.Flags().GetString("output")
-
-		if tfDir == "" || outputFile == "" {
-			fmt.Println("Usage: taralizer terraform-to-yaml --tf-dir <path> --output <file>")
-			return
-		}
-
-		// Generate the YAML template from Terraform files
-		yamlContent, err := terraform.GenerateFromTerraform(tfDir, "./profiles/google.yaml")
-		if err != nil {
-			fmt.Printf("Error generating template: %v\n", err)
-			return
-		}
-
-		// Write to output file
-		err = os.WriteFile(outputFile, []byte(yamlContent), 0644)
-		if err != nil {
-			fmt.Printf("Error writing output file: %v\n", err)
-			return
-		}
-
-		fmt.Printf("Successfully generated taralizer template at %s\n", outputFile)
-	},
-}
-
 // initializes arguments for version command
 func init() {
 	cobra.OnInitialize(initConfig)
-	rootCmd.AddCommand(terraformToYamlCmd)
-
-	// Add flags for terraform-to-yaml command
-	terraformToYamlCmd.Flags().String("tf-dir", "", "Directory containing Terraform files")
-	terraformToYamlCmd.Flags().String("output", "", "Output YAML file path")
 
 	rootCmd.Flags().StringVar(&cfgFile, "config", "", "configuration file. If not specified, 'config.yaml' is searched in path.")
 	rootCmd.Flags().StringVar(&ruleSet, "ruleset", "asvs", "compliance standard to use. Currently, only the OWASP ASVS 'asvs' has been parially implemented.")

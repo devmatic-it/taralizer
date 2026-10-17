@@ -107,27 +107,6 @@ func TestMapResourceToTechnology(t *testing.T) {
 	assert.Nil(t, profile.MapResourceToTechnology("google_storage_bucket"))
 }
 
-func TestResourceToAssetMapping(t *testing.T) {
-	profile, err := LoadGoogleProfile(googleProfilePath)
-	require.NoError(t, err)
-
-	resources := []GCPResource{
-		{Name: "db-1", Type: "google_sql_database_instance"},
-		{Name: "vpc-1", Type: "google_compute_network"},
-		{Name: "bucket-1", Type: "google_storage_bucket"}, // unmapped -> warning only
-	}
-
-	assets, boundaries := profile.ResourceToAssetMapping(resources)
-
-	require.Len(t, assets, 1)
-	assert.Equal(t, "db-1", assets[0].ID)
-	assert.Equal(t, "database-sql", assets[0].Technology)
-
-	require.Len(t, boundaries, 1)
-	assert.Equal(t, "vpc-1", boundaries[0].ID)
-	assert.Equal(t, "vpc", boundaries[0].Technology)
-}
-
 func TestBankOfAnthosExportableCount(t *testing.T) {
 	report, err := taralizer.Load("../../examples/gcp/bank_of_anthos.yaml")
 	if err != nil {

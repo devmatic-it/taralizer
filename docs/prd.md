@@ -106,6 +106,8 @@ graph TD
 
 ## 6. Usage Examples
 
+> **Note (Phase A5):** the `terraform-to-yaml` command shown below was part of the original prototype and has been **removed**. The current import path is `taralizer terraform import <dir> -o model.yaml` (see §13.2). The examples below are retained for historical reference only.
+
 ### 6.1 Basic Usage
 ```bash
 # Generate YAML from Terraform files in a directory
@@ -214,6 +216,7 @@ The former top-level `terraform` command is now a parent grouping `export`, `imp
 - **Phase A2**: directory-based import building a real report from Terraform files (drift engine foundation). *Done: `ImportFromDir` + CLI, parser robustness (heredoc normalization + corpus), legacy single-file import removed.*
 - **Phase A3**: structural drift report — missing assets, broken refs, unmodeled resources, stale markers — rendered as markdown via `taralizer terraform drift`; exit code 0 ⇔ in sync, non-zero on any finding (CI gate). *Done: `DetectDrift` + markdown report + CLI, see §14.*
 - **Phase A4**: attribute-level drift for security-relevant technical assets — compare model-declared attributes (e.g. encryption, public access, network exposure) against the corresponding Terraform resource arguments; profile-driven attribute relevance per technology. *Done: `DetectDrift` takes an optional mapping profile; non-literal Terraform values warn rather than drift; see §15.*
+- **Phase A5**: remove the legacy `hashicorp/hcl/v2` parse path and the `terraform-to-yaml` subcommand (superseded by the ANTLR parser + `terraform import`), dropping the HCL dependency. *Done: single ANTLR parser, single import path; see §16.*
 
 ## 14. Phase A3: Structural Drift Gate (Model ↔ Infrastructure)
 
@@ -258,6 +261,22 @@ Attribute-level drift — comparing model-declared attributes of security-releva
 - Attribute drift for trust boundaries (only technical assets carry declared attributes, per the PRD scope).
 - Comparison of non-literal (dynamic) Terraform values — these warn rather than drift.
 - Importing attribute values from Terraform into the model (import remains structural; attributes are declared in the model, not inferred).
+
+## 16. Phase A5: Removal of Legacy HCL Parse + `terraform-to-yaml` Subcommand
+
+> Phase A5 is a cleanup phase: it removes the original `hashicorp/hcl/v2` parse path and its `terraform-to-yaml` subcommand, which were superseded by the ANTLR parser (Phase A2) and `terraform import`. The goal is a single Terraform parser and a single import path (KISS).
+
+### 16.1 What Was Removed
+- The `terraform-to-yaml` subcommand (`cmd/root.go`) — the only CLI consumer of the legacy path.
+- The HCL v2 parse functions `ParseTerraform` (`pkg/terraform/parser.go`) and `ParseTerraformDir` + `GCPResource` (`pkg/terraform/types.go`).
+- The legacy template generator `GenerateFromTerraform` / `GenerateTaralizerTemplate` (`pkg/terraform/template_generator.go`).
+- The dead helpers/types `ResourceToAssetMapping`, local `TaralizerAsset`/`TrustBoundary` (`pkg/terraform/mapping.go`).
+- The `hashicorp/hcl/v2` dependency (`go.mod`/`go.sum`, via `go mod tidy`).
+
+### 16.2 Behavioral Guarantees
+- The ANTLR parser is now the sole Terraform parser; `terraform import` and `terraform drift` are the only Terraform-facing commands.
+- No user-facing behavior of the remaining commands changes — this is a pure removal of superseded code.
+- The `examples/gcp` fixtures are retained (shared by other tests).
 
 ---
 

@@ -15,9 +15,9 @@
 package terraform
 
 import (
-	"gopkg.in/yaml.v3"
-	"log"
 	"os"
+
+	"gopkg.in/yaml.v3"
 )
 
 // TechnologyAttribute is one security-relevant attribute of a technology
@@ -32,11 +32,11 @@ type TechnologyAttribute struct {
 
 // Technology represents a technology mapping in the taralizer model
 type Technology struct {
-	ID        string                `yaml:"id"`
-	Name      string                `yaml:"name"`
-	Type      string                `yaml:"type"`
-	Terraform string                `yaml:"terraform"`
-	Scaffold  string                `yaml:"scaffold,omitempty"`
+	ID        string `yaml:"id"`
+	Name      string `yaml:"name"`
+	Type      string `yaml:"type"`
+	Terraform string `yaml:"terraform"`
+	Scaffold  string `yaml:"scaffold,omitempty"`
 	// Attributes lists the security-relevant attributes compared during
 	// attribute-level drift detection (Phase A4). Empty for technologies with
 	// no declared relevance.
@@ -89,49 +89,4 @@ func (p *MappingProfile) TechnologyByID(id string) *Technology {
 		}
 	}
 	return nil
-}
-
-// ResourceToAssetMapping maps GCP resources to taralizer assets and boundaries
-func (p *MappingProfile) ResourceToAssetMapping(resources []GCPResource) ([]TaralizerAsset, []TrustBoundary) {
-	var assets []TaralizerAsset
-	var boundaries []TrustBoundary
-
-	for _, resource := range resources {
-		if tech := p.MapResourceToTechnology(resource.Type); tech != nil {
-			switch tech.Type {
-			case "technical_asset":
-				asset := TaralizerAsset{
-					ID:         resource.Name,
-					Name:       tech.Name,
-					Technology: tech.ID,
-				}
-				assets = append(assets, asset)
-			case "trust_boundary":
-				boundary := TrustBoundary{
-					ID:         resource.Name,
-					Name:       tech.Name,
-					Technology: tech.ID,
-				}
-				boundaries = append(boundaries, boundary)
-			}
-		} else {
-			log.Printf("Warning: Unknown GCP resource type: %s", resource.Type)
-		}
-	}
-
-	return assets, boundaries
-}
-
-// TaralizerAsset represents a technical asset in taralizer
-type TaralizerAsset struct {
-	ID         string `yaml:"id"`
-	Name       string `yaml:"name"`
-	Technology string `yaml:"technology"`
-}
-
-// TrustBoundary represents a trust boundary in taralizer
-type TrustBoundary struct {
-	ID         string `yaml:"id"`
-	Name       string `yaml:"name"`
-	Technology string `yaml:"technology"`
 }

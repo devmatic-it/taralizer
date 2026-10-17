@@ -1,5 +1,7 @@
 # Taralizer Architecture Specification
 
+> **Status note (Phase A5):** The sections from here through "Usage Example" describe the original import-only prototype. As of Phase A5, the legacy `terraform-to-yaml` command and its `hashicorp/hcl/v2` parse path (`ParseTerraform`, `ParseTerraformDir`, `GCPResource`) have been **removed** — the ANTLR-based parser (Phase A2) is now the sole Terraform parser, and `taralizer terraform import` is the sole import path. See "Phase A5" below and the Phase A1–A4 sections for the current architecture.
+
 ## Overview
 
 Taralizer is a tool designed to analyze Terraform configurations and generate architectural diagrams and technical asset inventories. It focuses on extracting information from GCP Terraform files to create structured output that can be used for security analysis, compliance checking, and infrastructure documentation.
@@ -151,7 +153,7 @@ The `terraform-to-yaml` command uses the parsed GCP resources to generate a stru
 
 ## Phase A1: Model → Terraform Export (supersedes the HCL v2 description above)
 
-> Note: the original sections describe the early `terraform-to-yaml` prototype. The parser is now ANTLR-based (grammar in `.antlr`, generated code in `pkg/terraform/*_parser.go` / `*_lexer.go` — excluded from the coverage gate per CONSTRAINTS.md §3), and the Terraform integration is organized as a `terraform` command group. This section documents the current architecture.
+> Note: the original sections describe the early `terraform-to-yaml` prototype. The parser is now ANTLR-based (grammar in `.antlr`, generated code in `pkg/terraform/*_parser.go` / `*_lexer.go` — excluded from the coverage gate per CONSTRAINTS.md §3), and the Terraform integration is organized as a `terraform` command group. This section documents the current architecture. As of Phase A5, the legacy `terraform-to-yaml` command and HCL v2 parser have been removed entirely (see Phase A5).
 
 ### 1. Export Pipeline (`pkg/terraform/export.go`)
 
@@ -397,6 +399,25 @@ taralizer terraform drift <model.yaml> <terraform_dir> [--profile profiles/googl
 Without `--profile`, detection is structural only (the Phase A3 behavior), so existing
 pipelines are unaffected. With `--profile`, attribute drift is checked in addition to the
 structural categories; warnings (including non-determinable attribute values) go to stderr.
+
+## Phase A5: Removal of Legacy HCL Parse + `terraform-to-yaml` Subcommand
+
+Phase A2 introduced the ANTLR-based Terraform parser, but the original `hashicorp/hcl/v2` parse path was left in place alongside it. Phase A5 removes that duplication so there is exactly **one** Terraform parser (ANTLR) and **one** import path (`taralizer terraform import`). KISS: delete the superseded code rather than maintain two parallel implementations.
+
+### Removed
+| Item | Location (before removal) | Reason |
+| --- | --- | --- |
+| `ParseTerraform` (HCL v2 directory parser) | `pkg/terraform/parser.go` (file deleted) | superseded by the ANTLR parser (`parseResourceBlocks`) |
+| `GCPResource`, `ParseTerraformDir` | `pkg/terraform/types.go` (file deleted) | superseded; only consumer was the legacy path |
+| `GenerateFromTerraform`, `GenerateTaralizerTemplate` | `pkg/terraform/template_generator.go` (file deleted) | legacy Terraform→YAML template generator, superseded by `ImportFromDir` |
+| `terraform-to-yaml` subcommand | `cmd/root.go` | only CLI consumer of the legacy path; superseded by `terraform import` |
+| `ResourceToAssetMapping`, local `TaralizerAsset`/`TrustBoundary` | `pkg/terraform/mapping.go` | dead helpers/types (distinct from `taralizer.TrustBoundary`) used only by the legacy path |
+| `hashicorp/hcl/v2` dependency | `go.mod` / `go.sum` | no longer imported anywhere (dropped via `go mod tidy`) |
+
+### Consequences
+- The ANTLR parser is now the sole Terraform parser; `terraform import` (Phase A2) and `terraform drift` (Phases A3–A4) are the only Terraform-facing commands.
+- The `examples/gcp` fixtures are retained (shared by other tests); the removed code's own tests (`parser_test.go`, `template_generator_test.go`) were deleted with it.
+- Coverage moved from 86.4% to 85.7% (generated code excluded) — the removed dead code and its tests no longer count; still above the 65% threshold.
 
 ---
 
