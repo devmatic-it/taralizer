@@ -48,7 +48,7 @@ jobs:
       - name: Upload coverage
         uses: codecov/codecov-action@v6
         with:
-          file: ./coverage.txt
+          files: ./coverage.txt
           fail_ci_if_error: false
 
   lint:
