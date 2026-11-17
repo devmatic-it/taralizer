@@ -5,7 +5,7 @@ go 1.27
 require (
 	github.com/antlr4-go/antlr/v4 v4.13.1
 	github.com/charmbracelet/glamour v1.0.0
-	github.com/chromedp/cdproto v0.157.4
+	github.com/chromedp/cdproto v0.160.2
 	github.com/chromedp/chromedp v0.19.1
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/open-policy-agent/opa v1.21.1
@@ -31,6 +31,7 @@ require (
 	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.4.1 // indirect
 	github.com/dlclark/regexp2 v1.11.5 // indirect
 	github.com/fsnotify/fsnotify v1.10.1 // indirect
+	github.com/go-json-experiment/json v0.0.0-20260213210345-44df1a37e875 // indirect
 	github.com/go-viper/mapstructure/v2 v2.5.0 // indirect
 	github.com/gobwas/glob v1.0.0 // indirect
 	github.com/goccy/go-json v0.11.2 // indirect
