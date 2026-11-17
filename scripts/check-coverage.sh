@@ -26,7 +26,7 @@ go tool cover -func=.coverage.filtered | tail -n 1 | awk '{ print $3 }' | sed 's
 COVERAGE=$(cat .cov)
 
 echo "Current coverage: ${COVERAGE}% (generated code excluded)"
-if [ 1 -eq "$(echo "$COVERAGE < $THRESHOLD" | bc -l)" ]; then
+if awk -v c="$COVERAGE" -v t="$THRESHOLD" 'BEGIN { exit !(c + 0 < t + 0) }'; then
   echo "Coverage ${COVERAGE}% is below threshold of ${THRESHOLD}%"
   rm .cov .coverage.filtered
   exit 1

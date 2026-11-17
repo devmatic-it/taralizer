@@ -23,8 +23,10 @@ import (
 	"path/filepath"
 	"text/template"
 
-	"github.com/chromedp/chromedp"
 	"github.com/charmbracelet/glamour"
+	"github.com/chromedp/cdproto/cdp"
+	"github.com/chromedp/cdproto/page"
+	"github.com/chromedp/chromedp"
 )
 
 // ReportEngine generates HTML and PDF reports from a Taralizer model.
@@ -39,12 +41,6 @@ func NewReportEngine() ReportEngine {
 // templates using chromedp (Chrome headless). A Chrome or Chromium binary
 // must be installed on the system.
 func (svc *ReportEngine) GenerateReportFilePDF(filename string, tplFileReport string, tplFileCover string, report Report) error {
-	tmpDir, err := os.MkdirTemp("", "taralizer-report-*")
-	if err != nil {
-		return fmt.Errorf("create temp dir: %w", err)
-	}
-	defer os.RemoveAll(tmpDir)
-
 	var coverBuf, reportBuf bytes.Buffer
 	if err := svc.renderTemplate(&coverBuf, tplFileCover, report); err != nil {
 		return fmt.Errorf("render cover: %w", err)
@@ -56,16 +52,33 @@ func (svc *ReportEngine) GenerateReportFilePDF(filename string, tplFileReport st
 	// Combine with page break (cover page 1, report starts page 2).
 	html := coverBuf.String() + `<div style="page-break-after: always;"></div>` + reportBuf.String()
 
-	htmlPath := filepath.Join(tmpDir, "report.html")
-	if err := os.WriteFile(htmlPath, []byte(html), 0644); err != nil {
-		return fmt.Errorf("write HTML: %w", err)
+	opts := append(chromedp.DefaultExecAllocatorOptions[:],
+		chromedp.DisableGPU,
+	)
+	if os.Getenv("CI") != "" || os.Geteuid() == 0 {
+		opts = append(opts, chromedp.NoSandbox)
 	}
 
-	ctx, cancel := chromedp.NewContext(context.Background())
+	allocCtx, cancelAlloc := chromedp.NewExecAllocator(context.Background(), opts...)
+	defer cancelAlloc()
+
+	ctx, cancel := chromedp.NewContext(allocCtx)
 	defer cancel()
 
-	if err := chromedp.Do(ctx, chromedp.Navigate("file://"+htmlPath)); err != nil {
-		return fmt.Errorf("navigate: %w", err)
+	setContent := chromedp.Func(func(ctx context.Context, t *chromedp.Target) error {
+		tree, err := cdp.Call(ctx, t, page.GetFrameTree, cdp.Empty{})
+		if err != nil {
+			return err
+		}
+		_, err = cdp.Call(ctx, t, page.SetDocumentContent, page.SetDocumentContentParams{
+			FrameID: tree.FrameTree.Frame.ID,
+			HTML:    html,
+		})
+		return err
+	})
+
+	if err := chromedp.Do(ctx, chromedp.Navigate("about:blank"), setContent); err != nil {
+		return fmt.Errorf("load HTML: %w", err)
 	}
 
 	// Capture PDF (mermaid.js renders the DFD before this if internet is available)

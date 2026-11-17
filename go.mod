@@ -5,6 +5,7 @@ go 1.27
 require (
 	github.com/antlr4-go/antlr/v4 v4.13.1
 	github.com/charmbracelet/glamour v1.0.0
+	github.com/chromedp/cdproto v0.157.4
 	github.com/chromedp/chromedp v0.19.1
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/open-policy-agent/opa v1.21.1
@@ -26,7 +27,6 @@ require (
 	github.com/charmbracelet/x/cellbuf v0.0.13 // indirect
 	github.com/charmbracelet/x/exp/slice v0.0.0-20250327172914-2fdc97757edf // indirect
 	github.com/charmbracelet/x/term v0.2.1 // indirect
-	github.com/chromedp/cdproto v0.157.4 // indirect
 	github.com/clipperhouse/uax29/v2 v2.6.0 // indirect
 	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.4.1 // indirect
 	github.com/dlclark/regexp2 v1.11.5 // indirect

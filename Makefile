@@ -52,7 +52,7 @@ enforce-rules:
 # Run linters (Hard failures only)
 lint: enforce-rules
 	@echo "Running go vet..."
-	go vet -json ./...
+	sh scripts/govet.sh
 	@echo "Running staticcheck..."
 	sh scripts/staticcheck.sh
 	@echo "Running govulncheck..."
