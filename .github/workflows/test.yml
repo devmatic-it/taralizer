@@ -46,7 +46,7 @@ jobs:
         run: make check-coverage
 
       - name: Upload coverage
-        uses: codecov/codecov-action@v6
+        uses: codecov/codecov-action@v7
         with:
           file: ./coverage.txt
           fail_ci_if_error: false
