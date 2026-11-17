@@ -5,13 +5,9 @@ build/
 ./taralizer
 ./taralizer*
 
-# Generated ANTLR code (regenerate during build from Terraform.g4)
+# ANTLR IDE caches are ignored; generated Go parser outputs from ./generate.sh are committed for CI builds.
 .antlr/
 pkg/terraform/.antlr/
-pkg/terraform/terraform_parser.go
-pkg/terraform/terraform_lexer.go
-pkg/terraform/terraform_base_listener.go
-pkg/terraform/terraform_listener.go
 
 # Test artifacts
 coverage.*
@@ -38,9 +34,11 @@ taralizer.rb
 # Vendor (if used)
 vendor/
 
-# Local config (optional override)
+# Local config & agent/IDE state
 config.yaml
-.pi-lens/cache/*
+.pi-lens/
+.opencode/
+.pi/
 
 # Working documents (optional - remove if obsolete)
 tasks/

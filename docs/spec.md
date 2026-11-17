@@ -424,6 +424,17 @@ Phase A2 introduced the ANTLR-based Terraform parser, but the original `hashicor
 - The `examples/gcp` fixtures are retained (shared by other tests); the removed code's own tests (`parser_test.go`, `template_generator_test.go`) were deleted with it.
 - Coverage moved from 86.4% to 85.7% (generated code excluded) — the removed dead code and its tests no longer count; still above the 65% threshold.
 
+## CI, PDF Rendering, and Release Infrastructure Fixes
+
+### 1. In-Memory CDP PDF Rendering (`pkg/taralizer/reporting.go`)
+
+`ReportEngine.GenerateReportFilePDF` previously wrote a temporary HTML file under `/tmp` and navigated Chrome to `file://<tmp>/report.html`. On Linux environments where Chromium is Snap-confined (private `/tmp` mount namespace) or on Windows path formats, `file://` navigation fails with `net::ERR_FILE_NOT_FOUND`. `GenerateReportFilePDF` now navigates to `about:blank` and injects the rendered cover + report HTML directly via Chrome DevTools Protocol (`page.GetFrameTree` + `page.SetDocumentContent`), while enabling `chromedp.NoSandbox` only when `CI` is non-empty or running as UID 0.
+
+### 2. Generated-Code `go vet` Gate & CI Parity (`scripts/govet.sh`, `Makefile`, `.github/workflows/`)
+
+- `scripts/govet.sh` applies the same `^// Code generated .* DO NOT EDIT\.` header exclusion used by `scripts/staticcheck.sh` and `scripts/check-coverage.sh` (per `CONSTRAINTS.md` §3) so ANTLR-generated unreachable `goto` statements do not fail `go vet`, while preserving any finding or build failure in hand-written code.
+- `Makefile`'s `lint` target now calls `sh scripts/govet.sh` (replacing `go vet -json ./...`, which masked diagnostics with exit code `0`), and `.github/workflows/test.yml` invokes `make lint`, `make check-coverage`, `make check-tf`, and `make build` directly.
+
 ---
 
 This specification outlines the architecture and components of taralizer, providing a clear understanding of how it processes Terraform configurations and generates technical asset inventories.
